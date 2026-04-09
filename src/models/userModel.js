@@ -2,7 +2,6 @@ const pool = require('../config/db');
 
 const UserModel = {
     getAllUsers: async () => {
-        // Sengaja gak men-select kolom password biar aman pas dikirim ke response
         const query = 'SELECT id, name, email, created_at FROM users ORDER BY created_at DESC';
         const result = await pool.query(query);
         return result.rows;

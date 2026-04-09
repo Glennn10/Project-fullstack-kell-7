@@ -1,7 +1,6 @@
 const BookModel = require('../models/bookModel');
 
 const bookController = {
-    // 1. Dapatkan semua buku
     getAllBooks: async (req, res) => {
         try {
             const books = await BookModel.getAllBooks();
@@ -16,13 +15,11 @@ const bookController = {
         }
     },
 
-    // 2. Dapatkan satu buku berdasarkan ID
     getBookById: async (req, res) => {
         try {
-            const { id } = req.params; // Ambil ID dari URL
+            const { id } = req.params;
             const book = await BookModel.getBookById(id);
 
-            // Cek apakah buku ditemukan
             if (!book) {
                 return res.status(404).json({ 
                     success: false, 
@@ -41,13 +38,10 @@ const bookController = {
         }
     },
 
-    // 3. Tambah buku baru
     createBook: async (req, res) => {
         try {
-            // Ambil data dari body request
             const { title, author, publisher, year, category_id } = req.body;
 
-            // Validasi sederhana: pastikan kolom wajib diisi
             if (!title || !author || !publisher || !year) {
                 return res.status(400).json({ 
                     success: false, 

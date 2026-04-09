@@ -41,7 +41,6 @@ const LoanModel = {
 
     createLoan: async (loanData) => {
         const { book_id, borrower_id, loan_date, user_id } = loanData;
-        // Status otomatis pakai default 'Dipinjam' sesuai skema DB lu
         const query = `
             INSERT INTO loans (book_id, borrower_id, loan_date, user_id) 
             VALUES ($1, $2, $3, $4) 
@@ -52,8 +51,6 @@ const LoanModel = {
     },
 
     updateLoanStatus: async (id, status, return_date = null) => {
-        // Ini fungsi khusus update untuk ganti status (misal: 'Dikembalikan' atau 'Terlambat')
-        // plus ngisi return_date kalau bukunya dibalikin
         const query = `
             UPDATE loans 
             SET status = $1, return_date = $2 

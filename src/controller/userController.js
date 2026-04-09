@@ -28,7 +28,6 @@ const userController = {
             const newUser = await UserModel.createUser({ name, email, password });
             res.status(201).json({ success: true, message: 'User berhasil ditambahkan', data: newUser });
         } catch (error) {
-            // Error code 23505 adalah error PostgreSQL untuk UNIQUE violation (email sudah terdaftar)
             if (error.code === '23505') return res.status(400).json({ success: false, message: 'Email sudah terdaftar' });
             console.error(error.message);
             res.status(500).json({ success: false, message: 'Internal Server Error' });

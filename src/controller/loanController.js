@@ -39,7 +39,6 @@ const loanController = {
         try {
             const { status, return_date } = req.body;
             
-            // Validasi ENUM sesuai database
             const validStatus = ['Dipinjam', 'Dikembalikan', 'Terlambat'];
             if (!validStatus.includes(status)) {
                 return res.status(400).json({ success: false, message: "Status harus salah satu dari: 'Dipinjam', 'Dikembalikan', 'Terlambat'" });
