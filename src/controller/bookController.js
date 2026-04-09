@@ -1,58 +1,123 @@
-const BorrowerModel = require('../models/borrowerModel');
+const BookModel = require('../models/bookModel');
 
-const borrowerController = {
-    getAllBorrowers: async (req, res) => {
+const bookController = {
+    // 1. Dapatkan semua buku
+    getAllBooks: async (req, res) => {
         try {
-            const borrowers = await BorrowerModel.getAllBorrowers();
-            res.status(200).json({ success: true, message: 'Data peminjam berhasil diambil', data: borrowers });
+            const books = await BookModel.getAllBooks();
+            res.status(200).json({
+                success: true,
+                message: 'Berhasil mengambil data buku',
+                data: books
+            });
         } catch (error) {
-            console.error(error.message);
+            console.error('Error getAllBooks:', error.message);
             res.status(500).json({ success: false, message: 'Internal Server Error' });
         }
     },
-    getBorrowerById: async (req, res) => {
+
+    // 2. Dapatkan satu buku berdasarkan ID
+    getBookById: async (req, res) => {
         try {
-            const borrower = await BorrowerModel.getBorrowerById(req.params.id);
-            if (!borrower) return res.status(404).json({ success: false, message: 'Peminjam tidak ditemukan' });
-            res.status(200).json({ success: true, data: borrower });
+            const { id } = req.params; // Ambil ID dari URL
+            const book = await BookModel.getBookById(id);
+
+            // Cek apakah buku ditemukan
+            if (!book) {
+                return res.status(404).json({ 
+                    success: false, 
+                    message: `Buku dengan ID ${id} tidak ditemukan` 
+                });
+            }
+
+            res.status(200).json({
+                success: true,
+                message: 'Berhasil mengambil data buku',
+                data: book
+            });
         } catch (error) {
-            console.error(error.message);
+            console.error('Error getBookById:', error.message);
             res.status(500).json({ success: false, message: 'Internal Server Error' });
         }
     },
-    createBorrower: async (req, res) => {
+
+    // 3. Tambah buku baru
+    createBook: async (req, res) => {
         try {
-            const { name, phone, address } = req.body;
-            if (!name) return res.status(400).json({ success: false, message: 'Nama peminjam wajib diisi' });
-            
-            const newBorrower = await BorrowerModel.createBorrower({ name, phone, address });
-            res.status(201).json({ success: true, message: 'Peminjam berhasil ditambahkan', data: newBorrower });
+            // Ambil data dari body request
+            const { title, author, publisher, year, category_id } = req.body;
+
+            // Validasi sederhana: pastikan kolom wajib diisi
+            if (!title || !author || !publisher || !year) {
+                return res.status(400).json({ 
+                    success: false, 
+                    message: 'Data title, author, publisher, dan year wajib diisi!' 
+                });
+            }
+
+            const newBook = await BookModel.createBook({ title, author, publisher, year, category_id });
+            res.status(201).json({
+                success: true,
+                message: 'Berhasil menambahkan buku baru',
+                data: newBook
+            });
         } catch (error) {
-            console.error(error.message);
+            console.error('Error createBook:', error.message);
             res.status(500).json({ success: false, message: 'Internal Server Error' });
         }
     },
-    updateBorrower: async (req, res) => {
+
+    // 4. Update data buku
+    updateBook: async (req, res) => {
         try {
-            const { name, phone, address } = req.body;
-            const updatedBorrower = await BorrowerModel.updateBorrower(req.params.id, { name, phone, address });
-            if (!updatedBorrower) return res.status(404).json({ success: false, message: 'Peminjam tidak ditemukan' });
-            res.status(200).json({ success: true, message: 'Peminjam berhasil diupdate', data: updatedBorrower });
+            const { id } = req.params;
+            const { title, author, publisher, year, category_id } = req.body;
+
+            // Cek apakah buku yang mau diupdate itu ada di database
+            const existingBook = await BookModel.getBookById(id);
+            if (!existingBook) {
+                return res.status(404).json({ 
+                    success: false, 
+                    message: `Gagal update. Buku dengan ID ${id} tidak ditemukan` 
+                });
+            }
+
+            const updatedBook = await BookModel.updateBook(id, { title, author, publisher, year, category_id });
+            res.status(200).json({
+                success: true,
+                message: 'Berhasil mengupdate data buku',
+                data: updatedBook
+            });
         } catch (error) {
-            console.error(error.message);
+            console.error('Error updateBook:', error.message);
             res.status(500).json({ success: false, message: 'Internal Server Error' });
         }
     },
-    deleteBorrower: async (req, res) => {
+
+    // 5. Hapus buku
+    deleteBook: async (req, res) => {
         try {
-            const deletedBorrower = await BorrowerModel.deleteBorrower(req.params.id);
-            if (!deletedBorrower) return res.status(404).json({ success: false, message: 'Peminjam tidak ditemukan' });
-            res.status(200).json({ success: true, message: 'Peminjam berhasil dihapus', data: deletedBorrower });
+            const { id } = req.params;
+
+            const deletedBook = await BookModel.deleteBook(id);
+
+            if (!deletedBook) {
+                return res.status(404).json({ 
+                    success: false, 
+                    message: `Gagal menghapus. Buku dengan ID ${id} tidak ditemukan` 
+                });
+            }
+
+            res.status(200).json({
+                success: true,
+                message: `Berhasil menghapus buku dengan ID ${id}`,
+                data: deletedBook
+            });
         } catch (error) {
-            console.error(error.message);
+            console.error('Error deleteBook:', error.message);
             res.status(500).json({ success: false, message: 'Internal Server Error' });
         }
     }
 };
 
-module.exports = borrowerController;
+module.exports = bookController;
