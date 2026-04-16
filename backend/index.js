@@ -1,21 +1,18 @@
 const express = require('express');
 const cors = require('cors');
 const pool = require('./src/config/db');
-const bookRoutes = require('./src/routes/bookRoutes');
-const categoryRoutes = require('./src/routes/categoryRoutes');
-const userRoutes = require('./src/routes/userRoutes');
-const borrowerRoutes = require('./src/routes/borrowerRoutes');
-const loanRoutes = require('./src/routes/loanRoutes');
+const routes = require('./src/routes/index'); // Cukup import 1 file hub ini
+const { notFound, globalErrorHandler } = require('./src/middleware/errorHandler');
 require('dotenv').config();
 
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-// Middleware
+// 1. MIDDLEWARE GLOBAL
 app.use(cors());
 app.use(express.json());
 
-// Fungsi test koneksi database
+// 2. TEST KONEKSI DATABASE
 const testDbConnection = async () => {
     try {
         const result = await pool.query('SELECT NOW()');
@@ -25,16 +22,21 @@ const testDbConnection = async () => {
         process.exit(1);
     }
 };
-
 testDbConnection();
 
-// Routes
-app.use('/api/books', bookRoutes); 
-app.use('/api/categories', categoryRoutes);
-app.use('/api/users', userRoutes);
-app.use('/api/borrowers', borrowerRoutes);
-app.use('/api/loans', loanRoutes);
+// 3. ROUTES
+app.get('/', (req, res) => {
+    res.json({ success: true, message: 'Welcome to Library API Sprint 3 & 4!' });
+});
 
+// Integrasi semua API routes (otomatis diawali /api)
+app.use('/api', routes);
+
+// 4. ERROR HANDLING MIDDLEWARE
+app.use(notFound);
+app.use(globalErrorHandler);
+
+// 5. START SERVER
 app.listen(PORT, () => {
-    console.log(`Server is running on http://localhost:${PORT}`);
+    console.log(`🚀 Server is running on http://localhost:${PORT}`);
 });
