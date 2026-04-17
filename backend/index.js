@@ -1,7 +1,7 @@
 const express = require('express');
 const cors = require('cors');
 const pool = require('./src/config/db');
-const routes = require('./src/routes/index'); // Cukup import 1 file hub ini
+const routes = require('./src/routes/index');
 const { notFound, globalErrorHandler } = require('./src/middleware/errorHandler');
 require('dotenv').config();
 
@@ -29,7 +29,7 @@ app.get('/', (req, res) => {
     res.json({ success: true, message: 'Welcome to Library API Sprint 3 & 4!' });
 });
 
-// Integrasi semua API routes (otomatis diawali /api)
+// Integrasi API Routes
 app.use('/api', routes);
 
 // 4. ERROR HANDLING MIDDLEWARE
