@@ -8,6 +8,7 @@ const { verifyToken, isAdmin } = require('../middleware/authMiddleware');
 // ==========================================
 // PUBLIC ROUTES (Tidak butuh login)
 // ==========================================
+const upload = require('../middleware/uploadMiddleware');
 router.get('/', bookController.getAllBooks);
 router.get('/:id', bookController.getBookById);
 
