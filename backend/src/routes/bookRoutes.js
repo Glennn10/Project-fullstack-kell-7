@@ -15,8 +15,8 @@ router.get('/:id', bookController.getBookById);
 // PROTECTED ROUTES (Butuh login & Wajib Admin)
 // ==========================================
 // Middleware akan mengeksekusi verifyToken dulu -> kalau lolos cek isAdmin -> kalau lolos baru jalankan Controller
-router.post('/', verifyToken, isAdmin, bookController.createBook);
-router.put('/:id', verifyToken, isAdmin, bookController.updateBook);
+router.post('/', verifyToken, isAdmin, upload.single('cover_image'), bookController.createBook);
+router.put('/:id', verifyToken, isAdmin, upload.single('cover_image'), bookController.updateBook);
 router.delete('/:id', verifyToken, isAdmin, bookController.deleteBook);
 
 module.exports = router;
