@@ -42,6 +42,9 @@ const bookController = {
         try {
             const { title, author, publisher, year, category_id } = req.body;
 
+            // Tangkap nama file dari multer (kalau ada file yang diupload)
+            const cover_image = req.file ? req.file.filename : null;
+
             // VALIDASI REQUIRED
             if (!title || !author || !publisher || !year) {
                 return res.status(400).json({
@@ -51,29 +54,36 @@ const bookController = {
                 });
             }
 
-            // VALIDASI TIPE DATA
-            if (typeof year !== "number") {
+            // VALIDASI TIPE DATA (Harus di-parse ke Number karena multipart/form-data ngirimnya String)
+            const parsedYear = Number(year);
+            if (isNaN(parsedYear)) {
                 return res.status(400).json({
                     success: false,
                     message: "Validation error",
-                    error: "year harus berupa angka"
+                    error: "year harus berupa angka valid"
                 });
             }
 
-            if (category_id !== null && category_id !== undefined && typeof category_id !== "number") {
-                return res.status(400).json({
-                    success: false,
-                    message: "Validation error",
-                    error: "category_id harus number atau null"
-                });
+            let parsedCategoryId = null;
+            if (category_id !== null && category_id !== undefined) {
+                parsedCategoryId = Number(category_id);
+                if (isNaN(parsedCategoryId)) {
+                    return res.status(400).json({
+                        success: false,
+                        message: "Validation error",
+                        error: "category_id harus berupa angka valid atau tidak diisi"
+                    });
+                }
             }
 
+            // Masukkan cover_image ke parameter Model
             const newBook = await BookModel.createBook({
                 title,
                 author,
                 publisher,
-                year,
-                category_id
+                year: parsedYear,
+                category_id: parsedCategoryId,
+                cover_image
             });
 
             res.status(201).json({
@@ -97,6 +107,9 @@ const bookController = {
             const { id } = req.params;
             const { title, author, publisher, year, category_id } = req.body;
 
+            // Tangkap nama file baru (jika user mau ganti foto)
+            const cover_image = req.file ? req.file.filename : null;
+
             const existingBook = await BookModel.getBookById(id);
 
             if (!existingBook) {
@@ -106,29 +119,44 @@ const bookController = {
                 });
             }
 
-            // VALIDASI
+            // VALIDASI REQUIRED
             if (!title || !author || !publisher || !year) {
                 return res.status(400).json({
                     success: false,
                     message: "Validation error",
-                    error: "Semua field wajib diisi"
+                    error: "Semua field (title, author, publisher, year) wajib diisi"
                 });
             }
 
-            if (typeof year !== "number") {
+            // VALIDASI TIPE DATA
+            const parsedYear = Number(year);
+            if (isNaN(parsedYear)) {
                 return res.status(400).json({
                     success: false,
                     message: "Validation error",
-                    error: "year harus angka"
+                    error: "year harus berupa angka valid"
                 });
+            }
+
+            let parsedCategoryId = category_id !== undefined ? category_id : existingBook.category_id;
+            if (category_id !== null && category_id !== undefined) {
+                parsedCategoryId = Number(category_id);
+                if (isNaN(parsedCategoryId)) {
+                    return res.status(400).json({
+                        success: false,
+                        message: "Validation error",
+                        error: "category_id harus berupa angka valid"
+                    });
+                }
             }
 
             const updatedBook = await BookModel.updateBook(id, {
                 title,
                 author,
                 publisher,
-                year,
-                category_id
+                year: parsedYear,
+                category_id: parsedCategoryId,
+                cover_image
             });
 
             res.status(200).json({
