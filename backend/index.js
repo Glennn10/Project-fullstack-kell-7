@@ -1,5 +1,6 @@
 const express = require('express');
 const cors = require('cors');
+const path = require('path');
 const pool = require('./src/config/db');
 const routes = require('./src/routes/index');
 const { notFound, globalErrorHandler } = require('./src/middleware/errorHandler');
@@ -11,6 +12,7 @@ const PORT = process.env.PORT || 3000;
 // 1. MIDDLEWARE GLOBAL
 app.use(cors());
 app.use(express.json());
+app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
 // 2. TEST KONEKSI DATABASE
 const testDbConnection = async () => {
