@@ -1,38 +1,34 @@
-import { Badge, Button, Card, Col, Row, Table } from 'react-bootstrap'
+import { Badge, Button, Col, Row } from 'react-bootstrap'
 import Layout from './components/Layout'
+import fallbackCover from './assets/hero.png'
 import './App.css'
 
-const libraryStats = [
-  { label: 'Total Buku', value: '1.248' },
-  { label: 'Dipinjam', value: '86' },
-  { label: 'Anggota Aktif', value: '342' },
-]
-
-const latestBooks = [
+const featuredBooks = [
   {
-    title: 'Clean Code',
-    author: 'Robert C. Martin',
-    category: 'Pemrograman',
-    status: 'Tersedia',
+    title: 'Ensiklopedia Anak Cerdas: Olahraga',
+    author: 'BIP Kelompok Gramedia',
+    category: 'Edukasi Anak',
+    cover:
+      'https://www.static-src.com/wcsstore/Indraprastha/images/catalog/full//100/MTA-14390577/bhuana_ilmu_popular_buku_ensiklopedia_anak_cerdas-_olahraga_by_geraldine_maincent_full01_thbhrev4.jpg',
+    synopsis:
+      'Mengenalkan dunia olahraga lewat ilustrasi ceria, fakta ringan, dan penjelasan yang mudah dipahami anak.',
   },
   {
-    title: 'Basis Data Lanjut',
-    author: 'Abdul Kadir',
-    category: 'Database',
-    status: 'Dipinjam',
+    title: 'Ensiklopedia Anak Cerdas: Penemuan',
+    author: 'BIP Kelompok Gramedia',
+    category: 'Sains Populer',
+    cover: 'https://bukukita.com/babacms/displaybuku/109935_f.jpg',
+    synopsis:
+      'Berisi kisah penemuan penting yang mengubah kehidupan manusia, disajikan singkat dan penuh warna.',
   },
   {
-    title: 'Jaringan Komputer',
-    author: 'Andrew S. Tanenbaum',
-    category: 'Networking',
-    status: 'Tersedia',
+    title: "Perry's Chemical Engineers' Handbook",
+    author: 'Don W. Green',
+    category: 'Teknik Kimia',
+    cover: 'https://covers.openlibrary.org/b/isbn/9780071834087-L.jpg',
+    synopsis:
+      'Referensi teknik kimia komprehensif untuk perancangan proses, operasi pabrik, dan pemecahan masalah industri.',
   },
-]
-
-const upcomingReturns = [
-  { borrower: 'Nadia Putri', book: 'React Dasar', dueDate: '24 Mei 2026' },
-  { borrower: 'Raka Aditya', book: 'Algoritma Praktis', dueDate: '26 Mei 2026' },
-  { borrower: 'Sinta Lestari', book: 'UI/UX Fundamentals', dueDate: '28 Mei 2026' },
 ]
 
 function App() {
@@ -51,81 +47,44 @@ function App() {
         </div>
       </section>
 
-      <Row className="g-3 mb-4">
-        {libraryStats.map((stat) => (
-          <Col md={4} key={stat.label}>
-            <Card className="h-100 border-0 shadow-sm">
-              <Card.Body>
-                <p className="text-secondary mb-1">{stat.label}</p>
-                <h2 className="fw-bold mb-0">{stat.value}</h2>
-              </Card.Body>
-            </Card>
-          </Col>
-        ))}
-      </Row>
+      <section className="featured-books-section">
+        <div className="section-heading">
+          <Badge bg="warning" text="dark" className="section-badge">
+            Rekomendasi Baru
+          </Badge>
+          <h2>Buku Terbaru</h2>
+          <p>
+            Pilihan koleksi terbaru yang bisa langsung dijelajahi sebelum kamu
+            masuk ke katalog lengkap.
+          </p>
+        </div>
 
-      <Row className="g-4">
-        <Col lg={7}>
-          <Card className="border-0 shadow-sm h-100">
-            <Card.Header className="bg-white fw-semibold">
-              Katalog Terbaru
-            </Card.Header>
-            <Card.Body className="p-0">
-              <Table responsive hover className="mb-0 align-middle">
-                <thead>
-                  <tr>
-                    <th>Judul</th>
-                    <th>Kategori</th>
-                    <th>Status</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {latestBooks.map((book) => (
-                    <tr key={book.title}>
-                      <td>
-                        <div className="fw-semibold">{book.title}</div>
-                        <small className="text-secondary">{book.author}</small>
-                      </td>
-                      <td>{book.category}</td>
-                      <td>
-                        <Badge
-                          bg={book.status === 'Tersedia' ? 'success' : 'warning'}
-                          text={book.status === 'Tersedia' ? undefined : 'dark'}
-                        >
-                          {book.status}
-                        </Badge>
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </Table>
-            </Card.Body>
-          </Card>
-        </Col>
-
-        <Col lg={5}>
-          <Card className="border-0 shadow-sm h-100">
-            <Card.Header className="bg-white fw-semibold">
-              Jadwal Pengembalian
-            </Card.Header>
-            <Card.Body>
-              <div className="d-grid gap-3">
-                {upcomingReturns.map((item) => (
-                  <div className="return-item" key={`${item.borrower}-${item.book}`}>
-                    <div>
-                      <div className="fw-semibold">{item.borrower}</div>
-                      <small className="text-secondary">{item.book}</small>
-                    </div>
-                    <Badge bg="light" text="dark">
-                      {item.dueDate}
-                    </Badge>
+        <Row className="g-4">
+          {featuredBooks.map((book) => (
+            <Col md={6} lg={4} key={book.title}>
+              <article className="book-card">
+                <img
+                  src={book.cover}
+                  alt={`Sampul ${book.title}`}
+                  onError={(event) => {
+                    event.currentTarget.src = fallbackCover
+                  }}
+                />
+                <div className="book-card__overlay">
+                  <Badge bg="light" text="dark" className="book-card__category">
+                    {book.category}
+                  </Badge>
+                  <div>
+                    <h3>{book.title}</h3>
+                    <p className="book-card__author">{book.author}</p>
+                    <p className="book-card__synopsis">{book.synopsis}</p>
                   </div>
-                ))}
-              </div>
-            </Card.Body>
-          </Card>
-        </Col>
-      </Row>
+                </div>
+              </article>
+            </Col>
+          ))}
+        </Row>
+      </section>
     </Layout>
   )
 }
