@@ -1,4 +1,5 @@
 import { Container, Row, Col } from 'react-bootstrap'
+import { Link } from 'react-router-dom'
 
 const Footer = () => {
   return (
@@ -16,9 +17,9 @@ const Footer = () => {
           <Col lg={3} md={6}>
             <h3 className="site-footer__title">Navigasi</h3>
             <ul className="site-footer__list">
-              <li><a href="/">Home</a></li>
-              <li><a href="/books">Katalog Buku</a></li>
-              <li><a href="/books">Peminjaman</a></li>
+              <li><Link to="/">Home</Link></li>
+              <li><Link to="/books">Katalog Buku</Link></li>
+              <li><Link to="/loans">Peminjaman</Link></li>
               <li><a href="#faq">FAQ</a></li>
             </ul>
           </Col>
@@ -34,7 +35,7 @@ const Footer = () => {
         </Row>
 
         <div className="site-footer__bottom">
-          © 2026 MinjemDong • Sistem Informasi Perpustakaan MinjemDong
+          &copy; 2026 MinjemDong &bull; Sistem Informasi Perpustakaan MinjemDong
         </div>
       </Container>
     </footer>
