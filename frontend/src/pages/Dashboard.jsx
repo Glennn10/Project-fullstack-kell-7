@@ -11,19 +11,8 @@ const navItems = [
   { label: 'Peminjaman', path: '/loans', icon: 'loan' },
 ];
 
-const Icon = ({ name }) => {
-  const paths = {
-    grid: 'M4 4h7v7H4zM13 4h7v7h-7zM4 13h7v7H4zM13 13h7v7h-7z',
-    book: 'M5 4h10a4 4 0 0 1 4 4v12H8a3 3 0 0 0-3 3V4zm0 0v19',
-    loan: 'M4 7h16M4 12h16M4 17h10M16 17l2 2 4-5',
-    logout: 'M10 6H5v14h5M14 16l4-4-4-4M18 12H9',
-  };
-
-  return (
-    <svg className="dashboard-icon" viewBox="0 0 24 24" aria-hidden="true">
-      <path d={paths[name]} />
-    </svg>
-  );
+const Icon = () => {
+  return <img src="/Logo.png" alt="" className="dashboard-icon" aria-hidden="true" />;
 };
 
 const Dashboard = () => {
@@ -83,7 +72,9 @@ const Dashboard = () => {
     <div className="admin-shell">
       <aside className="admin-sidebar">
         <Link to="/dashboard" className="admin-brand">
-          <span>MD</span>
+          <span>
+            <img src="/Logo.png" alt="" aria-hidden="true" />
+          </span>
           <strong>MinjemDong</strong>
         </Link>
 

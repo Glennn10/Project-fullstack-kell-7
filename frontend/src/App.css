@@ -8,10 +8,20 @@
 }
 
 .navbar-brand {
+  align-items: center;
   color: #0f2d47 !important;
+  display: inline-flex;
   font-size: 1.25rem;
+  gap: 10px;
   font-weight: 700;
   letter-spacing: 0.2px;
+}
+
+.brand-logo {
+  border-radius: 6px;
+  height: 34px;
+  object-fit: contain;
+  width: 34px;
 }
 
 .navbar-brand:hover,
@@ -266,19 +276,10 @@ header p {
   width: 118px;
 }
 
-.library-feature-card__icon svg {
-  fill: none;
+.library-feature-card__icon img {
   height: 76px;
-  stroke: #2b7e8f;
-  stroke-linecap: round;
-  stroke-linejoin: round;
-  stroke-width: 5;
+  object-fit: contain;
   width: 76px;
-}
-
-.library-feature-card__icon svg path:not([fill]),
-.library-feature-card__icon svg rect {
-  fill: none;
 }
 
 .library-feature-card h3 {
@@ -801,6 +802,12 @@ header form .btn-warning:focus {
   width: 42px;
 }
 
+.admin-brand span img {
+  height: 30px;
+  object-fit: contain;
+  width: 30px;
+}
+
 .admin-brand strong {
   font-size: 1.08rem;
   letter-spacing: 0;
@@ -836,15 +843,8 @@ header form .btn-warning:focus {
 .dashboard-icon {
   flex: 0 0 auto;
   height: 20px;
+  object-fit: contain;
   width: 20px;
-}
-
-.dashboard-icon path {
-  fill: none;
-  stroke: currentColor;
-  stroke-linecap: round;
-  stroke-linejoin: round;
-  stroke-width: 2;
 }
 
 .admin-sidebar__footer {

@@ -19,6 +19,7 @@ const NavigationBar = () => {
       <Navbar expand="lg" sticky="top" className="shadow-sm" style={{ backgroundColor: '#ffffff' }}>
         <Container>
           <Navbar.Brand as={Link} to="/" className="fw-bold text-dark">
+            <img src="/Logo.png" alt="" className="brand-logo" aria-hidden="true" />
             MinjemDong
           </Navbar.Brand>
 
