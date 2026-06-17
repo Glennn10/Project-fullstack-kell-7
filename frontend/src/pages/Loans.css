@@ -1,0 +1,274 @@
+.loan-container {
+  padding: 40px 0;
+  background-color: #fafbfc;
+  min-height: 100vh;
+}
+
+/* Page Header */
+.loan-header-section {
+  margin-bottom: 32px;
+}
+
+.loan-badge {
+  font-weight: 700;
+  border-radius: 999px;
+  padding: 8px 16px;
+  font-size: 0.85rem;
+  letter-spacing: 0.5px;
+  box-shadow: 0 4px 10px rgba(255, 193, 7, 0.2);
+}
+
+.loan-title {
+  color: #0f2d47;
+  font-weight: 800;
+  font-size: clamp(1.8rem, 4vw, 2.5rem);
+  margin-top: 12px;
+  margin-bottom: 10px;
+}
+
+.loan-subtitle {
+  color: #5c6f80;
+  font-size: 1.05rem;
+  max-width: 600px;
+}
+
+/* Connection status alert badge */
+.connection-badge-wrapper {
+  margin-bottom: 24px;
+}
+
+.connection-alert {
+  border-radius: 12px;
+  padding: 12px 20px;
+  font-weight: 500;
+  font-size: 0.9rem;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.02);
+  border: 1px solid rgba(0, 0, 0, 0.04);
+}
+
+.connection-indicator {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  display: inline-block;
+  position: relative;
+}
+
+.connection-indicator.online {
+  background-color: #198754;
+  box-shadow: 0 0 0 4px rgba(25, 135, 84, 0.2);
+}
+
+.connection-indicator.demo {
+  background-color: #fd7e14;
+  box-shadow: 0 0 0 4px rgba(253, 126, 20, 0.2);
+  animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+  0% {
+    transform: scale(0.95);
+    box-shadow: 0 0 0 0 rgba(253, 126, 20, 0.5);
+  }
+  70% {
+    transform: scale(1);
+    box-shadow: 0 0 0 6px rgba(253, 126, 20, 0);
+  }
+  100% {
+    transform: scale(0.95);
+    box-shadow: 0 0 0 0 rgba(253, 126, 20, 0);
+  }
+}
+
+/* Premium Layout Cards */
+.loan-card {
+  background: #ffffff;
+  border: none;
+  border-radius: 16px;
+  box-shadow: 0 10px 30px rgba(15, 45, 71, 0.05);
+  padding: 28px;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  height: 100%;
+}
+
+.loan-card:hover {
+  box-shadow: 0 14px 35px rgba(15, 45, 71, 0.08);
+}
+
+.loan-card-title {
+  color: #0f2d47;
+  font-size: 1.25rem;
+  font-weight: 700;
+  margin-bottom: 6px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.loan-card-desc {
+  color: #8c9ba5;
+  font-size: 0.88rem;
+  margin-bottom: 24px;
+}
+
+/* Form Styles */
+.loan-form .form-label {
+  font-weight: 600;
+  color: #31475b;
+  font-size: 0.9rem;
+  margin-bottom: 8px;
+}
+
+.loan-form .form-control, 
+.loan-form .form-select {
+  border: 1px solid rgba(15, 45, 71, 0.15);
+  border-radius: 10px;
+  padding: 12px 16px;
+  font-size: 0.95rem;
+  color: #0f2d47;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+  background-color: #fafbfc;
+}
+
+.loan-form .form-control:focus, 
+.loan-form .form-select:focus {
+  border-color: #2b7e8f;
+  box-shadow: 0 0 0 4px rgba(43, 126, 143, 0.12);
+  background-color: #ffffff;
+}
+
+.loan-form .form-select {
+  cursor: pointer;
+}
+
+/* Submit Button */
+.btn-submit-loan {
+  background-color: #0f2d47;
+  border-color: #0f2d47;
+  color: #ffffff;
+  padding: 12px 24px;
+  border-radius: 10px;
+  font-weight: 700;
+  font-size: 0.95rem;
+  width: 100%;
+  margin-top: 12px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+  transition: background-color 0.2s ease, border-color 0.2s ease, transform 0.2s ease;
+}
+
+.btn-submit-loan:hover,
+.btn-submit-loan:focus {
+  background-color: #2b7e8f;
+  border-color: #2b7e8f;
+  color: #ffffff;
+  transform: translateY(-2px);
+}
+
+.btn-submit-loan:active {
+  transform: translateY(0);
+}
+
+/* Guide Steps Layout Styles */
+.guide-steps-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-top: 10px;
+}
+
+.guide-step-item {
+  display: flex;
+  gap: 20px;
+  padding: 18px;
+  border-radius: 12px;
+  background: #ffffff;
+  transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+  border: 1px solid rgba(15, 45, 71, 0.04);
+}
+
+.guide-step-item:hover {
+  transform: translateX(6px);
+  background: rgba(43, 126, 143, 0.02);
+  border-color: rgba(43, 126, 143, 0.15);
+  box-shadow: 0 6px 20px rgba(15, 45, 71, 0.04);
+}
+
+.step-number-col {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
+}
+
+.step-number-badge {
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  color: #ffffff;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-weight: 800;
+  font-size: 0.95rem;
+  z-index: 2;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.06);
+}
+
+.step-number-badge.step-1 {
+  background: linear-gradient(135deg, #2b7e8f, #48b1bf);
+}
+
+.step-number-badge.step-2 {
+  background: linear-gradient(135deg, #0f2d47, #2c3e50);
+}
+
+.step-number-badge.step-3 {
+  background: linear-gradient(135deg, #ffc107, #ff9800);
+}
+
+.step-number-badge.step-4 {
+  background: linear-gradient(135deg, #198754, #2ecc71);
+}
+
+.step-line {
+  width: 2px;
+  flex-grow: 1;
+  background-color: rgba(15, 45, 71, 0.08);
+  margin-top: 8px;
+  margin-bottom: -18px;
+  z-index: 1;
+}
+
+.step-content-col {
+  flex-grow: 1;
+}
+
+.step-content-col h4 {
+  color: #0f2d47;
+  font-size: 1rem;
+  font-weight: 700;
+  margin-bottom: 6px;
+}
+
+.step-content-col p {
+  color: #5c6f80;
+  font-size: 0.86rem;
+  line-height: 1.5;
+  margin: 0;
+}
+
+/* Footer guide card */
+.guide-rules-card {
+  transition: transform 0.3s ease;
+  border-left: 4px solid #ffc107 !important;
+}
+
+.guide-rules-card:hover {
+  transform: scale(1.01);
+}
