@@ -15,6 +15,13 @@ const MOCK_BOOKS = [
   { id: 5, title: 'Harry Potter and the Order of the Phoenix', author: 'J.K. Rowling' },
 ];
 
+const MOCK_BORROWERS = [
+  { id: 101, name: 'Budi Santoso', phone: '081234567890', address: 'Jakarta' },
+  { id: 102, name: 'Siti Rahma', phone: '085678901234', address: 'Bandung' },
+  { id: 103, name: 'Ahmad Faisal', phone: '089012345678', address: 'Surabaya' },
+  { id: 104, name: 'Dewi Lestari', phone: '082134567890', address: 'Yogyakarta' },
+];
+
 const Loans = () => {
   const { token, user, isAuthenticated } = useAuth();
 
@@ -40,16 +47,23 @@ const Loans = () => {
 
   // Load Initial Data
   useEffect(() => {
+    let active = true;
+
     const loadData = async () => {
+      if (!active) return;
+      
+      // Start loading
       setLoading(true);
       setErrorMessage('');
-      
+
       // If user is not logged in, force demo mode immediately
-      if (!isAuthenticated || !token) {
-        setIsDemoMode(true);
-        setBooks(MOCK_BOOKS);
-        setBorrowers(MOCK_BORROWERS);
-        setLoading(false);
+      if (!token) {
+        if (active) {
+          setIsDemoMode(true);
+          setBooks(MOCK_BOOKS);
+          setBorrowers(MOCK_BORROWERS);
+          setLoading(false);
+        }
         return;
       }
 
@@ -62,24 +76,30 @@ const Loans = () => {
           axios.get(apiUrl('/api/borrowers'), { headers })
         ]);
 
-        setBooks(booksRes.data.data || []);
-        setBorrowers(borrowersRes.data.data || []);
-        setIsDemoMode(false);
+        if (active) {
+          setBooks(booksRes.data.data || []);
+          setBorrowers(borrowersRes.data.data || []);
+          setIsDemoMode(false);
+          setLoading(false);
+        }
       } catch (err) {
         console.warn('Backend connection failed. Switching to Demo Mode.', err);
         // Fallback to demo mode if backend is down or API returns error
-        setIsDemoMode(true);
-        setBooks(MOCK_BOOKS);
-        setBorrowers(MOCK_BORROWERS);
-        setSuccessMessage('Halaman berjalan dalam Mode Demo (Offline/Koneksi Backend Gagal).');
-        setTimeout(() => setSuccessMessage(''), 5000);
-      } finally {
-        setLoading(false);
+        if (active) {
+          setIsDemoMode(true);
+          setBooks(MOCK_BOOKS);
+          setBorrowers(MOCK_BORROWERS);
+          setLoading(false);
+        }
       }
     };
 
     loadData();
-  }, [isAuthenticated, token]);
+
+    return () => {
+      active = false;
+    };
+  }, [token]);
 
   // Form Submit Handler
   const handleSubmit = async (e) => {
@@ -109,9 +129,9 @@ const Loans = () => {
         const headers = { Authorization: `Bearer ${token}` };
         let borrowerId = null;
 
-        // 1. Check if borrower already exists
+        // 1. Check if borrower already exists (defensively check b.name)
         const existing = borrowers.find(
-          b => b.name.toLowerCase() === borrowerName.trim().toLowerCase()
+          b => (b?.name || '').toLowerCase() === borrowerName.trim().toLowerCase()
         );
 
         if (existing) {
