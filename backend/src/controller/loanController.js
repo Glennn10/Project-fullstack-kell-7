@@ -22,10 +22,19 @@ const loanController = {
     },
     createLoan: async (req, res) => {
         try {
-            const { book_id, borrower_id, loan_date, user_id } = req.body;
+            const { book_id, borrower_id, loan_date } = req.body;
+            const user_id = req.user.id;
             
-            if (!book_id || !borrower_id || !loan_date || !user_id) {
-                return res.status(400).json({ success: false, message: 'book_id, borrower_id, loan_date, dan user_id wajib diisi' });
+            if (!book_id || !borrower_id || !loan_date) {
+                return res.status(400).json({ success: false, message: 'book_id, borrower_id, dan loan_date wajib diisi' });
+            }
+
+            if (isNaN(Number(book_id)) || isNaN(Number(borrower_id))) {
+                return res.status(400).json({ success: false, message: 'book_id dan borrower_id harus berupa angka valid' });
+            }
+
+            if (isNaN(Date.parse(loan_date))) {
+                return res.status(400).json({ success: false, message: 'loan_date harus berupa tanggal valid' });
             }
 
             const newLoan = await LoanModel.createLoan({ book_id, borrower_id, loan_date, user_id });
@@ -44,7 +53,12 @@ const loanController = {
                 return res.status(400).json({ success: false, message: "Status harus salah satu dari: 'Dipinjam', 'Dikembalikan', 'Terlambat'" });
             }
 
-            const updatedLoan = await LoanModel.updateLoanStatus(req.params.id, status, return_date);
+            if (return_date && isNaN(Date.parse(return_date))) {
+                return res.status(400).json({ success: false, message: 'return_date harus berupa tanggal valid' });
+            }
+
+            const normalizedReturnDate = status === 'Dipinjam' ? null : (return_date || new Date());
+            const updatedLoan = await LoanModel.updateLoanStatus(req.params.id, status, normalizedReturnDate);
             if (!updatedLoan) return res.status(404).json({ success: false, message: 'Data peminjaman tidak ditemukan' });
             
             res.status(200).json({ success: true, message: 'Status peminjaman berhasil diupdate', data: updatedLoan });

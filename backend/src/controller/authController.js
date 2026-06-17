@@ -8,7 +8,7 @@ const authController = {
     // ==========================================
     register: async (req, res) => {
         try {
-            const { name, email, password, role } = req.body;
+            const { name, email, password } = req.body;
 
             // Validasi input kosong
             if (!name || !email || !password) {
@@ -25,13 +25,13 @@ const authController = {
             // Angka 10 adalah 'saltRounds' (tingkat kerumitan acakan, 10 itu standar yang aman & cepat)
             const hashedPassword = await bcrypt.hash(password, 10);
 
-            // Simpan ke database dengan password yang sudah di-hash
-            // Jika role tidak dikirim dari front-end, otomatis jadi 'user' dari logic di Model
+            // Simpan ke database dengan password yang sudah di-hash.
+            // Register publik selalu membuat akun user biasa.
             const newUser = await UserModel.createUser({ 
                 name, 
                 email, 
-                password: hashedPassword, 
-                role 
+                password: hashedPassword,
+                role: 'user'
             });
 
             res.status(201).json({

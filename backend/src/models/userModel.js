@@ -39,15 +39,22 @@ const UserModel = {
     },
 
     updateUser: async (id, userData) => {
-        const { name, email, role } = userData;
-        // Sengaja password nggak dimasukkan ke update general biar aman (idealnya update password ada endpoint sendiri)
-        const query = `
-            UPDATE users 
-            SET name = $1, email = $2, role = $3 
-            WHERE id = $4 
-            RETURNING id, name, email, role, created_at
-        `;
-        const result = await pool.query(query, [name, email, role, id]);
+        const { name, email, password, role } = userData;
+        const query = password
+            ? `
+                UPDATE users 
+                SET name = $1, email = $2, password = $3, role = $4 
+                WHERE id = $5 
+                RETURNING id, name, email, role, created_at
+            `
+            : `
+                UPDATE users 
+                SET name = $1, email = $2, role = $3 
+                WHERE id = $4 
+                RETURNING id, name, email, role, created_at
+            `;
+        const values = password ? [name, email, password, role, id] : [name, email, role, id];
+        const result = await pool.query(query, values);
         return result.rows[0];
     },
 

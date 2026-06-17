@@ -96,8 +96,7 @@ const bookController = {
             console.error("Error createBook:", error.message);
             res.status(500).json({
                 success: false,
-                message: "Internal Server Error",
-                error: error.message
+                message: "Internal Server Error"
             });
         }
     },
@@ -169,8 +168,7 @@ const bookController = {
             console.error("Error updateBook:", error.message);
             res.status(500).json({
                 success: false,
-                message: "Internal Server Error",
-                error: error.message
+                message: "Internal Server Error"
             });
         }
     },

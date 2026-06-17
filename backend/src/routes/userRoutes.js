@@ -1,6 +1,9 @@
 const express = require('express');
 const router = express.Router();
 const userController = require('../controller/userController');
+const { verifyToken, isAdmin } = require('../middleware/authMiddleware');
+
+router.use(verifyToken, isAdmin);
 
 router.get('/', userController.getAllUsers);
 router.get('/:id', userController.getUserById);

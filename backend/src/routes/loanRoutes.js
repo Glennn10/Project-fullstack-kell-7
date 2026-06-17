@@ -3,12 +3,12 @@ const router = express.Router();
 const loanController = require('../controller/loanController');
 const { verifyToken, isAdmin } = require('../middleware/authMiddleware');
 
-// Lihat riwayat pinjaman: minimal harus login (nanti bisa di-upgrade cuma liat riwayat sendiri)
-router.get('/', verifyToken, loanController.getAllLoans);
-router.get('/:id', verifyToken, loanController.getLoanById);
+// Lihat seluruh riwayat pinjaman: khusus Admin
+router.get('/', verifyToken, isAdmin, loanController.getAllLoans);
+router.get('/:id', verifyToken, isAdmin, loanController.getLoanById);
 
-// Bikin peminjaman baru: minimal harus login
-router.post('/', verifyToken, loanController.createLoan);
+// Bikin peminjaman baru: khusus Admin
+router.post('/', verifyToken, isAdmin, loanController.createLoan);
 
 // Update status & Hapus data peminjaman: Wajib Admin
 router.patch('/:id/status', verifyToken, isAdmin, loanController.updateLoanStatus); 

@@ -35,6 +35,8 @@ const categoryController = {
     updateCategory: async (req, res) => {
         try {
             const { name } = req.body;
+            if (!name) return res.status(400).json({ success: false, message: 'Nama kategori wajib diisi' });
+
             const updatedCategory = await CategoryModel.updateCategory(req.params.id, name);
             if (!updatedCategory) return res.status(404).json({ success: false, message: 'Kategori tidak ditemukan' });
             res.status(200).json({ success: true, message: 'Kategori berhasil diupdate', data: updatedCategory });

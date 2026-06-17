@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { Container, Row, Col, Card, Spinner, Alert } from 'react-bootstrap';
 import axios from 'axios';
+import { API_BASE_URL, apiUrl } from '../config/api';
 
 const Books = () => {
   const [books, setBooks] = useState([]);
@@ -11,7 +12,7 @@ const Books = () => {
   const fetchBooks = async () => {
     try {
       // Pastikan backend lu lagi jalan (npm run dev di folder backend)
-      const response = await axios.get('http://localhost:3000/api/books');
+      const response = await axios.get(apiUrl('/api/books'));
       setBooks(response.data.data); // Sesuaikan dengan struktur response backend lu
       setLoading(false);
     } catch (err) {
@@ -23,6 +24,7 @@ const Books = () => {
 
   // useEffect jalan otomatis pas halaman pertama kali dibuka
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     fetchBooks();
   }, []);
 
@@ -51,7 +53,7 @@ const Books = () => {
                   {/* Kalau ada cover_image tampilkan, kalau null pakai gambar dummy */}
                   <Card.Img 
                     variant="top" 
-                    src={book.cover_image ? `http://localhost:3000/uploads/${book.cover_image}` : "https://via.placeholder.com/150"} 
+                    src={book.cover_image ? `${API_BASE_URL}/uploads/${book.cover_image}` : "https://via.placeholder.com/150"} 
                     style={{ height: '250px', objectFit: 'cover' }}
                   />
                   <Card.Body>

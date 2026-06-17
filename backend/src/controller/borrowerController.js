@@ -35,6 +35,8 @@ const borrowerController = {
     updateBorrower: async (req, res) => {
         try {
             const { name, phone, address } = req.body;
+            if (!name) return res.status(400).json({ success: false, message: 'Nama peminjam wajib diisi' });
+
             const updatedBorrower = await BorrowerModel.updateBorrower(req.params.id, { name, phone, address });
             if (!updatedBorrower) return res.status(404).json({ success: false, message: 'Peminjam tidak ditemukan' });
             res.status(200).json({ success: true, message: 'Peminjam berhasil diupdate', data: updatedBorrower });
