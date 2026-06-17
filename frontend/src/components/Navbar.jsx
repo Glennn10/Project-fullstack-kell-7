@@ -35,9 +35,14 @@ const NavigationBar = () => {
                 Katalog Buku
               </Nav.Link>
 
-              <Nav.Link as={NavLink} to="/loans">
-                Peminjaman Buku
-              </Nav.Link>
+              <NavDropdown title="Sirkulasi Buku" id="sirkulasi-dropdown">
+                <NavDropdown.Item as={Link} to="/loans">
+                  Catat Peminjaman
+                </NavDropdown.Item>
+                <NavDropdown.Item as={Link} to="/returns">
+                  Pengembalian Buku
+                </NavDropdown.Item>
+              </NavDropdown>
 
               {isAdmin && (
                 <Nav.Link as={NavLink} to="/dashboard">

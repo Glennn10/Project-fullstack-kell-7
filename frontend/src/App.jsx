@@ -4,6 +4,7 @@ import Layout from './components/Layout';
 import Home from './pages/index';
 import Books from './pages/Books';
 import Loans from './pages/Loans';
+import Returns from './pages/Returns';
 import Login from './pages/Login';
 import Register from './pages/Register';
 import Dashboard from './pages/Dashboard';
@@ -56,6 +57,14 @@ function App() {
           element={
             <Layout>
               <Loans />
+            </Layout>
+          }
+        />
+        <Route
+          path="/returns"
+          element={
+            <Layout>
+              <Returns />
             </Layout>
           }
         />
