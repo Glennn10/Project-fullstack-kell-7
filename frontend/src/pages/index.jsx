@@ -432,12 +432,12 @@ const Home = () => {
         </div>
       </section>
 
-      <section className="borrowing-guide" aria-labelledby="borrowing-guide-title">
+      <section className="borrowing-guide" id="borrowing-guide" aria-labelledby="borrowing-guide-title">
         <div className="borrowing-guide__heading">
           <div>
             <h2 id="borrowing-guide-title">Dari rak sampai <em>ke tanganmu?</em></h2>
           </div>
-          <p>Cuma tiga langkah. Make formulir panjang? idih kuno.</p>
+          <p>Make formulir panjang? idih kuno. Cuma tiga langkah. </p>
         </div>
 
         <div className="borrowing-guide__steps">

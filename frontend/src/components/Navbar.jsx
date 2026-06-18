@@ -19,7 +19,7 @@ const NavigationBar = () => {
 
   return (
     <>
-      <Navbar expand="lg" sticky="top" className={`navigation-bar${showHero ? ' navigation-bar--home' : ''}`}>
+      <Navbar id="top" expand="lg" sticky="top" className={`navigation-bar${showHero ? ' navigation-bar--home' : ''}`}>
         <Container className="navigation-bar__inner">
           <Navbar.Brand as={Link} to="/" className="fw-bold text-dark">
             <span className="brand-logo-wrap"><img src="/Logo.png" alt="" className="brand-logo" aria-hidden="true" /></span>
