@@ -24,7 +24,7 @@ const buildCatalog = (categories, books) => categories.map((category, categoryIn
       id: book.id,
       title: book.title,
       author: book.author,
-      available: book.available ?? book.status !== 'borrowed',
+      available: book.is_available ?? book.available ?? book.status !== 'borrowed',
       accent: categoryPalette[(categoryIndex + bookIndex) % categoryPalette.length],
       cover: getCoverUrl(book.cover_image),
     })),

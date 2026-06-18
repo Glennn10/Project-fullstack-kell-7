@@ -5,10 +5,14 @@ const LoanModel = {
         const query = `
             SELECT 
                 l.id, 
+                l.book_id,
                 b.title AS book_title, 
+                b.author AS book_author,
+                b.cover_image,
                 br.name AS borrower_name, 
                 u.name AS staff_name,
                 l.loan_date, 
+                COALESCE(l.due_date, (l.loan_date + INTERVAL '7 days')::date) AS due_date,
                 l.return_date, 
                 l.status, 
                 l.created_at
@@ -30,7 +34,7 @@ const LoanModel = {
                 l.return_date,
                 l.status,
                 l.created_at,
-                (l.loan_date + INTERVAL '7 days')::date AS due_date,
+                COALESCE(l.due_date, (l.loan_date + INTERVAL '7 days')::date) AS due_date,
                 b.id AS book_id,
                 b.title AS book_title,
                 b.author AS book_author,
@@ -65,25 +69,61 @@ const LoanModel = {
     },
 
     createLoan: async (loanData) => {
-        const { book_id, borrower_id, loan_date, user_id } = loanData;
-        const query = `
-            INSERT INTO loans (book_id, borrower_id, loan_date, user_id) 
-            VALUES ($1, $2, $3, $4) 
-            RETURNING *;
-        `;
-        const result = await pool.query(query, [book_id, borrower_id, loan_date, user_id]);
-        return result.rows[0];
+        const { book_id, borrower_id, loan_date, due_date, user_id } = loanData;
+        const client = await pool.connect();
+        try {
+            await client.query('BEGIN');
+            const bookResult = await client.query('SELECT id, is_available FROM books WHERE id = $1 FOR UPDATE', [book_id]);
+            const book = bookResult.rows[0];
+            if (!book) {
+                const error = new Error('Buku tidak ditemukan');
+                error.code = 'BOOK_NOT_FOUND';
+                throw error;
+            }
+            if (!book.is_available) {
+                const error = new Error('Buku sedang dipinjam');
+                error.code = 'BOOK_UNAVAILABLE';
+                throw error;
+            }
+
+            const result = await client.query(`
+                INSERT INTO loans (book_id, borrower_id, loan_date, due_date, user_id)
+                VALUES ($1, $2, $3, $4, $5)
+                RETURNING *
+            `, [book_id, borrower_id, loan_date, due_date, user_id]);
+            await client.query('UPDATE books SET is_available = FALSE WHERE id = $1', [book_id]);
+            await client.query('COMMIT');
+            return result.rows[0];
+        } catch (error) {
+            await client.query('ROLLBACK');
+            throw error;
+        } finally {
+            client.release();
+        }
     },
 
     updateLoanStatus: async (id, status, return_date = null) => {
-        const query = `
-            UPDATE loans 
-            SET status = $1, return_date = $2 
-            WHERE id = $3 
-            RETURNING *;
-        `;
-        const result = await pool.query(query, [status, return_date, id]);
-        return result.rows[0];
+        const client = await pool.connect();
+        try {
+            await client.query('BEGIN');
+            const result = await client.query(`
+                UPDATE loans
+                SET status = $1, return_date = $2
+                WHERE id = $3
+                RETURNING *
+            `, [status, return_date, id]);
+            const loan = result.rows[0];
+            if (loan) {
+                await client.query('UPDATE books SET is_available = $1 WHERE id = $2', [status === 'Dikembalikan', loan.book_id]);
+            }
+            await client.query('COMMIT');
+            return loan;
+        } catch (error) {
+            await client.query('ROLLBACK');
+            throw error;
+        } finally {
+            client.release();
+        }
     },
 
     deleteLoan: async (id) => {

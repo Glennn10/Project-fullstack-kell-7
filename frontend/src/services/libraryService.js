@@ -16,6 +16,7 @@ export const libraryService = {
   getLoans: (token) => apiClient.get('/api/loans', authConfig(token)),
   getMyLoans: (token) => apiClient.get('/api/loans/my', authConfig(token)),
   createLoan: (payload, token) => apiClient.post('/api/loans', payload, authConfig(token)),
+  updateLoanStatus: (id, payload, token) => apiClient.patch(`/api/loans/${id}/status`, payload, authConfig(token)),
   getBorrowers: (token) => apiClient.get('/api/borrowers', authConfig(token)),
   createBorrower: (payload, token) => apiClient.post('/api/borrowers', payload, authConfig(token)),
 };

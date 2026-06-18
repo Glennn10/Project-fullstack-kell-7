@@ -6,7 +6,7 @@ const navItems = [
   { label: 'Ringkasan', path: '/dashboard', icon: FiGrid },
   { label: 'Kelola Buku', path: '/dashboard/books', icon: FiBookOpen },
   { label: 'Kategori', path: '/dashboard/categories', icon: FiTag },
-  { label: 'Peminjaman', path: '/loans', icon: FiRepeat },
+  { label: 'Peminjaman', path: '/dashboard/loans', icon: FiRepeat },
 ];
 
 const DashboardShell = ({ children, note = 'Cek data sebelum menutup perpustakaan.' }) => {

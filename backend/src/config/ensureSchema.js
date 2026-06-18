@@ -17,8 +17,24 @@ const ensureSchema = async () => {
     `);
 
     await pool.query(`
+        ALTER TABLE loans
+        ADD COLUMN IF NOT EXISTS due_date DATE;
+    `);
+
+    await pool.query(`
+        UPDATE loans
+        SET due_date = (loan_date + INTERVAL '7 days')::date
+        WHERE due_date IS NULL;
+    `);
+
+    await pool.query(`
         ALTER TABLE borrowers
         ADD COLUMN IF NOT EXISTS user_id INTEGER;
+    `);
+
+    await pool.query(`
+        ALTER TABLE books
+        ADD COLUMN IF NOT EXISTS is_available BOOLEAN NOT NULL DEFAULT TRUE;
     `);
 
     await pool.query(`
@@ -75,6 +91,16 @@ const ensureSchema = async () => {
           AND NOT EXISTS (
               SELECT 1 FROM borrowers br WHERE br.user_id = u.id
           );
+    `);
+
+    await pool.query(`
+        UPDATE books b
+        SET is_available = NOT EXISTS (
+            SELECT 1
+            FROM loans l
+            WHERE l.book_id = b.id
+              AND l.status IN ('Dipinjam', 'Terlambat')
+        );
     `);
 };
 

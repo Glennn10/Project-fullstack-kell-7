@@ -21,7 +21,7 @@ const navItems = [
   { label: 'Ringkasan', path: '/dashboard', icon: FiGrid },
   { label: 'Kelola Buku', path: '/dashboard/books', icon: FiBookOpen },
   { label: 'Kategori', path: '/dashboard/categories', icon: FiTag },
-  { label: 'Peminjaman', path: '/loans', icon: FiRepeat },
+  { label: 'Peminjaman', path: '/dashboard/loans', icon: FiRepeat },
 ];
 
 const statMeta = [
@@ -155,7 +155,7 @@ const Dashboard = () => {
               <article className="loan-ledger">
                 <header>
                   <div><span>Catatan sirkulasi</span><h2>Peminjaman terbaru</h2></div>
-                  <Link to="/loans">Buka pencatatan <FiArrowUpRight /></Link>
+                  <Link to="/dashboard/loans">Buka pencatatan <FiArrowUpRight /></Link>
                 </header>
 
                 {latestLoans.length > 0 ? (

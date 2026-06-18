@@ -39,7 +39,9 @@
 .inventory-ledger { background: #fffaf0; border: 1.5px solid #102f3d; box-shadow: 9px 10px 0 rgba(16,47,61,.16); overflow: hidden; }
 .inventory-ledger > header { background: #f5c84b; border-bottom: 1.5px solid #102f3d; padding: 18px 22px 15px; }
 .inventory-ledger > header > span { font-family: Georgia, serif; font-size: 1.25rem; font-weight: 700; }
-.inventory-ledger > header > div { color: rgba(16,47,61,.62); display: grid; font-size: .54rem; gap: 15px; grid-template-columns: minmax(220px, 1fr) minmax(120px,.5fr) 70px 82px; letter-spacing: .1em; margin: 12px 0 0 80px; text-transform: uppercase; }
+.inventory-ledger > header > div { color: #102f3d; display: grid; font-size: .6rem; font-weight: 900; gap: 15px; grid-template-columns: 64px minmax(220px, 1fr) minmax(120px,.5fr) 70px 82px; letter-spacing: .1em; margin: 12px 0 0; text-transform: uppercase; }
+.inventory-ledger > header > div > strong { font-weight: 900; }
+.inventory-ledger > header > div > strong:first-child { grid-column: 1 / 3; }
 .inventory-row { align-items: center; border-bottom: 1px solid rgba(16,47,61,.17); display: grid; gap: 15px; grid-template-columns: 64px minmax(220px, 1fr) minmax(120px,.5fr) 70px 82px; min-height: 112px; padding: 16px 22px; transition: background-color .18s ease; }
 .inventory-row:last-child { border-bottom: 0; }
 .inventory-row:hover { background: #f7f0e3; }

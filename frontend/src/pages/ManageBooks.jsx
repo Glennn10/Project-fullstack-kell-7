@@ -185,7 +185,7 @@ const ManageBooks = () => {
 
       {!loading && (
         <section className="inventory-ledger">
-          <header><span>Daftar Buku</span><div><b>Judul & penulis</b><b>Kategori</b><b>Terbit</b><b>Aksi</b></div></header>
+          <header><span>Daftar Buku</span><div><strong>Judul & penulis</strong><strong>Kategori</strong><strong>Terbit</strong><strong>Aksi</strong></div></header>
           {filteredBooks.length > 0 ? filteredBooks.map((book) => (
             <article className="inventory-row" key={book.id}>
               <BookVolume cover={getCoverUrl(book.cover_image)} title={book.title} className="inventory-mini-book" />

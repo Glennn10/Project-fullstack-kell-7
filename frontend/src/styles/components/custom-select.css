@@ -1,4 +1,5 @@
 .custom-select { position: relative; text-transform: none; width: 100%; z-index: 20; }
+.custom-select.is-open { z-index: 120; }
 .custom-select__trigger { align-items: center; background: #fffaf0; border: 1.5px solid #102f3d; color: #102f3d; display: flex; font: inherit; font-size: .8rem; font-weight: 750; justify-content: space-between; min-height: 45px; padding: 10px 12px; text-align: left; width: 100%; }
 .custom-select__trigger svg { flex: 0 0 auto; transition: transform .18s ease; }
 .custom-select.is-open .custom-select__trigger { box-shadow: 4px 4px 0 #377d83; }
