@@ -16,7 +16,7 @@ const SplashScreen = ({ fadeOut }) => {
           <i className="splash-book__cover splash-book__cover--left" />
           <i className="splash-book__cover splash-book__cover--right" />
           <div className="splash-book__page splash-book__page--left">
-            <small>MINJEM</small>
+            <small>MINJEMDONG!</small>
             <strong>Temukan<br />ceritamu.</strong>
             <span className="splash-book__lines"><i /><i /><i /></span>
             <em>01</em>
@@ -25,8 +25,7 @@ const SplashScreen = ({ fadeOut }) => {
             <span className="splash-book__spark splash-book__spark--one">✦</span>
             <span className="splash-book__spark splash-book__spark--two">✦</span>
             <span className="splash-book__logo"><img src="/Logo.png" alt="" /></span>
-            <strong>DONG!</strong>
-            <small>baca sesukamu</small>
+            <strong>baca sesukamu</strong>
             <em>02</em>
           </div>
           <i className="splash-book__bookmark" />
@@ -34,14 +33,14 @@ const SplashScreen = ({ fadeOut }) => {
         </div>
 
         <h1 className="splash-title">Minjem<span>Dong!</span></h1>
-        <p className="splash-subtitle">Sebentar, lagi nyiapin rak bukunya...</p>
+        <p className="splash-subtitle">Sebentar, lagi nyiapin bukunya...</p>
 
         <div className="splash-loader-container">
           <span className="splash-loader-bar" />
         </div>
       </div>
 
-      <p className="splash-note" aria-hidden="true">baca · pinjam · ulangi</p>
+      <p className="splash-note" aria-hidden="true">baca · pinjam · repeat</p>
     </div>
   );
 };

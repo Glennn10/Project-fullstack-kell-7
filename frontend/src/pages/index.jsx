@@ -2,12 +2,16 @@ import { useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
 import {
   FiArrowUpRight,
+  FiArrowRight,
+  FiBookOpen,
   FiChevronLeft,
   FiChevronRight,
   FiCompass,
   FiCpu,
   FiFeather,
   FiPenTool,
+  FiSearch,
+  FiSend,
   FiSmile,
   FiTrendingUp,
 } from 'react-icons/fi';
@@ -107,6 +111,33 @@ const featuredBooks = [
 ];
 
 const weeklyShelfStops = ['Awal rak', 'Bagian kedua', 'Tengah rak', 'Bagian keempat', 'Akhir rak'];
+
+const borrowingSteps = [
+  {
+    label: 'Langkah satu',
+    title: 'Cari bukunya',
+    description: 'Pakai kolom pencarian atau masuk lewat kategori yang kamu suka.',
+    note: 'Cari judul, penulis, atau topik',
+    icon: <FiSearch aria-hidden="true" />,
+    color: '#f5c84b',
+  },
+  {
+    label: 'Langkah dua',
+    title: 'Ajukan pinjam',
+    description: 'Pilih buku yang tersedia lalu kirim permintaan peminjamanmu.',
+    note: 'Konfirmasi dilakukan petugas',
+    icon: <FiSend aria-hidden="true" />,
+    color: '#e96d4d',
+  },
+  {
+    label: 'Langkah tiga',
+    title: 'Ambil & baca',
+    description: 'Datang ke perpustakaan, tunjukkan akunmu, lalu bawa pulang bukunya.',
+    note: 'Jangan lupa tanggal kembali',
+    icon: <FiBookOpen aria-hidden="true" />,
+    color: '#377d83',
+  },
+];
 
 const popularCategories = [
   {
@@ -219,10 +250,9 @@ const Home = () => {
       <section className="popular-categories" aria-labelledby="popular-categories-title">
         <div className="popular-categories__heading">
           <div>
-            <span className="popular-categories__eyebrow">Mulai dari sini</span>
-            <h2 id="popular-categories-title">Lagi pengin baca <em>yang mana?</em></h2>
+            <h2 id="popular-categories-title">Lagi nyari categori <em>yang mana?</em></h2>
           </div>
-          <p>Pilih suasana bacamu. Kami sudah merapikan bukunya per rak biar kamu nggak perlu keliling terlalu lama.</p>
+          <p>Sesuai in aja ama suasana hati, tinggal pilih aja.</p>
         </div>
 
         <div className="popular-categories__grid">
@@ -252,11 +282,10 @@ const Home = () => {
       <section className="weekly-books" aria-labelledby="weekly-books-title">
         <div className="weekly-books__heading">
           <div>
-            <span className="weekly-books__eyebrow">Baru di rak</span>
-            <h2 id="weekly-books-title">Pilihan minggu ini.</h2>
+            <h2 id="weekly-books-title">Book of the week!</h2>
           </div>
           <div className="weekly-books__intro">
-            <p>Sepuluh buku yang lagi sering dibicarakan, dipinjam, atau diam-diam masuk daftar baca kami.</p>
+            <p>Beberapa buku yang sering jadi topik hangat, dipinjam, atau diam-diam ilang.</p>
             <Link to="/books">Lihat semua buku <FiArrowUpRight aria-hidden="true" /></Link>
           </div>
         </div>
@@ -335,6 +364,43 @@ const Home = () => {
               key={label}
             ><span /></button>
           ))}
+        </div>
+      </section>
+
+      <section className="borrowing-guide" aria-labelledby="borrowing-guide-title">
+        <div className="borrowing-guide__heading">
+          <div>
+            <h2 id="borrowing-guide-title">Dari rak sampai <em>ke tanganmu?</em></h2>
+          </div>
+          <p>Cuma tiga langkah. Make formulir panjang? idih kuno.</p>
+        </div>
+
+        <div className="borrowing-guide__steps">
+          {borrowingSteps.map((step, index) => (
+            <div className="borrowing-guide__step-wrap" key={step.title}>
+              <article className="borrow-ticket" style={{ '--ticket-color': step.color }}>
+                <div className="borrow-ticket__top">
+                  <span>{step.label}</span>
+                  <span className="borrow-ticket__icon">{step.icon}</span>
+                </div>
+                <div className="borrow-ticket__body">
+                  <h3>{step.title}</h3>
+                  <p>{step.description}</p>
+                </div>
+                <div className="borrow-ticket__note">
+                  <i aria-hidden="true" /> {step.note}
+                </div>
+              </article>
+              {index < borrowingSteps.length - 1 && (
+                <span className="borrowing-guide__arrow" aria-hidden="true"><FiArrowRight /></span>
+              )}
+            </div>
+          ))}
+        </div>
+
+        <div className="borrowing-guide__footer">
+          <p><strong>Siap mulai?</strong> Buku berikutnya mungkin tinggal satu pencarian lagi.</p>
+          <Link to="/books">Cari buku sekarang <FiArrowUpRight aria-hidden="true" /></Link>
         </div>
       </section>
     </>

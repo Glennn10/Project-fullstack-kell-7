@@ -116,14 +116,14 @@ const NavigationBar = () => {
           <Container>
             <div className="landing-hero__layout">
               <div className="landing-hero__content">
-                <span className="landing-hero__eyebrow"><FiBookOpen /> Hai, lagi cari bacaan?</span>
+                <span className="landing-hero__eyebrow"><FiBookOpen /> aloww, lagi nyari buku?</span>
 
                 <h1>
-                  Mau baca apa <span>hari ini?</span>
+                  Mau baca apa <span>today?</span>
                 </h1>
 
                 <p className="landing-hero__description">
-                  Nggak perlu muter-muter rak. Cari bukunya di sini, cek ketersediaan, lalu tinggal pinjam.
+                  Masih nyari buku keliling rak? yaelah kuno, langsung cari aja disini gausah keliling rak lagi.
                 </p>
 
                 <Form action="/books" method="GET" className="landing-search">
@@ -143,7 +143,7 @@ const NavigationBar = () => {
               </div>
 
               <div className="hero-books" aria-hidden="true">
-                <span className="hero-books__scribble">pilihan minggu ini!</span>
+                <span className="hero-books__scribble">book of the week!</span>
                 <div className="hero-book hero-book--one">
                   <small>Bacaan santai</small>
                   <strong>Laut<br />Bercerita</strong>
