@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import {
   FiArrowUpRight,
   FiArrowRight,
+  FiBookmark,
   FiBookOpen,
   FiChevronLeft,
   FiChevronRight,
@@ -136,6 +137,35 @@ const borrowingSteps = [
     note: 'Jangan lupa tanggal kembali',
     icon: <FiBookOpen aria-hidden="true" />,
     color: '#377d83',
+  },
+];
+
+const librarianPick = {
+  title: 'The Midnight Library',
+  author: 'Matt Haig',
+  category: 'Fiksi Kontemporer',
+  cover: 'https://covers.openlibrary.org/b/isbn/9780525559474-L.jpg',
+  note: 'Buku ini cocok buat kamu yang pernah bertanya, “bagaimana kalau dulu aku memilih jalan yang berbeda?” Hangat, ringan, tapi tinggal cukup lama di kepala.',
+};
+
+const librarianAlternatives = [
+  {
+    title: 'Before the Coffee Gets Cold',
+    author: 'Toshikazu Kawaguchi',
+    mood: 'Hangat & reflektif',
+    color: '#f5c84b',
+  },
+  {
+    title: 'Days at the Morisaki Bookshop',
+    author: 'Satoshi Yagisawa',
+    mood: 'Tenang & nyaman',
+    color: '#377d83',
+  },
+  {
+    title: 'Tuesdays with Morrie',
+    author: 'Mitch Albom',
+    mood: 'Pelan tapi membekas',
+    color: '#e96d4d',
   },
 ];
 
@@ -401,6 +431,65 @@ const Home = () => {
         <div className="borrowing-guide__footer">
           <p><strong>Siap mulai?</strong> Buku berikutnya mungkin tinggal satu pencarian lagi.</p>
           <Link to="/books">Cari buku sekarang <FiArrowUpRight aria-hidden="true" /></Link>
+        </div>
+      </section>
+
+      <section className="librarian-picks" aria-labelledby="librarian-picks-title">
+        <div className="librarian-picks__heading">
+          <span className="librarian-picks__eyebrow">Dipilih langsung oleh pustakawan</span>
+          <h2 id="librarian-picks-title">Kalau bingung, <em>mulai dari sini.</em></h2>
+        </div>
+
+        <div className="librarian-desk">
+          <div className="librarian-desk__book-side">
+            <span className="librarian-desk__tape" aria-hidden="true" />
+            <span className="librarian-desk__pick-label"><FiBookmark /> Pilihan minggu ini</span>
+            <div className="curator-book">
+              <img
+                src={librarianPick.cover}
+                alt={`Sampul ${librarianPick.title}`}
+                draggable="false"
+                onError={(event) => {
+                  event.currentTarget.src = fallbackCover;
+                }}
+              />
+              <i className="curator-book__spine" aria-hidden="true" />
+            </div>
+          </div>
+
+          <article className="librarian-note">
+            <span className="librarian-note__category">{librarianPick.category}</span>
+            <h3>{librarianPick.title}</h3>
+            <p className="librarian-note__author">oleh {librarianPick.author}</p>
+            <blockquote>“{librarianPick.note}”</blockquote>
+            <div className="librarian-note__person">
+              <span aria-hidden="true">R</span>
+              <div>
+                <strong>Bu Rani</strong>
+                <small>Pustakawan MinjemDong</small>
+              </div>
+            </div>
+          </article>
+
+          <aside className="librarian-alternatives">
+            <div className="librarian-alternatives__title">
+              <span>Kalau yang ini sedang dipinjam...</span>
+              <p>Coba tiga bacaan dengan suasana serupa.</p>
+            </div>
+            <div className="librarian-alternatives__list">
+              {librarianAlternatives.map((book) => (
+                <Link to="/books" className="alternative-book" style={{ '--alternative-color': book.color }} key={book.title}>
+                  <span className="alternative-book__mark" aria-hidden="true" />
+                  <div>
+                    <small>{book.mood}</small>
+                    <h3>{book.title}</h3>
+                    <p>{book.author}</p>
+                  </div>
+                  <FiArrowUpRight aria-hidden="true" />
+                </Link>
+              ))}
+            </div>
+          </aside>
         </div>
       </section>
     </>
