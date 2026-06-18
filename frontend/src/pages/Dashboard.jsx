@@ -7,6 +7,7 @@ import {
   FiGrid,
   FiLogOut,
   FiRepeat,
+  FiTag,
 } from 'react-icons/fi';
 import { Link, NavLink, useNavigate } from 'react-router-dom';
 import BookVolume from '../components/common/BookVolume';
@@ -19,6 +20,7 @@ import '../styles/pages/dashboard.css';
 const navItems = [
   { label: 'Ringkasan', path: '/dashboard', icon: FiGrid },
   { label: 'Kelola Buku', path: '/dashboard/books', icon: FiBookOpen },
+  { label: 'Kategori', path: '/dashboard/categories', icon: FiTag },
   { label: 'Peminjaman', path: '/loans', icon: FiRepeat },
 ];
 

@@ -50,7 +50,7 @@
 .library-admin__profile button { background: transparent; border: 0; color: rgba(255,255,255,.65); display: grid; height: 30px; place-items: center; width: 30px; }
 .library-admin__profile button:hover { color: #e96d4d; }
 
-.library-admin__main { min-width: 0; padding: 32px clamp(24px, 4vw, 58px) 60px; position: relative; }
+.library-admin__main { min-width: 0; overflow: visible; padding: 32px clamp(24px, 4vw, 58px) 60px; position: relative; }
 
 .dashboard-masthead { align-items: flex-end; background: #f5c84b; border: 1.5px solid #102f3d; box-shadow: 8px 8px 0 #102f3d; display: flex; justify-content: space-between; min-height: 245px; overflow: hidden; padding: 38px 42px; position: relative; }
 .dashboard-masthead::before { background-image: radial-gradient(rgba(16,47,61,.2) 1px, transparent 1px); background-size: 16px 16px; content: ''; height: 130px; position: absolute; right: -10px; top: -10px; width: 210px; }
@@ -166,7 +166,7 @@
   .library-admin__sidebar { height: auto; overflow: visible; }
   .library-admin__brand { margin-bottom: 18px; }
   .library-admin__nav-label, .library-admin__sidebar-note { display: none; }
-  .library-admin__nav { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  .library-admin__nav { grid-template-columns: repeat(4, minmax(0, 1fr)); }
   .library-admin__nav a { gap: 6px; grid-template-columns: 16px 1fr; padding: 9px 8px; }
   .library-admin__nav a > i { display: none; }
   .library-admin__profile { margin-top: 18px; }

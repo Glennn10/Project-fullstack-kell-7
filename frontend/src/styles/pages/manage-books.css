@@ -64,7 +64,7 @@
 .inventory-editor__close { cursor: pointer; flex: 0 0 auto; pointer-events: auto; position: relative; z-index: 10; }
 .inventory-editor__close:hover { background: #e96d4d !important; transform: rotate(4deg); }
 .inventory-editor form { display: grid; gap: 18px; padding: 27px 28px 40px; }
-.inventory-editor form > label, .inventory-form-grid label { color: #334f5a; display: grid; font-size: .62rem; font-weight: 850; gap: 7px; letter-spacing: .05em; text-transform: uppercase; }
+.inventory-editor form > label, .inventory-form-grid label, .inventory-field { color: #334f5a; display: grid; font-size: .62rem; font-weight: 850; gap: 7px; letter-spacing: .05em; text-transform: uppercase; }
 .inventory-editor input, .inventory-editor select { background: #fffaf0; border: 1.5px solid #102f3d; color: #102f3d; font: inherit; font-size: .8rem; outline: 0; padding: 12px; text-transform: none; }
 .inventory-editor input:focus, .inventory-editor select:focus { box-shadow: 4px 4px 0 #377d83; }
 .inventory-form-grid { display: grid; gap: 14px; grid-template-columns: 1fr 120px; }

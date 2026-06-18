@@ -46,11 +46,11 @@ const bookController = {
             const cover_image = req.file ? req.file.filename : null;
 
             // VALIDASI REQUIRED
-            if (!title || !author || !publisher || !year) {
+            if (!title || !author || !publisher || !year || !category_id) {
                 return res.status(400).json({
                     success: false,
                     message: "Validation error",
-                    error: "title, author, publisher, dan year wajib diisi"
+                    error: "title, author, publisher, year, dan category_id wajib diisi"
                 });
             }
 
@@ -64,16 +64,13 @@ const bookController = {
                 });
             }
 
-            let parsedCategoryId = null;
-            if (category_id !== null && category_id !== undefined && category_id !== '') {
-                parsedCategoryId = Number(category_id);
-                if (isNaN(parsedCategoryId)) {
-                    return res.status(400).json({
-                        success: false,
-                        message: "Validation error",
-                        error: "category_id harus berupa angka valid atau tidak diisi"
-                    });
-                }
+            const parsedCategoryId = Number(category_id);
+            if (isNaN(parsedCategoryId)) {
+                return res.status(400).json({
+                    success: false,
+                    message: "Validation error",
+                    error: "category_id harus berupa angka valid"
+                });
             }
 
             // Masukkan cover_image ke parameter Model
@@ -119,11 +116,11 @@ const bookController = {
             }
 
             // VALIDASI REQUIRED
-            if (!title || !author || !publisher || !year) {
+            if (!title || !author || !publisher || !year || !category_id) {
                 return res.status(400).json({
                     success: false,
                     message: "Validation error",
-                    error: "Semua field (title, author, publisher, year) wajib diisi"
+                    error: "Semua field (title, author, publisher, year, category_id) wajib diisi"
                 });
             }
 
@@ -137,18 +134,13 @@ const bookController = {
                 });
             }
 
-            let parsedCategoryId = category_id === ''
-                ? null
-                : (category_id !== undefined ? category_id : existingBook.category_id);
-            if (category_id !== null && category_id !== undefined && category_id !== '') {
-                parsedCategoryId = Number(category_id);
-                if (isNaN(parsedCategoryId)) {
-                    return res.status(400).json({
-                        success: false,
-                        message: "Validation error",
-                        error: "category_id harus berupa angka valid"
-                    });
-                }
+            const parsedCategoryId = Number(category_id);
+            if (isNaN(parsedCategoryId)) {
+                return res.status(400).json({
+                    success: false,
+                    message: "Validation error",
+                    error: "category_id harus berupa angka valid"
+                });
             }
 
             const updatedBook = await BookModel.updateBook(id, {

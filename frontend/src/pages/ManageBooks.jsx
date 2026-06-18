@@ -11,6 +11,7 @@ import {
   FiX,
 } from 'react-icons/fi';
 import BookVolume from '../components/common/BookVolume';
+import CustomSelect from '../components/common/CustomSelect';
 import DashboardShell from '../components/dashboard/DashboardShell';
 import DeskStationery from '../components/dashboard/DeskStationery';
 import { API_BASE_URL } from '../config/api';
@@ -125,6 +126,10 @@ const ManageBooks = () => {
 
   const handleSubmit = async (event) => {
     event.preventDefault();
+    if (!form.category_id) {
+      setError('Kategori wajib dipilih sebelum buku disimpan.');
+      return;
+    }
     setSubmitting(true);
     setError('');
 
@@ -218,8 +223,16 @@ const ManageBooks = () => {
                 <label>Penerbit<input required value={form.publisher} onChange={(event) => setForm({ ...form, publisher: event.target.value })} /></label>
                 <label>Tahun<input required type="number" min="1000" max="2100" value={form.year} onChange={(event) => setForm({ ...form, year: event.target.value })} /></label>
               </div>
-              <label>Kategori<select value={form.category_id} onChange={(event) => setForm({ ...form, category_id: event.target.value })}><option value="">Tanpa kategori</option>{categories.map((category) => <option value={category.id} key={category.id}>{category.name}</option>)}</select></label>
-              <button className="inventory-save" type="submit" disabled={submitting}><FiSave /> {submitting ? 'Menyimpan...' : 'Simpan buku'}</button>
+              <div className="inventory-field">
+                <span>Kategori *</span>
+                <CustomSelect
+                  value={form.category_id}
+                  onChange={(categoryId) => setForm({ ...form, category_id: categoryId })}
+                  placeholder="Pilih kategori"
+                  options={categories.map((category) => ({ value: category.id, label: category.name }))}
+                />
+              </div>
+              <button className="inventory-save" type="submit" disabled={submitting || !form.category_id}><FiSave /> {submitting ? 'Menyimpan...' : 'Simpan buku'}</button>
             </form>
           </aside>
         </div>

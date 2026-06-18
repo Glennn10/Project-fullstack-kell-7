@@ -3,6 +3,9 @@ import { apiClient, authConfig } from './apiClient';
 export const libraryService = {
   getBooks: () => apiClient.get('/api/books'),
   getCategories: () => apiClient.get('/api/categories'),
+  createCategory: (payload, token) => apiClient.post('/api/categories', payload, authConfig(token)),
+  updateCategory: (id, payload, token) => apiClient.put(`/api/categories/${id}`, payload, authConfig(token)),
+  deleteCategory: (id, token) => apiClient.delete(`/api/categories/${id}`, authConfig(token)),
   createBook: (formData, token) => apiClient.post('/api/books', formData, {
     headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'multipart/form-data' },
   }),

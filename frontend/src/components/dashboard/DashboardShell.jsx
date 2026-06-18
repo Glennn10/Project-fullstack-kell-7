@@ -1,10 +1,11 @@
-import { FiBookOpen, FiGrid, FiLogOut, FiRepeat } from 'react-icons/fi';
+import { FiBookOpen, FiGrid, FiLogOut, FiRepeat, FiTag } from 'react-icons/fi';
 import { Link, NavLink, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/useAuth';
 
 const navItems = [
   { label: 'Ringkasan', path: '/dashboard', icon: FiGrid },
   { label: 'Kelola Buku', path: '/dashboard/books', icon: FiBookOpen },
+  { label: 'Kategori', path: '/dashboard/categories', icon: FiTag },
   { label: 'Peminjaman', path: '/loans', icon: FiRepeat },
 ];
 

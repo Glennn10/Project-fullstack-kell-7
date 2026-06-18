@@ -24,8 +24,12 @@ const categoryController = {
         try {
             const { name } = req.body;
             if (!name) return res.status(400).json({ success: false, message: 'Nama kategori wajib diisi' });
-            
-            const newCategory = await CategoryModel.createCategory(name);
+
+            const normalizedName = name.trim();
+            const existingCategory = await CategoryModel.getCategoryByName(normalizedName);
+            if (existingCategory) return res.status(409).json({ success: false, message: 'Nama kategori sudah digunakan' });
+
+            const newCategory = await CategoryModel.createCategory(normalizedName);
             res.status(201).json({ success: true, message: 'Kategori berhasil ditambahkan', data: newCategory });
         } catch (error) {
             console.error(error.message);
@@ -37,7 +41,13 @@ const categoryController = {
             const { name } = req.body;
             if (!name) return res.status(400).json({ success: false, message: 'Nama kategori wajib diisi' });
 
-            const updatedCategory = await CategoryModel.updateCategory(req.params.id, name);
+            const normalizedName = name.trim();
+            const existingCategory = await CategoryModel.getCategoryByName(normalizedName);
+            if (existingCategory && String(existingCategory.id) !== String(req.params.id)) {
+                return res.status(409).json({ success: false, message: 'Nama kategori sudah digunakan' });
+            }
+
+            const updatedCategory = await CategoryModel.updateCategory(req.params.id, normalizedName);
             if (!updatedCategory) return res.status(404).json({ success: false, message: 'Kategori tidak ditemukan' });
             res.status(200).json({ success: true, message: 'Kategori berhasil diupdate', data: updatedCategory });
         } catch (error) {
@@ -47,6 +57,11 @@ const categoryController = {
     },
     deleteCategory: async (req, res) => {
         try {
+            const bookCount = await CategoryModel.getBookCount(req.params.id);
+            if (bookCount > 0) {
+                return res.status(409).json({ success: false, message: `Kategori masih dipakai oleh ${bookCount} buku` });
+            }
+
             const deletedCategory = await CategoryModel.deleteCategory(req.params.id);
             if (!deletedCategory) return res.status(404).json({ success: false, message: 'Kategori tidak ditemukan' });
             res.status(200).json({ success: true, message: 'Kategori berhasil dihapus', data: deletedCategory });
