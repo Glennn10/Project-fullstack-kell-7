@@ -1,20 +1,15 @@
 import { useState } from 'react';
 import { Container, Card, Table, Button, Badge, Form, InputGroup } from 'react-bootstrap';
-import { Link } from 'react-router-dom';
-import './Loans.css'; // Reusing loans CSS for consistent header padding/styling
-
-const MOCK_ACTIVE_LOANS = [
-  { id: 1, borrowerName: 'Budi Santoso', bookTitle: 'Ensiklopedia Anak Cerdas: Olahraga', loanDate: '2023-10-01', dueDate: '2023-10-08', status: 'borrowed' },
-  { id: 2, borrowerName: 'Siti Rahma', bookTitle: 'Harry Potter and the Order of the Phoenix', loanDate: '2023-10-05', dueDate: '2023-10-12', status: 'borrowed' },
-];
+import { demoActiveLoans } from '../data/loanDemoData';
+import '../styles/pages/loans.css';
 
 const Returns = () => {
   const [searchTerm, setSearchTerm] = useState('');
-  const [loans, setLoans] = useState(MOCK_ACTIVE_LOANS);
+  const [loans, setLoans] = useState(demoActiveLoans);
 
   const handleReturn = (id) => {
     // In a real app, this would call the backend
-    setLoans(loans.map(loan => 
+    setLoans((currentLoans) => currentLoans.map((loan) =>
       loan.id === id ? { ...loan, status: 'returned' } : loan
     ));
     alert('Buku berhasil dikembalikan secara lokal (Mode Demo)!');

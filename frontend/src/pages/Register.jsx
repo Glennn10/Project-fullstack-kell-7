@@ -1,8 +1,7 @@
 import { useState } from 'react';
 import { Alert, Button, Form, Spinner } from 'react-bootstrap';
 import { Link, useNavigate } from 'react-router-dom';
-import axios from 'axios';
-import { apiUrl } from '../config/api';
+import { authService } from '../services/authService';
 
 const Register = () => {
   const [formData, setFormData] = useState({ name: '', email: '', password: '' });
@@ -21,7 +20,7 @@ const Register = () => {
     setLoading(true);
 
     try {
-      await axios.post(apiUrl('/api/auth/register'), formData);
+      await authService.register(formData);
       navigate('/login', {
         replace: true,
         state: { message: 'Registrasi berhasil. Silakan login.' },

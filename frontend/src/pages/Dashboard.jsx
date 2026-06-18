@@ -1,9 +1,8 @@
 import { useEffect, useMemo, useState } from 'react';
 import { Alert, Badge, Button, Card, Col, Row, Spinner, Table } from 'react-bootstrap';
 import { Link, NavLink, useNavigate } from 'react-router-dom';
-import axios from 'axios';
-import { apiUrl } from '../config/api';
 import { useAuth } from '../context/useAuth';
+import { libraryService } from '../services/libraryService';
 
 const navItems = [
   { label: 'Overview', path: '/dashboard', icon: 'grid' },
@@ -29,10 +28,9 @@ const Dashboard = () => {
       setError('');
 
       try {
-        const headers = { Authorization: `Bearer ${token}` };
         const [booksResponse, loansResponse] = await Promise.all([
-          axios.get(apiUrl('/api/books')),
-          axios.get(apiUrl('/api/loans'), { headers }),
+          libraryService.getBooks(),
+          libraryService.getLoans(token),
         ]);
 
         setBooks(booksResponse.data.data || []);

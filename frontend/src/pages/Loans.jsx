@@ -1,26 +1,10 @@
 import { useState, useEffect } from 'react';
 import { Container, Row, Col, Card, Form, Button, Alert, Spinner, Badge } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
-import axios from 'axios';
-import { apiUrl } from '../config/api';
 import { useAuth } from '../context/useAuth';
-import './Loans.css';
-
-// Mock data fallbacks for standalone/offline demo mode
-const MOCK_BOOKS = [
-  { id: 1, title: 'Ensiklopedia Anak Cerdas: Olahraga', author: 'BIP Kelompok Gramedia' },
-  { id: 2, title: 'Ensiklopedia Anak Cerdas: Penemuan', author: 'BIP Kelompok Gramedia' },
-  { id: 3, title: "Perry's Chemical Engineers' Handbook", author: 'Don W. Green' },
-  { id: 4, title: 'To Feel the Music', author: 'Dav Pilkey' },
-  { id: 5, title: 'Harry Potter and the Order of the Phoenix', author: 'J.K. Rowling' },
-];
-
-const MOCK_BORROWERS = [
-  { id: 101, name: 'Budi Santoso', phone: '081234567890', address: 'Jakarta' },
-  { id: 102, name: 'Siti Rahma', phone: '085678901234', address: 'Bandung' },
-  { id: 103, name: 'Ahmad Faisal', phone: '089012345678', address: 'Surabaya' },
-  { id: 104, name: 'Dewi Lestari', phone: '082134567890', address: 'Yogyakarta' },
-];
+import { libraryService } from '../services/libraryService';
+import { demoBooks, demoBorrowers } from '../data/loanDemoData';
+import '../styles/pages/loans.css';
 
 const Loans = () => {
   const { token, user, isAuthenticated } = useAuth();
@@ -60,20 +44,18 @@ const Loans = () => {
       if (!token) {
         if (active) {
           setIsDemoMode(true);
-          setBooks(MOCK_BOOKS);
-          setBorrowers(MOCK_BORROWERS);
+          setBooks(demoBooks);
+          setBorrowers(demoBorrowers);
           setLoading(false);
         }
         return;
       }
 
       try {
-        const headers = { Authorization: `Bearer ${token}` };
-        
         // Fetch books and borrowers concurrently
         const [booksRes, borrowersRes] = await Promise.all([
-          axios.get(apiUrl('/api/books')),
-          axios.get(apiUrl('/api/borrowers'), { headers })
+          libraryService.getBooks(),
+          libraryService.getBorrowers(token),
         ]);
 
         if (active) {
@@ -87,8 +69,8 @@ const Loans = () => {
         // Fallback to demo mode if backend is down or API returns error
         if (active) {
           setIsDemoMode(true);
-          setBooks(MOCK_BOOKS);
-          setBorrowers(MOCK_BORROWERS);
+          setBooks(demoBooks);
+          setBorrowers(demoBorrowers);
           setLoading(false);
         }
       }
@@ -126,7 +108,6 @@ const Loans = () => {
     } else {
       // API integration mode
       try {
-        const headers = { Authorization: `Bearer ${token}` };
         let borrowerId = null;
 
         // 1. Check if borrower already exists (defensively check b.name)
@@ -138,16 +119,15 @@ const Loans = () => {
           borrowerId = existing.id;
         } else {
           // 2. Register borrower first if they don't exist
-          const newBorrowerRes = await axios.post(
-            apiUrl('/api/borrowers'),
+          const newBorrowerRes = await libraryService.createBorrower(
             { name: borrowerName.trim(), phone: '-', address: '-' },
-            { headers }
+            token,
           );
           if (newBorrowerRes.data.success && newBorrowerRes.data.data) {
             borrowerId = newBorrowerRes.data.data.id;
             
             // Refresh borrowers list in state
-            const updatedBorrowersRes = await axios.get(apiUrl('/api/borrowers'), { headers });
+            const updatedBorrowersRes = await libraryService.getBorrowers(token);
             setBorrowers(updatedBorrowersRes.data.data || []);
           } else {
             throw new Error('Gagal mendaftarkan anggota baru.');
@@ -161,7 +141,7 @@ const Loans = () => {
           loan_date: loanDate
         };
 
-        const response = await axios.post(apiUrl('/api/loans'), payload, { headers });
+        const response = await libraryService.createLoan(payload, token);
         
         if (response.data.success) {
           setSuccessMessage(`Peminjaman buku untuk "${borrowerName.trim()}" berhasil dicatat ke database!`);

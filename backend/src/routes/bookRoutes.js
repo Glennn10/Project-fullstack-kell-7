@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const bookController = require('../controller/bookController');
+const bookController = require('../controllers/bookController');
 
 // 1. IMPORT MIDDLEWARE (SATPAM)
 const { verifyToken, isAdmin } = require('../middleware/authMiddleware');

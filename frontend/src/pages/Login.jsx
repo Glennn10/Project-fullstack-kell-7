@@ -1,9 +1,8 @@
 import { useState } from 'react';
 import { Alert, Button, Form, Spinner } from 'react-bootstrap';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
-import axios from 'axios';
 import { useAuth } from '../context/useAuth';
-import { apiUrl } from '../config/api';
+import { authService } from '../services/authService';
 
 const Login = () => {
   const [formData, setFormData] = useState({ email: '', password: '' });
@@ -27,7 +26,7 @@ const Login = () => {
     setLoading(true);
 
     try {
-      const response = await axios.post(apiUrl('/api/auth/login'), formData);
+      const response = await authService.login(formData);
       const authData = response.data.data;
       const fallbackPath = authData.user.role === 'admin' ? '/dashboard' : '/books';
       const nextPath = requestedPath === '/dashboard' && authData.user.role !== 'admin'

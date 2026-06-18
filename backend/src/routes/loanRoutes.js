@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const loanController = require('../controller/loanController');
+const loanController = require('../controllers/loanController');
 const { verifyToken, isAdmin } = require('../middleware/authMiddleware');
 
 // Lihat seluruh riwayat pinjaman: khusus Admin
