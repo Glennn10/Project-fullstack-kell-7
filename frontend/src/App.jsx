@@ -10,6 +10,7 @@ import Register from './pages/Register';
 import Dashboard from './pages/Dashboard';
 import ProtectedRoute from './components/ProtectedRoute';
 import SplashScreen from './components/SplashScreen';
+import CustomScrollbar from './components/CustomScrollbar';
 import './App.css';
 
 function App() {
@@ -36,6 +37,7 @@ function App() {
   return (
     <>
       {showSplash && <SplashScreen fadeOut={fadeOut} />}
+      <CustomScrollbar />
       <Routes>
         <Route
           path="/"

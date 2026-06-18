@@ -17,3 +17,46 @@ body {
 #root {
   min-height: 100vh;
 }
+
+/* The page uses a fully custom thumb instead of the native scrollbar. */
+html,
+body {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+html::-webkit-scrollbar,
+body::-webkit-scrollbar {
+  display: none;
+  height: 0;
+  width: 0;
+}
+
+.custom-scrollbar-thumb {
+  background: #377d83;
+  border-radius: 999px;
+  box-shadow: 0 3px 10px rgba(16, 47, 61, .2);
+  cursor: grab;
+  position: fixed;
+  right: 0;
+  top: 0;
+  touch-action: none;
+  transition: background-color .2s ease, width .2s ease;
+  width: 9px;
+  z-index: 99990;
+}
+
+.custom-scrollbar-thumb:hover {
+  background: #e76746;
+  box-shadow: 0 3px 12px rgba(231, 103, 70, .28);
+  width: 11px;
+}
+
+.custom-scrollbar-thumb:active {
+  background: #d95638;
+  cursor: grabbing;
+}
+
+@media (max-width: 768px), (pointer: coarse) {
+  .custom-scrollbar-thumb { display: none; }
+}
