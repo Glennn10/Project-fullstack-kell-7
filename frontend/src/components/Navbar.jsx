@@ -150,9 +150,12 @@ const NavigationBar = () => {
                   <span>Leila S. Chudori</span>
                 </div>
                 <div className="hero-book hero-book--two">
-                  <small>Belajar hal baru</small>
-                  <strong>Filosofi<br />Teras</strong>
-                  <span>Henry Manampiring</span>
+                  <i className="hero-book__bookmark" />
+                  <div className="hero-book__face">
+                    <small>Belajar hal baru</small>
+                    <strong>Filosofi<br />Teras</strong>
+                    <span>Henry Manampiring</span>
+                  </div>
                 </div>
                 <div className="hero-book hero-book--three">
                   <small>Paling dicari</small>

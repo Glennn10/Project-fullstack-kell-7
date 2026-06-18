@@ -1,6 +1,18 @@
-import { Badge, Button, Col, Row } from 'react-bootstrap';
+import { Badge, Col, Row } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
-import { FiArrowRight, FiBarChart2, FiBookOpen, FiClock, FiSearch } from 'react-icons/fi';
+import {
+  FiArrowUpRight,
+  FiBarChart2,
+  FiBookOpen,
+  FiClock,
+  FiCompass,
+  FiCpu,
+  FiFeather,
+  FiPenTool,
+  FiSearch,
+  FiSmile,
+  FiTrendingUp,
+} from 'react-icons/fi';
 import fallbackCover from '../assets/hero.png'; // Pastiin path fotonya bener
 
 const featuredBooks = [
@@ -50,19 +62,91 @@ const libraryFeatures = [
   },
 ];
 
+const popularCategories = [
+  {
+    title: 'Fiksi & Sastra',
+    description: 'Novel, cerpen, dan cerita yang bikin lupa waktu.',
+    label: 'Cerita & Imajinasi',
+    icon: <FiFeather aria-hidden="true" />,
+    color: '#e96d4d',
+    ink: '#ffffff',
+  },
+  {
+    title: 'Sains & Teknologi',
+    description: 'Dari teori sederhana sampai inovasi terbaru.',
+    label: 'Ide & Inovasi',
+    icon: <FiCpu aria-hidden="true" />,
+    color: '#377d83',
+    ink: '#ffffff',
+  },
+  {
+    title: 'Sejarah',
+    description: 'Melihat hari ini lewat cerita masa lalu.',
+    label: 'Jejak & Peristiwa',
+    icon: <FiCompass aria-hidden="true" />,
+    color: '#f5c84b',
+    ink: '#102f3d',
+  },
+  {
+    title: 'Pengembangan Diri',
+    description: 'Bacaan kecil untuk perubahan yang berarti.',
+    label: 'Tumbuh & Berproses',
+    icon: <FiTrendingUp aria-hidden="true" />,
+    color: '#b8d7b0',
+    ink: '#102f3d',
+  },
+  {
+    title: 'Anak & Remaja',
+    description: 'Penuh warna, rasa penasaran, dan petualangan.',
+    label: 'Seru & Penuh Warna',
+    icon: <FiSmile aria-hidden="true" />,
+    color: '#8e78b8',
+    ink: '#ffffff',
+  },
+  {
+    title: 'Seni & Desain',
+    description: 'Ide visual, proses kreatif, dan karya pilihan.',
+    label: 'Visual & Kreatif',
+    icon: <FiPenTool aria-hidden="true" />,
+    color: '#ef9fbc',
+    ink: '#102f3d',
+  },
+];
+
 const Home = () => {
   return (
     <>
-      <section className="app-hero">
-        <div>
-          <Badge bg="primary" className="mb-3">Mulai Membaca</Badge>
-          <h2>Temukan cerita yang ingin kamu bawa pulang.</h2>
-          <p>Mulai dari buku pelajaran sampai bacaan santai, semuanya dapat kamu cari dalam satu katalog.</p>
+      <section className="popular-categories" aria-labelledby="popular-categories-title">
+        <div className="popular-categories__heading">
+          <div>
+            <span className="popular-categories__eyebrow">Mulai dari sini</span>
+            <h2 id="popular-categories-title">Lagi pengin baca <em>yang mana?</em></h2>
+          </div>
+          <p>Pilih suasana bacamu. Kami sudah merapikan bukunya per rak biar kamu nggak perlu keliling terlalu lama.</p>
         </div>
-        <div className="d-flex flex-wrap gap-2 app-hero__actions">
-          <Button as={Link} to="/books" variant="primary">Jelajahi Katalog <FiArrowRight /></Button>
-          <Button as={Link} to="/loans" variant="outline-secondary">Lihat Peminjaman</Button>
+
+        <div className="popular-categories__grid">
+          {popularCategories.map((category) => (
+            <Link
+              to="/books"
+              className="category-tile"
+              key={category.title}
+              style={{ '--category-color': category.color, '--category-ink': category.ink }}
+            >
+              <span className="category-tile__shelf">{category.label}</span>
+              <span className="category-tile__icon">{category.icon}</span>
+              <div>
+                <h3>{category.title}</h3>
+                <p>{category.description}</p>
+              </div>
+              <FiArrowUpRight className="category-tile__arrow" aria-hidden="true" />
+            </Link>
+          ))}
         </div>
+
+        <Link to="/books" className="popular-categories__all">
+          Lihat semua koleksi <FiArrowUpRight aria-hidden="true" />
+        </Link>
       </section>
 
       <section className="library-feature-section mt-5">
