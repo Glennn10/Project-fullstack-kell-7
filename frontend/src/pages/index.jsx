@@ -11,6 +11,7 @@ import {
   FiCpu,
   FiFeather,
   FiPenTool,
+  FiPlus,
   FiSearch,
   FiSend,
   FiSmile,
@@ -169,6 +170,39 @@ const librarianAlternatives = [
   },
 ];
 
+const frequentlyAskedQuestions = [
+  {
+    label: 'Mulai',
+    question: 'Bagaimana cara meminjam buku?',
+    answer: 'Cari buku yang kamu mau, pastikan statusnya tersedia, lalu kirim permintaan peminjaman. Setelah dikonfirmasi petugas, buku bisa langsung kamu ambil di perpustakaan.',
+  },
+  {
+    label: 'Durasi',
+    question: 'Berapa lama masa peminjamannya?',
+    answer: 'Tanggal kembali akan tercantum pada detail peminjamanmu. Cek halaman Peminjaman setelah permintaan disetujui supaya bukunya tidak terlambat dikembalikan.',
+  },
+  {
+    label: 'Perpanjang',
+    question: 'Apakah masa pinjam bisa diperpanjang?',
+    answer: 'Bisa selama buku tersebut tidak sedang ditunggu anggota lain. Hubungi petugas sebelum tanggal pengembalian agar perpanjangan dapat diperiksa lebih dulu.',
+  },
+  {
+    label: 'Terlambat',
+    question: 'Bagaimana kalau bukunya terlambat dikembalikan?',
+    answer: 'Segera kembalikan buku dan konfirmasi kepada petugas. Ketentuan keterlambatan akan mengikuti kebijakan perpustakaan yang berlaku.',
+  },
+  {
+    label: 'Stok',
+    question: 'Bagaimana mengecek buku masih tersedia?',
+    answer: 'Status buku dapat dilihat langsung dari katalog. Label “Ada di rak” berarti buku bisa diajukan, sedangkan “Sedang dipinjam” berarti kamu perlu menunggu.',
+  },
+  {
+    label: 'Kondisi',
+    question: 'Apa yang harus dilakukan jika buku rusak atau hilang?',
+    answer: 'Jangan panik dan jangan memperbaikinya sendiri. Laporkan kondisinya kepada petugas agar solusi penggantian atau perbaikan dapat ditentukan bersama.',
+  },
+];
+
 const popularCategories = [
   {
     title: 'Fiksi & Sastra',
@@ -222,6 +256,7 @@ const popularCategories = [
 
 const Home = () => {
   const [weeklyPosition, setWeeklyPosition] = useState(0);
+  const [openFaq, setOpenFaq] = useState(0);
   const weeklyShelfRef = useRef(null);
   const weeklyDragRef = useRef(null);
   const blockWeeklyClickRef = useRef(false);
@@ -490,6 +525,48 @@ const Home = () => {
               ))}
             </div>
           </aside>
+        </div>
+      </section>
+
+      <section className="faq-section" id="faq" aria-labelledby="faq-title">
+        <div className="faq-section__intro">
+          <span className="faq-section__eyebrow">Sebelum kamu tanya petugas</span>
+          <h2 id="faq-title">Yang sering <em>ditanyain.</em></h2>
+          <p>Jawaban singkat buat hal-hal yang paling sering bikin bingung saat mau pinjam buku.</p>
+          <div className="faq-section__hint">
+            <span aria-hidden="true">?</span>
+            <p>Belum ketemu jawabannya? Petugas perpustakaan siap membantu saat jam operasional.</p>
+          </div>
+        </div>
+
+        <div className="faq-index">
+          <div className="faq-index__header">
+            <span>Indeks Bantuan</span>
+            <span>MinjemDong / FAQ</span>
+          </div>
+
+          {frequentlyAskedQuestions.map((item, index) => {
+            const isOpen = openFaq === index;
+            const answerId = `faq-answer-${index}`;
+
+            return (
+              <article className={`faq-item${isOpen ? ' faq-item--open' : ''}`} key={item.question}>
+                <button
+                  type="button"
+                  onClick={() => setOpenFaq(isOpen ? -1 : index)}
+                  aria-expanded={isOpen}
+                  aria-controls={answerId}
+                >
+                  <span className="faq-item__label">{item.label}</span>
+                  <span className="faq-item__question">{item.question}</span>
+                  <span className="faq-item__toggle" aria-hidden="true"><FiPlus /></span>
+                </button>
+                <div className="faq-item__answer" id={answerId}>
+                  <div><p>{item.answer}</p></div>
+                </div>
+              </article>
+            );
+          })}
         </div>
       </section>
     </>
