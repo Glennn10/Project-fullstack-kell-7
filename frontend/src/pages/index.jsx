@@ -1,15 +1,13 @@
-import { Badge, Col, Row } from 'react-bootstrap';
+import { useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
 import {
   FiArrowUpRight,
-  FiBarChart2,
-  FiBookOpen,
-  FiClock,
+  FiChevronLeft,
+  FiChevronRight,
   FiCompass,
   FiCpu,
   FiFeather,
   FiPenTool,
-  FiSearch,
   FiSmile,
   FiTrendingUp,
 } from 'react-icons/fi';
@@ -17,50 +15,98 @@ import fallbackCover from '../assets/hero.png'; // Pastiin path fotonya bener
 
 const featuredBooks = [
   {
-    title: 'Ensiklopedia Anak Cerdas: Olahraga',
-    author: 'BIP Kelompok Gramedia',
-    category: 'Edukasi Anak',
-    cover: 'https://www.static-src.com/wcsstore/Indraprastha/images/catalog/full//100/MTA-14390577/bhuana_ilmu_popular_buku_ensiklopedia_anak_cerdas-_olahraga_by_geraldine_maincent_full01_thbhrev4.jpg',
-    synopsis: 'Mengenalkan dunia olahraga lewat ilustrasi ceria, fakta ringan, dan penjelasan yang mudah dipahami anak.',
+    title: 'Laut Bercerita',
+    author: 'Leila S. Chudori',
+    category: 'Fiksi & Sastra',
+    cover: 'https://covers.openlibrary.org/b/isbn/9786024246945-L.jpg',
+    available: true,
+    accent: '#377d83',
+    highlight: 'Paling dicari',
   },
   {
-    title: 'Ensiklopedia Anak Cerdas: Penemuan',
-    author: 'BIP Kelompok Gramedia',
-    category: 'Sains Populer',
-    cover: 'https://bukukita.com/babacms/displaybuku/109935_f.jpg',
-    synopsis: 'Berisi kisah penemuan penting yang mengubah kehidupan manusia, disajikan singkat dan penuh warna.',
+    title: 'Filosofi Teras',
+    author: 'Henry Manampiring',
+    category: 'Pengembangan Diri',
+    cover: 'https://covers.openlibrary.org/b/isbn/9786024125189-L.jpg',
+    available: true,
+    accent: '#f5c84b',
+    highlight: 'Pilihan staf',
   },
   {
-    title: "Perry's Chemical Engineers' Handbook",
-    author: 'Don W. Green',
-    category: 'Teknik Kimia',
-    cover: 'https://covers.openlibrary.org/b/isbn/9780071834087-L.jpg',
-    synopsis: 'Referensi teknik kimia komprehensif untuk perancangan proses, operasi pabrik, dan pemecahan masalah industri.',
+    title: 'Atomic Habits',
+    author: 'James Clear',
+    category: 'Pengembangan Diri',
+    cover: 'https://covers.openlibrary.org/b/isbn/9780735211292-L.jpg',
+    available: false,
+    accent: '#e96d4d',
+    highlight: 'Sedang ramai',
+  },
+  {
+    title: 'Bumi Manusia',
+    author: 'Pramoedya Ananta Toer',
+    category: 'Fiksi Sejarah',
+    cover: 'https://covers.openlibrary.org/b/isbn/9780140256352-L.jpg',
+    available: true,
+    accent: '#8e78b8',
+    highlight: 'Klasik wajib',
+  },
+  {
+    title: 'The Design of Everyday Things',
+    author: 'Don Norman',
+    category: 'Seni & Desain',
+    cover: 'https://covers.openlibrary.org/b/isbn/9780465050659-L.jpg',
+    available: true,
+    accent: '#ef9fbc',
+    highlight: 'Buat kreatif',
+  },
+  {
+    title: 'The Little Prince',
+    author: 'Antoine de Saint-Exupéry',
+    category: 'Fiksi & Sastra',
+    cover: 'https://covers.openlibrary.org/b/isbn/9780156012195-L.jpg',
+    available: true,
+    accent: '#7eb9c2',
+    highlight: 'Tipis tapi ngena',
+  },
+  {
+    title: 'Sapiens',
+    author: 'Yuval Noah Harari',
+    category: 'Sejarah',
+    cover: 'https://covers.openlibrary.org/b/isbn/9780062316097-L.jpg',
+    available: false,
+    accent: '#d6a56f',
+    highlight: 'Banyak dibahas',
+  },
+  {
+    title: 'Clean Code',
+    author: 'Robert C. Martin',
+    category: 'Sains & Teknologi',
+    cover: 'https://covers.openlibrary.org/b/isbn/9780132350884-L.jpg',
+    available: true,
+    accent: '#b8d7b0',
+    highlight: 'Anak IT wajib',
+  },
+  {
+    title: 'Norwegian Wood',
+    author: 'Haruki Murakami',
+    category: 'Fiksi & Sastra',
+    cover: 'https://covers.openlibrary.org/b/isbn/9780375704024-L.jpg',
+    available: true,
+    accent: '#bf6d63',
+    highlight: 'Baca pelan-pelan',
+  },
+  {
+    title: 'Thinking, Fast and Slow',
+    author: 'Daniel Kahneman',
+    category: 'Pengembangan Diri',
+    cover: 'https://covers.openlibrary.org/b/isbn/9780374533557-L.jpg',
+    available: false,
+    accent: '#9a91c7',
+    highlight: 'Bikin mikir',
   },
 ];
 
-const libraryFeatures = [
-  {
-    title: 'Pilihan Konten Lengkap',
-    description: 'Koleksi buku dan referensi tersusun rapi untuk memudahkan pencarian kebutuhan belajar.',
-    icon: <FiSearch aria-hidden="true" />,
-  },
-  {
-    title: 'Peminjaman Terpantau',
-    description: 'Lihat status buku dan riwayat peminjaman melalui tampilan yang mudah dibaca.',
-    icon: <FiBarChart2 aria-hidden="true" />,
-  },
-  {
-    title: 'Fitur Membaca Lengkap',
-    description: 'Informasi koleksi dapat diakses dengan nyaman, termasuk detail buku dan status peminjaman.',
-    icon: <FiBookOpen aria-hidden="true" />,
-  },
-  {
-    title: 'Akses Lebih Fleksibel',
-    description: 'Cari informasi koleksi kapan pun melalui sistem perpustakaan berbasis web.',
-    icon: <FiClock aria-hidden="true" />,
-  },
-];
+const weeklyShelfStops = ['Awal rak', 'Bagian kedua', 'Tengah rak', 'Bagian keempat', 'Akhir rak'];
 
 const popularCategories = [
   {
@@ -114,6 +160,60 @@ const popularCategories = [
 ];
 
 const Home = () => {
+  const [weeklyPosition, setWeeklyPosition] = useState(0);
+  const weeklyShelfRef = useRef(null);
+  const weeklyDragRef = useRef(null);
+  const blockWeeklyClickRef = useRef(false);
+
+  const moveWeeklyShelf = (position) => {
+    const shelf = weeklyShelfRef.current;
+    if (!shelf) return;
+
+    const maxScroll = shelf.scrollWidth - shelf.clientWidth;
+    shelf.scrollTo({ left: maxScroll * (position / (weeklyShelfStops.length - 1)), behavior: 'smooth' });
+    setWeeklyPosition(position);
+  };
+
+  const syncWeeklyPosition = () => {
+    const shelf = weeklyShelfRef.current;
+    if (!shelf) return;
+
+    const maxScroll = shelf.scrollWidth - shelf.clientWidth;
+    if (maxScroll <= 0) return;
+    setWeeklyPosition(Math.round((shelf.scrollLeft / maxScroll) * (weeklyShelfStops.length - 1)));
+  };
+
+  const startWeeklyDrag = (event) => {
+    weeklyDragRef.current = {
+      pointerX: event.clientX,
+      scrollLeft: event.currentTarget.scrollLeft,
+      moved: false,
+    };
+    event.currentTarget.setPointerCapture(event.pointerId);
+  };
+
+  const dragWeeklyShelf = (event) => {
+    if (!weeklyDragRef.current) return;
+
+    const distance = event.clientX - weeklyDragRef.current.pointerX;
+    if (Math.abs(distance) > 4) weeklyDragRef.current.moved = true;
+    event.currentTarget.scrollLeft = weeklyDragRef.current.scrollLeft - distance;
+  };
+
+  const stopWeeklyDrag = (event) => {
+    if (!weeklyDragRef.current) return;
+    blockWeeklyClickRef.current = weeklyDragRef.current.moved;
+    weeklyDragRef.current = null;
+    if (event.currentTarget.hasPointerCapture(event.pointerId)) {
+      event.currentTarget.releasePointerCapture(event.pointerId);
+    }
+    setTimeout(() => { blockWeeklyClickRef.current = false; }, 0);
+  };
+
+  const blockClickAfterDrag = (event) => {
+    if (blockWeeklyClickRef.current) event.preventDefault();
+  };
+
   return (
     <>
       <section className="popular-categories" aria-labelledby="popular-categories-title">
@@ -149,58 +249,93 @@ const Home = () => {
         </Link>
       </section>
 
-      <section className="library-feature-section mt-5">
-        <div className="section-heading mb-4">
-          <h2>Kelola Perpustakaan dengan Praktis</h2>
-          <p>Atur kapan pun dan di mana pun dengan mudah</p>
+      <section className="weekly-books" aria-labelledby="weekly-books-title">
+        <div className="weekly-books__heading">
+          <div>
+            <span className="weekly-books__eyebrow">Baru di rak</span>
+            <h2 id="weekly-books-title">Pilihan minggu ini.</h2>
+          </div>
+          <div className="weekly-books__intro">
+            <p>Sepuluh buku yang lagi sering dibicarakan, dipinjam, atau diam-diam masuk daftar baca kami.</p>
+            <Link to="/books">Lihat semua buku <FiArrowUpRight aria-hidden="true" /></Link>
+          </div>
         </div>
 
-        <div className="library-feature-grid">
-          {libraryFeatures.map((feature) => (
-            <article className="library-feature-card" key={feature.title}>
-              <div className="library-feature-card__icon mb-3">{feature.icon}</div>
-              <h3>{feature.title}</h3>
-              <p>{feature.description}</p>
-            </article>
-          ))}
-        </div>
-      </section>
+        <div className="weekly-books__carousel">
+          <button
+            type="button"
+            className="weekly-books__arrow weekly-books__arrow--left"
+            onClick={() => moveWeeklyShelf(Math.max(0, weeklyPosition - 1))}
+            disabled={weeklyPosition === 0}
+            aria-label="Geser buku ke kiri"
+          ><FiChevronLeft /></button>
 
-      <section className="featured-books-section mt-5">
-        <div className="section-heading mb-4">
-          <Badge bg="warning" text="dark" className="section-badge mb-2">
-            Rekomendasi Baru
-          </Badge>
-          <h2>Buku Terbaru</h2>
-          <p>Pilihan koleksi terbaru yang bisa langsung dijelajahi sebelum kamu masuk ke katalog lengkap.</p>
-        </div>
-
-        <Row className="g-4">
-          {featuredBooks.map((book) => (
-            <Col md={6} lg={4} key={book.title}>
-              <article className="book-card h-100">
-                <img
-                  src={book.cover}
-                  alt={`Sampul ${book.title}`}
-                  className="book-card__cover"
-                  onError={(event) => {
-                    event.currentTarget.src = fallbackCover;
-                  }}
-                />
-                <div className="book-card__overlay">
-                  <Badge bg="light" text="dark" className="book-card__category mb-2">
-                    {book.category}
-                  </Badge>
-                  <div>
-                    <h3>{book.title}</h3>
-                    <p className="book-card__author">{book.author}</p>
-                    <p className="book-card__synopsis">{book.synopsis}</p>
+          <div
+            className="weekly-books__viewport"
+            ref={weeklyShelfRef}
+            onScroll={syncWeeklyPosition}
+            onPointerDown={startWeeklyDrag}
+            onPointerMove={dragWeeklyShelf}
+            onPointerUp={stopWeeklyDrag}
+            onPointerCancel={stopWeeklyDrag}
+            onClickCapture={blockClickAfterDrag}
+          >
+            <div className="weekly-books__shelf">
+              {featuredBooks.map((book) => (
+                <Link to="/books" className="weekly-book" key={book.title}>
+                  <div className="weekly-book__stage" style={{ '--book-accent': book.accent }}>
+                    <span className="weekly-book__highlight">{book.highlight}</span>
+                    <div className="weekly-book__volume">
+                      <img
+                        src={book.cover}
+                        alt={`Sampul ${book.title}`}
+                        className="weekly-book__cover"
+                        draggable="false"
+                        onError={(event) => {
+                          event.currentTarget.src = fallbackCover;
+                        }}
+                      />
+                      <i className="weekly-book__spine" aria-hidden="true" />
+                    </div>
                   </div>
-                </div>
-              </article>
-            </Col>
+                  <div className="weekly-book__details">
+                    <span>{book.category}</span>
+                    <h3>{book.title}</h3>
+                    <p>{book.author}</p>
+                    <div className={`weekly-book__status${book.available ? '' : ' weekly-book__status--borrowed'}`}>
+                      <i /> {book.available ? 'Ada di rak' : 'Sedang dipinjam'}
+                    </div>
+                  </div>
+                </Link>
+              ))}
+            </div>
+          </div>
+
+          <button
+            type="button"
+            className="weekly-books__arrow weekly-books__arrow--right"
+            onClick={() => moveWeeklyShelf(Math.min(weeklyShelfStops.length - 1, weeklyPosition + 1))}
+            disabled={weeklyPosition === weeklyShelfStops.length - 1}
+            aria-label="Geser buku ke kanan"
+          ><FiChevronRight /></button>
+        </div>
+
+        <div
+          className="weekly-books__controls"
+          aria-label="Navigasi buku pilihan"
+          style={{ '--weekly-position': weeklyPosition }}
+        >
+          {weeklyShelfStops.map((label, index) => (
+            <button
+              type="button"
+              className={weeklyPosition === index ? 'active' : ''}
+              onClick={() => moveWeeklyShelf(index)}
+              aria-label={label}
+              aria-pressed={weeklyPosition === index}
+              key={label}
+            ><span /></button>
           ))}
-        </Row>
+        </div>
       </section>
     </>
   );
