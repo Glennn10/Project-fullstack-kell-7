@@ -56,7 +56,7 @@ const Footer = () => {
 
         <div className="site-footer__bottom">
           <span>© 2026 MinjemDong</span>
-          <span>Dibuat untuk pembaca yang selalu bilang, “satu buku lagi.”</span>
+          <span>Dibuat untuk untuk Ujian Akhir Semester.</span>
           <a href="#top">Kembali ke atas ↑</a>
         </div>
       </Container>

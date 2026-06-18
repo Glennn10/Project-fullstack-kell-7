@@ -40,7 +40,7 @@ const SplashScreen = ({ fadeOut }) => {
         </div>
       </div>
 
-      <p className="splash-note" aria-hidden="true">baca · pinjam · repeat</p>
+      <p className="splash-note" aria-hidden="true">Read · Return · Repeat</p>
     </div>
   );
 };

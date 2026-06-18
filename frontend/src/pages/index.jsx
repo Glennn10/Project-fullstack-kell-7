@@ -1,4 +1,4 @@
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
 import {
   FiArrowUpRight,
@@ -27,7 +27,7 @@ const featuredBooks = [
     cover: 'https://covers.openlibrary.org/b/isbn/9786024246945-L.jpg',
     available: true,
     accent: '#377d83',
-    highlight: 'Paling dicari',
+    highlight: '3x dipinjam minggu ini',
   },
   {
     title: 'Filosofi Teras',
@@ -36,7 +36,7 @@ const featuredBooks = [
     cover: 'https://covers.openlibrary.org/b/isbn/9786024125189-L.jpg',
     available: true,
     accent: '#f5c84b',
-    highlight: 'Pilihan staf',
+    highlight: 'Catatan dari Bu Rani',
   },
   {
     title: 'Atomic Habits',
@@ -45,7 +45,7 @@ const featuredBooks = [
     cover: 'https://covers.openlibrary.org/b/isbn/9780735211292-L.jpg',
     available: false,
     accent: '#e96d4d',
-    highlight: 'Sedang ramai',
+    highlight: 'Sedang ditunggu 2 orang',
   },
   {
     title: 'Bumi Manusia',
@@ -54,7 +54,7 @@ const featuredBooks = [
     cover: 'https://covers.openlibrary.org/b/isbn/9780140256352-L.jpg',
     available: true,
     accent: '#8e78b8',
-    highlight: 'Klasik wajib',
+    highlight: 'Koleksi sejak 2018',
   },
   {
     title: 'The Design of Everyday Things',
@@ -63,7 +63,7 @@ const featuredBooks = [
     cover: 'https://covers.openlibrary.org/b/isbn/9780465050659-L.jpg',
     available: true,
     accent: '#ef9fbc',
-    highlight: 'Buat kreatif',
+    highlight: 'Baru kembali kemarin',
   },
   {
     title: 'The Little Prince',
@@ -72,7 +72,7 @@ const featuredBooks = [
     cover: 'https://covers.openlibrary.org/b/isbn/9780156012195-L.jpg',
     available: true,
     accent: '#7eb9c2',
-    highlight: 'Tipis tapi ngena',
+    highlight: 'Selesai dalam sekali duduk',
   },
   {
     title: 'Sapiens',
@@ -81,7 +81,7 @@ const featuredBooks = [
     cover: 'https://covers.openlibrary.org/b/isbn/9780062316097-L.jpg',
     available: false,
     accent: '#d6a56f',
-    highlight: 'Banyak dibahas',
+    highlight: 'Sering ditanya anggota',
   },
   {
     title: 'Clean Code',
@@ -90,7 +90,7 @@ const featuredBooks = [
     cover: 'https://covers.openlibrary.org/b/isbn/9780132350884-L.jpg',
     available: true,
     accent: '#b8d7b0',
-    highlight: 'Anak IT wajib',
+    highlight: 'Favorit anak informatika',
   },
   {
     title: 'Norwegian Wood',
@@ -99,7 +99,7 @@ const featuredBooks = [
     cover: 'https://covers.openlibrary.org/b/isbn/9780375704024-L.jpg',
     available: true,
     accent: '#bf6d63',
-    highlight: 'Baca pelan-pelan',
+    highlight: 'Ada di meja baca',
   },
   {
     title: 'Thinking, Fast and Slow',
@@ -108,7 +108,7 @@ const featuredBooks = [
     cover: 'https://covers.openlibrary.org/b/isbn/9780374533557-L.jpg',
     available: false,
     accent: '#9a91c7',
-    highlight: 'Bikin mikir',
+    highlight: 'Baru masuk bulan ini',
   },
 ];
 
@@ -118,24 +118,24 @@ const borrowingSteps = [
   {
     label: 'Langkah satu',
     title: 'Cari bukunya',
-    description: 'Pakai kolom pencarian atau masuk lewat kategori yang kamu suka.',
-    note: 'Cari judul, penulis, atau topik',
+    description: 'Kalau sudah tahu judulnya, langsung ketik. Kalau belum, masuk saja dari kategori.',
+    note: 'Judul, penulis, atau topik juga bisa',
     icon: <FiSearch aria-hidden="true" />,
     color: '#f5c84b',
   },
   {
     label: 'Langkah dua',
     title: 'Ajukan pinjam',
-    description: 'Pilih buku yang tersedia lalu kirim permintaan peminjamanmu.',
-    note: 'Konfirmasi dilakukan petugas',
+    description: 'Klik pinjam. Petugas akan cek bukunya dulu sebelum kamu datang mengambil.',
+    note: 'Tunggu kabar dari petugas',
     icon: <FiSend aria-hidden="true" />,
     color: '#e96d4d',
   },
   {
     label: 'Langkah tiga',
     title: 'Ambil & baca',
-    description: 'Datang ke perpustakaan, tunjukkan akunmu, lalu bawa pulang bukunya.',
-    note: 'Jangan lupa tanggal kembali',
+    description: 'Setelah disetujui, datang dan tunjukkan akunmu. Selesai—bukunya boleh dibawa.',
+    note: 'Tanggal kembali ada di akunmu',
     icon: <FiBookOpen aria-hidden="true" />,
     color: '#377d83',
   },
@@ -146,60 +146,46 @@ const librarianPick = {
   author: 'Matt Haig',
   category: 'Fiksi Kontemporer',
   cover: 'https://covers.openlibrary.org/b/isbn/9780525559474-L.jpg',
-  note: 'Buku ini cocok buat kamu yang pernah bertanya, “bagaimana kalau dulu aku memilih jalan yang berbeda?” Hangat, ringan, tapi tinggal cukup lama di kepala.',
+  note: 'Awalnya saya kira buku ini bakal terlalu manis. Ternyata bagian tentang menyesali pilihan hidup cukup kena. Kalau akhir-akhir ini kamu sering memikirkan keputusan yang sudah lewat, coba baca pelan-pelan.',
 };
 
 const librarianAlternatives = [
   {
     title: 'Before the Coffee Gets Cold',
     author: 'Toshikazu Kawaguchi',
-    mood: 'Hangat & reflektif',
+    mood: 'Lebih tipis, sedikit lebih ajaib',
     color: '#f5c84b',
   },
   {
     title: 'Days at the Morisaki Bookshop',
     author: 'Satoshi Yagisawa',
-    mood: 'Tenang & nyaman',
+    mood: 'Kalau sedang ingin bacaan yang tenang',
     color: '#377d83',
   },
   {
     title: 'Tuesdays with Morrie',
     author: 'Mitch Albom',
-    mood: 'Pelan tapi membekas',
+    mood: 'Buat dibaca pelan pada akhir pekan',
     color: '#e96d4d',
   },
 ];
 
 const frequentlyAskedQuestions = [
   {
-    label: 'Mulai',
-    question: 'Bagaimana cara meminjam buku?',
-    answer: 'Cari buku yang kamu mau, pastikan statusnya tersedia, lalu kirim permintaan peminjaman. Setelah dikonfirmasi petugas, buku bisa langsung kamu ambil di perpustakaan.',
+    question: 'Bisa booking buku dulu sebelum datang?',
+    answer: 'Bisa. Ajukan lewat katalog dan tunggu konfirmasi petugas. Kalau sudah disetujui, bukunya akan disiapkan untuk kamu ambil.',
   },
   {
-    label: 'Durasi',
-    question: 'Berapa lama masa peminjamannya?',
-    answer: 'Tanggal kembali akan tercantum pada detail peminjamanmu. Cek halaman Peminjaman setelah permintaan disetujui supaya bukunya tidak terlambat dikembalikan.',
+    question: 'Bukunya belum selesai, boleh tambah waktu?',
+    answer: 'Kabari petugas sebelum tanggal kembali. Biasanya bisa diperpanjang selama bukunya tidak sedang ditunggu anggota lain.',
   },
   {
-    label: 'Perpanjang',
-    question: 'Apakah masa pinjam bisa diperpanjang?',
-    answer: 'Bisa selama buku tersebut tidak sedang ditunggu anggota lain. Hubungi petugas sebelum tanggal pengembalian agar perpanjangan dapat diperiksa lebih dulu.',
+    question: 'Di web tertulis tersedia, tapi kok bukunya nggak ada?',
+    answer: 'Mungkin bukunya sedang disiapkan, baru dikembalikan, atau masih ada di meja baca. Tanya petugas supaya bisa langsung dicek.',
   },
   {
-    label: 'Terlambat',
-    question: 'Bagaimana kalau bukunya terlambat dikembalikan?',
-    answer: 'Segera kembalikan buku dan konfirmasi kepada petugas. Ketentuan keterlambatan akan mengikuti kebijakan perpustakaan yang berlaku.',
-  },
-  {
-    label: 'Stok',
-    question: 'Bagaimana mengecek buku masih tersedia?',
-    answer: 'Status buku dapat dilihat langsung dari katalog. Label “Ada di rak” berarti buku bisa diajukan, sedangkan “Sedang dipinjam” berarti kamu perlu menunggu.',
-  },
-  {
-    label: 'Kondisi',
-    question: 'Apa yang harus dilakukan jika buku rusak atau hilang?',
-    answer: 'Jangan panik dan jangan memperbaikinya sendiri. Laporkan kondisinya kepada petugas agar solusi penggantian atau perbaikan dapat ditentukan bersama.',
+    question: 'Buku yang kupinjam kena air. Harus bagaimana?',
+    answer: 'Jangan dilem atau diperbaiki sendiri. Bawa bukunya dan ceritakan kondisinya ke petugas—nanti kita cari jalan keluarnya bersama.',
   },
 ];
 
@@ -261,6 +247,39 @@ const Home = () => {
   const weeklyDragRef = useRef(null);
   const blockWeeklyClickRef = useRef(false);
 
+  useEffect(() => {
+    const sections = document.querySelectorAll('.scroll-reveal');
+    let previousScrollY = window.scrollY;
+    let scrollDirection = 'down';
+
+    const trackScrollDirection = () => {
+      const currentScrollY = window.scrollY;
+      if (Math.abs(currentScrollY - previousScrollY) > 3) {
+        scrollDirection = currentScrollY > previousScrollY ? 'down' : 'up';
+        previousScrollY = currentScrollY;
+      }
+    };
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          entry.target.classList.toggle('scroll-reveal--from-top', scrollDirection === 'up');
+          requestAnimationFrame(() => entry.target.classList.add('scroll-reveal--visible'));
+        } else {
+          entry.target.classList.remove('scroll-reveal--visible');
+        }
+      });
+    }, { threshold: 0.1, rootMargin: '0px 0px -7% 0px' });
+
+    sections.forEach((section) => observer.observe(section));
+    window.addEventListener('scroll', trackScrollDirection, { passive: true });
+
+    return () => {
+      observer.disconnect();
+      window.removeEventListener('scroll', trackScrollDirection);
+    };
+  }, []);
+
   const moveWeeklyShelf = (position) => {
     const shelf = weeklyShelfRef.current;
     if (!shelf) return;
@@ -312,12 +331,12 @@ const Home = () => {
 
   return (
     <>
-      <section className="popular-categories" aria-labelledby="popular-categories-title">
+      <section className="popular-categories scroll-reveal scroll-reveal--fade" aria-labelledby="popular-categories-title">
         <div className="popular-categories__heading">
           <div>
             <h2 id="popular-categories-title">Lagi nyari categori <em>yang mana?</em></h2>
           </div>
-          <p>Sesuai in aja ama suasana hati, tinggal pilih aja.</p>
+          <p>Sesuai in aja ama suasana hati, tinggal pilih categorinya aja.</p>
         </div>
 
         <div className="popular-categories__grid">
@@ -344,7 +363,7 @@ const Home = () => {
         </Link>
       </section>
 
-      <section className="weekly-books" aria-labelledby="weekly-books-title">
+      <section className="weekly-books scroll-reveal scroll-reveal--side" aria-labelledby="weekly-books-title">
         <div className="weekly-books__heading">
           <div>
             <h2 id="weekly-books-title">Book of the week!</h2>
@@ -432,7 +451,7 @@ const Home = () => {
         </div>
       </section>
 
-      <section className="borrowing-guide" id="borrowing-guide" aria-labelledby="borrowing-guide-title">
+      <section className="borrowing-guide scroll-reveal scroll-reveal--stagger" id="borrowing-guide" aria-labelledby="borrowing-guide-title">
         <div className="borrowing-guide__heading">
           <div>
             <h2 id="borrowing-guide-title">Dari rak sampai <em>ke tanganmu?</em></h2>
@@ -469,7 +488,7 @@ const Home = () => {
         </div>
       </section>
 
-      <section className="librarian-picks" aria-labelledby="librarian-picks-title">
+      <section className="librarian-picks scroll-reveal scroll-reveal--soft" aria-labelledby="librarian-picks-title">
         <div className="librarian-picks__heading">
           <span className="librarian-picks__eyebrow">Dipilih langsung oleh pustakawan</span>
           <h2 id="librarian-picks-title">Kalau bingung, <em>mulai dari sini.</em></h2>
@@ -508,8 +527,8 @@ const Home = () => {
 
           <aside className="librarian-alternatives">
             <div className="librarian-alternatives__title">
-              <span>Kalau yang ini sedang dipinjam...</span>
-              <p>Coba tiga bacaan dengan suasana serupa.</p>
+              <span>Kalau buku utamanya sedang keluar...</span>
+              <p>Bu Rani biasanya menyelipkan tiga judul ini sebagai gantinya.</p>
             </div>
             <div className="librarian-alternatives__list">
               {librarianAlternatives.map((book) => (
@@ -530,9 +549,9 @@ const Home = () => {
 
       <section className="faq-section" id="faq" aria-labelledby="faq-title">
         <div className="faq-section__intro">
-          <span className="faq-section__eyebrow">Sebelum kamu tanya petugas</span>
-          <h2 id="faq-title">Yang sering <em>ditanyain.</em></h2>
-          <p>Jawaban singkat buat hal-hal yang paling sering bikin bingung saat mau pinjam buku.</p>
+          <span className="faq-section__eyebrow">Catatan dari meja petugas</span>
+          <h2 id="faq-title">Tadi ada yang <em>nanya ini.</em></h2>
+          <p>Bukan semua aturan perpustakaan—cuma beberapa pertanyaan yang memang sering muncul.</p>
           <div className="faq-section__hint">
             <span aria-hidden="true">?</span>
             <p>Belum ketemu jawabannya? Petugas perpustakaan siap membantu saat jam operasional.</p>
@@ -541,8 +560,8 @@ const Home = () => {
 
         <div className="faq-index">
           <div className="faq-index__header">
-            <span>Indeks Bantuan</span>
-            <span>MinjemDong / FAQ</span>
+            <span>Dicatat minggu ini</span>
+            <span>4 pertanyaan terakhir</span>
           </div>
 
           {frequentlyAskedQuestions.map((item, index) => {
@@ -557,7 +576,6 @@ const Home = () => {
                   aria-expanded={isOpen}
                   aria-controls={answerId}
                 >
-                  <span className="faq-item__label">{item.label}</span>
                   <span className="faq-item__question">{item.question}</span>
                   <span className="faq-item__toggle" aria-hidden="true"><FiPlus /></span>
                 </button>
