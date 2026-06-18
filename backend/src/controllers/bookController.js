@@ -65,7 +65,7 @@ const bookController = {
             }
 
             let parsedCategoryId = null;
-            if (category_id !== null && category_id !== undefined) {
+            if (category_id !== null && category_id !== undefined && category_id !== '') {
                 parsedCategoryId = Number(category_id);
                 if (isNaN(parsedCategoryId)) {
                     return res.status(400).json({
@@ -137,8 +137,10 @@ const bookController = {
                 });
             }
 
-            let parsedCategoryId = category_id !== undefined ? category_id : existingBook.category_id;
-            if (category_id !== null && category_id !== undefined) {
+            let parsedCategoryId = category_id === ''
+                ? null
+                : (category_id !== undefined ? category_id : existingBook.category_id);
+            if (category_id !== null && category_id !== undefined && category_id !== '') {
                 parsedCategoryId = Number(category_id);
                 if (isNaN(parsedCategoryId)) {
                     return res.status(400).json({

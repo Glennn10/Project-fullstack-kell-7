@@ -1,17 +1,42 @@
 import { useEffect, useMemo, useState } from 'react';
-import { Alert, Badge, Button, Card, Col, Row, Spinner, Table } from 'react-bootstrap';
+import {
+  FiAlertTriangle,
+  FiArrowUpRight,
+  FiBookOpen,
+  FiClock,
+  FiGrid,
+  FiLogOut,
+  FiRepeat,
+} from 'react-icons/fi';
 import { Link, NavLink, useNavigate } from 'react-router-dom';
+import BookVolume from '../components/common/BookVolume';
+import DeskStationery from '../components/dashboard/DeskStationery';
+import { API_BASE_URL } from '../config/api';
 import { useAuth } from '../context/useAuth';
 import { libraryService } from '../services/libraryService';
+import '../styles/pages/dashboard.css';
 
 const navItems = [
-  { label: 'Overview', path: '/dashboard', icon: 'grid' },
-  { label: 'Kelola Buku', path: '/books', icon: 'book' },
-  { label: 'Peminjaman', path: '/loans', icon: 'loan' },
+  { label: 'Ringkasan', path: '/dashboard', icon: FiGrid },
+  { label: 'Kelola Buku', path: '/dashboard/books', icon: FiBookOpen },
+  { label: 'Peminjaman', path: '/loans', icon: FiRepeat },
 ];
 
-const Icon = () => {
-  return <img src="/Logo.png" alt="" className="dashboard-icon" aria-hidden="true" />;
+const statMeta = [
+  { key: 'books', label: 'Buku tercatat', detail: 'Koleksi di katalog', color: '#f5c84b', icon: FiBookOpen },
+  { key: 'loans', label: 'Semua transaksi', detail: 'Sejak pencatatan dimulai', color: '#377d83', icon: FiRepeat },
+  { key: 'active', label: 'Masih dibawa', detail: 'Belum kembali ke rak', color: '#e96d4d', icon: FiClock },
+  { key: 'overdue', label: 'Perlu diingatkan', detail: 'Melewati batas kembali', color: '#927db8', icon: FiAlertTriangle },
+];
+
+const formatDate = (value) => value
+  ? new Intl.DateTimeFormat('id-ID', { day: 'numeric', month: 'short', year: 'numeric' }).format(new Date(value))
+  : '—';
+
+const getCoverUrl = (coverImage) => {
+  if (!coverImage) return null;
+  if (/^https?:\/\//i.test(coverImage)) return coverImage;
+  return `${API_BASE_URL}/uploads/${coverImage.replace(/^\/?uploads\//, '')}`;
 };
 
 const Dashboard = () => {
@@ -23,43 +48,37 @@ const Dashboard = () => {
   const [error, setError] = useState('');
 
   useEffect(() => {
-    const fetchDashboard = async () => {
-      setLoading(true);
-      setError('');
+    let isCurrent = true;
 
-      try {
-        const [booksResponse, loansResponse] = await Promise.all([
-          libraryService.getBooks(),
-          libraryService.getLoans(token),
-        ]);
+    Promise.all([libraryService.getBooks(), libraryService.getLoans(token)])
+      .then(([booksResponse, loansResponse]) => {
+        if (!isCurrent) return;
+        setBooks(booksResponse.data?.data || []);
+        setLoans(loansResponse.data?.data || []);
+      })
+      .catch((requestError) => {
+        if (isCurrent) setError(requestError.response?.data?.message || 'Dashboard belum bisa dimuat. Pastikan server aktif.');
+      })
+      .finally(() => {
+        if (isCurrent) setLoading(false);
+      });
 
-        setBooks(booksResponse.data.data || []);
-        setLoans(loansResponse.data.data || []);
-      } catch (err) {
-        setError(err.response?.data?.message || 'Gagal memuat data dashboard. Pastikan backend sedang berjalan.');
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchDashboard();
+    return () => { isCurrent = false; };
   }, [token]);
 
-  const stats = useMemo(() => {
-    const activeLoans = loans.filter((loan) => loan.status === 'Dipinjam').length;
-    const returnedLoans = loans.filter((loan) => loan.status === 'Dikembalikan').length;
-    const overdueLoans = loans.filter((loan) => loan.status === 'Terlambat').length;
-
-    return [
-      { label: 'Total Buku', value: books.length, detail: 'Koleksi tercatat', tone: 'primary' },
-      { label: 'Total Peminjaman', value: loans.length, detail: 'Semua transaksi', tone: 'info' },
-      { label: 'Sedang Dipinjam', value: activeLoans, detail: 'Belum kembali', tone: 'warning' },
-      { label: 'Terlambat', value: overdueLoans, detail: `${returnedLoans} sudah kembali`, tone: 'danger' },
-    ];
-  }, [books, loans]);
+  const statValues = useMemo(() => ({
+    books: books.length,
+    loans: loans.length,
+    active: loans.filter((loan) => loan.status === 'Dipinjam').length,
+    overdue: loans.filter((loan) => loan.status === 'Terlambat').length,
+  }), [books, loans]);
 
   const latestLoans = loans.slice(0, 6);
   const latestBooks = books.slice(0, 5);
+  const displayName = user?.name || 'Pustakawan';
+  const today = new Intl.DateTimeFormat('id-ID', {
+    weekday: 'long', day: 'numeric', month: 'long', year: 'numeric',
+  }).format(new Date());
 
   const handleLogout = () => {
     logout();
@@ -67,165 +86,115 @@ const Dashboard = () => {
   };
 
   return (
-    <div className="admin-shell">
-      <aside className="admin-sidebar">
-        <Link to="/dashboard" className="admin-brand">
-          <span>
-            <img src="/Logo.png" alt="" aria-hidden="true" />
-          </span>
-          <strong>MinjemDong</strong>
+    <div className="library-admin">
+      <aside className="library-admin__sidebar">
+        <Link to="/dashboard" className="library-admin__brand">
+          <span><img src="/Logo.png" alt="" aria-hidden="true" /></span>
+          <div><strong>MinjemDong!</strong><small>Meja petugas</small></div>
         </Link>
 
-        <nav className="admin-nav" aria-label="Navigasi admin">
-          {navItems.map((item) => (
-            <NavLink key={item.label} to={item.path} end={item.path === '/dashboard'} className="admin-nav__link">
-              <Icon name={item.icon} />
-              <span>{item.label}</span>
+        <span className="library-admin__nav-label">Jelajahi meja</span>
+        <nav className="library-admin__nav" aria-label="Navigasi admin">
+          {navItems.map(({ label, path, icon: Icon }) => (
+            <NavLink key={label} to={path} end={path === '/dashboard'}>
+              <Icon aria-hidden="true" /><span>{label}</span><i aria-hidden="true" />
             </NavLink>
           ))}
         </nav>
 
-        <div className="admin-sidebar__footer">
-          <div className="admin-user-card">
-            <span>{user?.name?.slice(0, 1) || 'A'}</span>
-            <div>
-              <strong>{user?.name || 'Admin'}</strong>
-              <small>{user?.email || '-'}</small>
-            </div>
-          </div>
-          <Button type="button" variant="outline-light" className="admin-logout" onClick={handleLogout}>
-            <Icon name="logout" />
-            <span>Logout</span>
-          </Button>
+        <div className="library-admin__sidebar-note">
+          <span>Catatan meja</span>
+          <p>Cek buku terlambat sebelum menutup perpustakaan.</p>
+          <i aria-hidden="true" />
+        </div>
+
+        <div className="library-admin__profile">
+          <span aria-hidden="true">{displayName.charAt(0).toUpperCase()}</span>
+          <div><strong>{displayName}</strong><small>{user?.email || 'Administrator'}</small></div>
+          <button type="button" onClick={handleLogout} aria-label="Keluar"><FiLogOut /></button>
         </div>
       </aside>
 
-      <main className="admin-main">
-        <header className="admin-topbar">
+      <main className="library-admin__main">
+        <header className="dashboard-masthead">
           <div>
-            <span className="admin-kicker">Admin Console</span>
-            <h1>Dashboard Perpustakaan</h1>
+            <span>Halo, {displayName}</span>
+            <h1>Apa yang terjadi<br />di perpustakaan?</h1>
+            <p>{today}</p>
           </div>
-          <div className="admin-topbar__actions">
-            <Button as={Link} to="/books" variant="outline-secondary">
-              Katalog Publik
-            </Button>
-            <Button as={Link} to="/" variant="primary">
-              Lihat Situs
-            </Button>
+          <div className="dashboard-masthead__actions">
+            <Link to="/books">Buka katalog <FiArrowUpRight /></Link>
+            <Link to="/">Lihat situs <FiArrowUpRight /></Link>
           </div>
+          <span className="dashboard-masthead__mark" aria-hidden="true">catatan hari ini</span>
         </header>
 
-        {loading && (
-          <div className="dashboard-loading">
-            <Spinner animation="border" variant="primary" />
-            <span>Memuat dashboard...</span>
-          </div>
-        )}
-
-        {error && <Alert variant="danger">{error}</Alert>}
+        {loading && <div className="dashboard-state"><i /> Membuka catatan perpustakaan...</div>}
+        {error && <div className="dashboard-state dashboard-state--error"><FiAlertTriangle /><span>{error}</span></div>}
 
         {!loading && !error && (
           <>
-            <Row className="g-3 mb-4">
-              {stats.map((item) => (
-                <Col md={6} xl={3} key={item.label}>
-                  <Card className="dashboard-stat h-100">
-                    <Card.Body>
-                      <div className="dashboard-stat__head">
-                        <span className={`dashboard-stat__dot bg-${item.tone}`} />
-                        <Badge bg="light" text="dark">
-                          Live
-                        </Badge>
-                      </div>
-                      <p>{item.label}</p>
-                      <strong>{item.value}</strong>
-                      <small>{item.detail}</small>
-                    </Card.Body>
-                  </Card>
-                </Col>
+            <section className="dashboard-stats" aria-label="Ringkasan perpustakaan">
+              {statMeta.map(({ key, label, detail, color, icon: Icon }, index) => (
+                <article className="dashboard-stat-card" style={{ '--stat-color': color }} key={key}>
+                  <div><span>{String(index + 1).padStart(2, '0')}</span><Icon aria-hidden="true" /></div>
+                  <strong>{statValues[key]}</strong>
+                  <h2>{label}</h2>
+                  <p>{detail}</p>
+                </article>
               ))}
-            </Row>
+              <DeskStationery
+                items={['ruler', 'writing-tools', 'highlighter', 'clips', 'stapler']}
+                className="dashboard-stat-stationery"
+              />
+            </section>
 
-            <Row className="g-4">
-              <Col xl={8}>
-                <Card className="dashboard-panel h-100">
-                  <Card.Body>
-                    <div className="dashboard-panel__head">
-                      <div>
-                        <h2>Peminjaman Terbaru</h2>
-                        <p>Transaksi terbaru yang masuk ke sistem.</p>
+            <section className="dashboard-workspace">
+              <article className="loan-ledger">
+                <header>
+                  <div><span>Catatan sirkulasi</span><h2>Peminjaman terbaru</h2></div>
+                  <Link to="/loans">Buka pencatatan <FiArrowUpRight /></Link>
+                </header>
+
+                {latestLoans.length > 0 ? (
+                  <div className="loan-ledger__rows">
+                    {latestLoans.map((loan) => (
+                      <div className="loan-ledger__row" key={loan.id}>
+                        <div><strong>{loan.book_title || 'Judul tidak tercatat'}</strong><small>{loan.borrower_name || 'Peminjam tidak tercatat'}</small></div>
+                        <span>{loan.staff_name || '—'}</span>
+                        <time>{formatDate(loan.loan_date)}</time>
+                        <em className={`loan-status loan-status--${loan.status?.toLowerCase() || 'unknown'}`}>{loan.status || '—'}</em>
                       </div>
-                      <Button as={Link} to="/loans" variant="outline-secondary" size="sm">
-                        Detail
-                      </Button>
-                    </div>
+                    ))}
+                  </div>
+                ) : (
+                  <div className="dashboard-blank dashboard-blank--ledger">
+                    <FiBookOpen aria-hidden="true" />
+                    <span>Halaman ini masih bersih.</span>
+                    <small>Peminjaman & Pengembalian akan tercatat di sini.</small>
+                  </div>
+                )}
+              </article>
 
-                    {latestLoans.length > 0 ? (
-                      <Table responsive hover className="dashboard-table align-middle">
-                        <thead>
-                          <tr>
-                            <th>Buku</th>
-                            <th>Peminjam</th>
-                            <th>Staff</th>
-                            <th>Status</th>
-                            <th>Tanggal</th>
-                          </tr>
-                        </thead>
-                        <tbody>
-                          {latestLoans.map((loan) => (
-                            <tr key={loan.id}>
-                              <td>{loan.book_title || '-'}</td>
-                              <td>{loan.borrower_name || '-'}</td>
-                              <td>{loan.staff_name || '-'}</td>
-                              <td>
-                                <Badge bg={loan.status === 'Dikembalikan' ? 'success' : 'warning'} text={loan.status === 'Dikembalikan' ? undefined : 'dark'}>
-                                  {loan.status}
-                                </Badge>
-                              </td>
-                              <td>{loan.loan_date ? new Date(loan.loan_date).toLocaleDateString('id-ID') : '-'}</td>
-                            </tr>
-                          ))}
-                        </tbody>
-                      </Table>
-                    ) : (
-                      <div className="dashboard-empty">Belum ada data peminjaman.</div>
-                    )}
-                  </Card.Body>
-                </Card>
-              </Col>
-
-              <Col xl={4}>
-                <Card className="dashboard-panel h-100">
-                  <Card.Body>
-                    <div className="dashboard-panel__head">
-                      <div>
-                        <h2>Koleksi Terbaru</h2>
-                        <p>Buku yang terakhir masuk katalog.</p>
+              <aside className="new-books-panel">
+                <header><div><span>Baru tiba</span><h2>Di meja katalog</h2></div><i aria-hidden="true" /></header>
+                {latestBooks.length > 0 ? (
+                  <div className="new-books-panel__list">
+                    {latestBooks.map((book, index) => (
+                      <div className="new-book-item" key={book.id}>
+                        <BookVolume cover={getCoverUrl(book.cover_image)} title={book.title} className="dashboard-mini-book" />
+                        <div><strong>{book.title}</strong><span>{book.author || 'Penulis belum dicatat'}</span><small>{book.year || 'Tahun —'}</small></div>
+                        <i style={{ '--book-index-color': statMeta[index % statMeta.length].color }} aria-hidden="true" />
                       </div>
-                    </div>
-
-                    {latestBooks.length > 0 ? (
-                      <div className="dashboard-book-list">
-                        {latestBooks.map((book) => (
-                          <div className="dashboard-book-item" key={book.id}>
-                            <div>
-                              <strong>{book.title}</strong>
-                              <span>{book.author || '-'}</span>
-                            </div>
-                            <Badge bg="light" text="dark">
-                              {book.year || '-'}
-                            </Badge>
-                          </div>
-                        ))}
-                      </div>
-                    ) : (
-                      <div className="dashboard-empty dashboard-empty--compact">Belum ada buku.</div>
-                    )}
-                  </Card.Body>
-                </Card>
-              </Col>
-            </Row>
+                    ))}
+                  </div>
+                ) : (
+                  <div className="dashboard-blank">
+                    <FiBookOpen aria-hidden="true" /><span>Mejanya masih kosong.</span><small>Buku baru akan muncul di sini.</small>
+                  </div>
+                )}
+              </aside>
+            </section>
           </>
         )}
       </main>

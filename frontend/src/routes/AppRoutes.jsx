@@ -9,6 +9,7 @@ import Login from '../pages/Login';
 import Register from '../pages/Register';
 import Dashboard from '../pages/Dashboard';
 import MyBooks from '../pages/MyBooks';
+import ManageBooks from '../pages/ManageBooks';
 
 const AppRoutes = () => (
   <Routes>
@@ -33,6 +34,14 @@ const AppRoutes = () => (
       element={(
         <ProtectedRoute allowedRoles={['admin']}>
           <Dashboard />
+        </ProtectedRoute>
+      )}
+    />
+    <Route
+      path="dashboard/books"
+      element={(
+        <ProtectedRoute allowedRoles={['admin']}>
+          <ManageBooks />
         </ProtectedRoute>
       )}
     />

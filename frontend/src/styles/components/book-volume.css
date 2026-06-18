@@ -1,4 +1,12 @@
 .physical-book {
+  --physical-book-border: 2px;
+  --physical-book-page-bottom: 10px;
+  --physical-book-page-depth: 11px;
+  --physical-book-page-offset: 8px;
+  --physical-book-page-overhang: 10px;
+  --physical-book-side-bottom: 5px;
+  --physical-book-page-tail: 2px;
+  --physical-book-spine-width: 13px;
   filter: drop-shadow(10px 13px 5px rgba(16, 47, 61, .23));
   height: var(--physical-book-height, 224px);
   position: relative;
@@ -15,14 +23,14 @@
   border: 1.5px solid #102f3d;
   border-left: 0;
   border-radius: 0 5px 5px 0;
-  bottom: -5px;
+  bottom: calc(0px - var(--physical-book-side-bottom));
   content: '';
   position: absolute;
-  right: -10px;
-  top: 8px;
+  right: calc(0px - var(--physical-book-page-overhang));
+  top: var(--physical-book-page-offset);
   transform: skewY(28deg);
   transform-origin: left top;
-  width: 11px;
+  width: var(--physical-book-page-depth);
   z-index: 1;
 }
 
@@ -31,12 +39,12 @@
   border: 1.5px solid #102f3d;
   border-top: 0;
   border-radius: 0 0 5px 3px;
-  bottom: -10px;
+  bottom: calc(0px - var(--physical-book-page-bottom));
   content: '';
-  height: 11px;
-  left: 7px;
+  height: var(--physical-book-page-bottom);
+  left: var(--physical-book-page-offset);
   position: absolute;
-  right: -2px;
+  right: calc(0px - var(--physical-book-page-tail));
   transform: skewX(38deg);
   transform-origin: left top;
   z-index: 1;
@@ -44,7 +52,7 @@
 
 .physical-book__cover {
   background: #f6f1e7;
-  border: 2px solid #102f3d;
+  border: var(--physical-book-border) solid #102f3d;
   border-radius: 3px 8px 8px 3px;
   height: 100%;
   inset: 0;
@@ -62,6 +70,6 @@
   pointer-events: none;
   position: absolute;
   top: 2px;
-  width: 13px;
+  width: var(--physical-book-spine-width);
   z-index: 4;
 }
