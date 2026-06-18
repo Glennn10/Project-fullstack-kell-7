@@ -17,19 +17,20 @@ function App() {
   const [fadeOut, setFadeOut] = useState(false);
 
   useEffect(() => {
-    // Wait 2 seconds, then trigger fade out animation
+    let removeTimer;
+
     const displayTimer = setTimeout(() => {
       setFadeOut(true);
-      
-      // Remove splash from DOM after fade out transition (0.6s) completes
-      const removeTimer = setTimeout(() => {
-        setShowSplash(false);
-      }, 600);
-      
-      return () => clearTimeout(removeTimer);
-    }, 2000);
 
-    return () => clearTimeout(displayTimer);
+      removeTimer = setTimeout(() => {
+        setShowSplash(false);
+      }, 500);
+    }, 1700);
+
+    return () => {
+      clearTimeout(displayTimer);
+      clearTimeout(removeTimer);
+    };
   }, []);
 
   return (

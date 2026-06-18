@@ -19,26 +19,29 @@ const NavigationBar = () => {
 
   return (
     <>
-      <Navbar expand="lg" sticky="top" className="shadow-sm" style={{ backgroundColor: '#ffffff' }}>
-        <Container>
+      <Navbar expand="lg" sticky="top" className={`navigation-bar${showHero ? ' navigation-bar--home' : ''}`}>
+        <Container className="navigation-bar__inner">
           <Navbar.Brand as={Link} to="/" className="fw-bold text-dark">
-            <img src="/Logo.png" alt="" className="brand-logo" aria-hidden="true" />
-            MinjemDong
+            <span className="brand-logo-wrap"><img src="/Logo.png" alt="" className="brand-logo" aria-hidden="true" /></span>
+            <span className="brand-wordmark">Minjem<span>Dong!</span></span>
           </Navbar.Brand>
 
-          <Navbar.Toggle aria-controls="main-navbar" />
+          <Navbar.Toggle aria-controls="main-navbar" className="navigation-toggle">
+            <span>Menu</span>
+            <span className="navigation-toggle__lines" aria-hidden="true"><i /><i /></span>
+          </Navbar.Toggle>
 
           <Navbar.Collapse id="main-navbar">
-            <Nav className="mx-auto">
+            <Nav className="mx-auto navigation-links">
               <Nav.Link as={NavLink} to="/">
-                Home
+                Beranda
               </Nav.Link>
 
               <Nav.Link as={NavLink} to="/books">
                 Katalog Buku
               </Nav.Link>
 
-              <NavDropdown title="Sirkulasi Buku" id="sirkulasi-dropdown">
+              <NavDropdown title="Peminjaman" id="sirkulasi-dropdown">
                 <NavDropdown.Item as={Link} to="/loans">
                   Catat Peminjaman
                 </NavDropdown.Item>
@@ -47,7 +50,7 @@ const NavigationBar = () => {
                 </NavDropdown.Item>
               </NavDropdown>
 
-              <NavDropdown title="Explore" id="explore-dropdown">
+              <NavDropdown title="Info" id="explore-dropdown">
                 <NavDropdown.Item href="#faq">FAQ</NavDropdown.Item>
                 <NavDropdown.Item href="#guidelines">
                   Panduan Peminjaman
@@ -94,13 +97,13 @@ const NavigationBar = () => {
                 </NavDropdown>
               </Nav>
             ) : (
-              <Nav>
-                <Nav.Link as={Link} to="/login" className="btn btn-outline-dark btn-sm px-4">
-                  Login
+              <Nav className="navigation-auth">
+                <Nav.Link as={Link} to="/login" className="navigation-auth__login">
+                  Masuk
                 </Nav.Link>
 
-                <Nav.Link as={Link} to="/register" className="btn btn-warning btn-sm px-4 ms-lg-2">
-                  Register
+                <Nav.Link as={Link} to="/register" className="navigation-auth__register">
+                  Daftar <FiArrowRight aria-hidden="true" />
                 </Nav.Link>
               </Nav>
             )}
@@ -111,33 +114,52 @@ const NavigationBar = () => {
       {showHero && (
         <header className="landing-hero">
           <Container>
-            <div className="landing-hero__content">
-              <span className="landing-hero__eyebrow"><FiBookOpen /> Perpustakaan Digital</span>
+            <div className="landing-hero__layout">
+              <div className="landing-hero__content">
+                <span className="landing-hero__eyebrow"><FiBookOpen /> Hai, lagi cari bacaan?</span>
 
-              <h1>
-                Buku bagus selalu punya cara untuk <span>menemukanmu.</span>
-              </h1>
+                <h1>
+                  Mau baca apa <span>hari ini?</span>
+                </h1>
 
-              <p className="landing-hero__description">
-                Jelajahi koleksi pilihan, temukan bacaan berikutnya, lalu pinjam dengan proses yang sederhana di MinjemDong.
-              </p>
+                <p className="landing-hero__description">
+                  Nggak perlu muter-muter rak. Cari bukunya di sini, cek ketersediaan, lalu tinggal pinjam.
+                </p>
 
-              <Form action="/books" method="GET" className="d-flex flex-column flex-md-row gap-2" style={{ maxWidth: 560 }}>
-                <Form.Control
-                  type="search"
-                  name="keyword"
-                  placeholder="Cari judul buku atau penulis..."
-                  aria-label="Pencarian buku"
-                  className="landing-search__input"
-                />
+                <Form action="/books" method="GET" className="landing-search">
+                  <Form.Control
+                    type="search"
+                    name="keyword"
+                    placeholder="Ketik judul, penulis, atau topik..."
+                    aria-label="Pencarian buku"
+                    className="landing-search__input"
+                  />
 
-                <Button type="submit" variant="warning" className="landing-search__button">
-                  Cari Buku <FiArrowRight />
-                </Button>
-              </Form>
-              <div className="landing-hero__trust">
-                <span><strong>500+</strong> koleksi buku</span>
-                <span><strong>Mudah</strong> dicari & dipinjam</span>
+                  <Button type="submit" className="landing-search__button">
+                    Cari <FiArrowRight />
+                  </Button>
+                </Form>
+                <p className="landing-hero__hint">Coba cari: novel, desain, sejarah, atau teknologi</p>
+              </div>
+
+              <div className="hero-books" aria-hidden="true">
+                <span className="hero-books__scribble">pilihan minggu ini!</span>
+                <div className="hero-book hero-book--one">
+                  <small>Bacaan santai</small>
+                  <strong>Laut<br />Bercerita</strong>
+                  <span>Leila S. Chudori</span>
+                </div>
+                <div className="hero-book hero-book--two">
+                  <small>Belajar hal baru</small>
+                  <strong>Filosofi<br />Teras</strong>
+                  <span>Henry Manampiring</span>
+                </div>
+                <div className="hero-book hero-book--three">
+                  <small>Paling dicari</small>
+                  <strong>Atomic<br />Habits</strong>
+                  <span>James Clear</span>
+                </div>
+                <span className="hero-books__tape" />
               </div>
             </div>
           </Container>
