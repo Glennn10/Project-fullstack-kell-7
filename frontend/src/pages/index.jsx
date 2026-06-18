@@ -1,4 +1,6 @@
 import { Badge, Button, Col, Row } from 'react-bootstrap';
+import { Link } from 'react-router-dom';
+import { FiArrowRight, FiBarChart2, FiBookOpen, FiClock, FiSearch } from 'react-icons/fi';
 import fallbackCover from '../assets/hero.png'; // Pastiin path fotonya bener
 
 const featuredBooks = [
@@ -29,22 +31,22 @@ const libraryFeatures = [
   {
     title: 'Pilihan Konten Lengkap',
     description: 'Koleksi buku dan referensi tersusun rapi untuk memudahkan pencarian kebutuhan belajar.',
-    icon: <img src="/Logo.png" alt="" aria-hidden="true" />,
+    icon: <FiSearch aria-hidden="true" />,
   },
   {
-    title: 'Dashboard Analitik',
-    description: 'Pantau ringkasan data buku, anggota, dan peminjaman melalui tampilan yang mudah dibaca.',
-    icon: <img src="/Logo.png" alt="" aria-hidden="true" />,
+    title: 'Peminjaman Terpantau',
+    description: 'Lihat status buku dan riwayat peminjaman melalui tampilan yang mudah dibaca.',
+    icon: <FiBarChart2 aria-hidden="true" />,
   },
   {
     title: 'Fitur Membaca Lengkap',
     description: 'Informasi koleksi dapat diakses dengan nyaman, termasuk detail buku dan status peminjaman.',
-    icon: <img src="/Logo.png" alt="" aria-hidden="true" />,
+    icon: <FiBookOpen aria-hidden="true" />,
   },
   {
-    title: 'Tidak Memerlukan Server Lokal',
-    description: 'Aplikasi bisa digunakan sebagai sistem perpustakaan berbasis web yang praktis.',
-    icon: <img src="/Logo.png" alt="" aria-hidden="true" />,
+    title: 'Akses Lebih Fleksibel',
+    description: 'Cari informasi koleksi kapan pun melalui sistem perpustakaan berbasis web.',
+    icon: <FiClock aria-hidden="true" />,
   },
 ];
 
@@ -52,15 +54,14 @@ const Home = () => {
   return (
     <>
       <section className="app-hero">
-        <Badge bg="primary" className="mb-3">
-          Dashboard Perpustakaan
-        </Badge>
-        <h1 className="display-5 fw-semibold mb-3">
-          Kelola data buku, anggota, dan peminjaman dalam satu tempat.
-        </h1>
-        <div className="d-flex flex-wrap gap-2">
-          <Button variant="primary">Tambah Buku</Button>
-          <Button variant="outline-secondary">Lihat Peminjaman</Button>
+        <div>
+          <Badge bg="primary" className="mb-3">Mulai Membaca</Badge>
+          <h2>Temukan cerita yang ingin kamu bawa pulang.</h2>
+          <p>Mulai dari buku pelajaran sampai bacaan santai, semuanya dapat kamu cari dalam satu katalog.</p>
+        </div>
+        <div className="d-flex flex-wrap gap-2 app-hero__actions">
+          <Button as={Link} to="/books" variant="primary">Jelajahi Katalog <FiArrowRight /></Button>
+          <Button as={Link} to="/loans" variant="outline-secondary">Lihat Peminjaman</Button>
         </div>
       </section>
 
@@ -70,9 +71,9 @@ const Home = () => {
           <p>Atur kapan pun dan di mana pun dengan mudah</p>
         </div>
 
-        <div className="library-feature-grid d-flex flex-wrap gap-4">
+        <div className="library-feature-grid">
           {libraryFeatures.map((feature) => (
-            <article className="library-feature-card flex-fill" key={feature.title} style={{ minWidth: '250px' }}>
+            <article className="library-feature-card" key={feature.title}>
               <div className="library-feature-card__icon mb-3">{feature.icon}</div>
               <h3>{feature.title}</h3>
               <p>{feature.description}</p>
@@ -93,12 +94,11 @@ const Home = () => {
         <Row className="g-4">
           {featuredBooks.map((book) => (
             <Col md={6} lg={4} key={book.title}>
-              <article className="book-card border rounded p-3 h-100 shadow-sm">
+              <article className="book-card h-100">
                 <img
                   src={book.cover}
                   alt={`Sampul ${book.title}`}
-                  className="img-fluid rounded mb-3"
-                  style={{ height: '200px', objectFit: 'cover', width: '100%' }}
+                  className="book-card__cover"
                   onError={(event) => {
                     event.currentTarget.src = fallbackCover;
                   }}
@@ -108,9 +108,9 @@ const Home = () => {
                     {book.category}
                   </Badge>
                   <div>
-                    <h5 className="fw-bold">{book.title}</h5>
-                    <p className="book-card__author text-muted small mb-1">{book.author}</p>
-                    <p className="book-card__synopsis small">{book.synopsis}</p>
+                    <h3>{book.title}</h3>
+                    <p className="book-card__author">{book.author}</p>
+                    <p className="book-card__synopsis">{book.synopsis}</p>
                   </div>
                 </div>
               </article>

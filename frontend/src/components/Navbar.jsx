@@ -1,5 +1,6 @@
 import { Navbar, Nav, Container, NavDropdown, Button, Form } from 'react-bootstrap';
 import { Link, NavLink, useLocation, useNavigate } from 'react-router-dom';
+import { FiArrowRight, FiBookOpen, FiGrid, FiLogOut } from 'react-icons/fi';
 import { useAuth } from '../context/useAuth';
 
 const NavigationBar = () => {
@@ -8,6 +9,8 @@ const NavigationBar = () => {
   const navigate = useNavigate();
   const showHero = location.pathname === '/';
   const isAdmin = user?.role === 'admin';
+  const displayName = user?.name?.trim() || 'Pengguna';
+  const userInitial = displayName.charAt(0).toUpperCase();
 
   const handleLogout = () => {
     logout();
@@ -44,12 +47,6 @@ const NavigationBar = () => {
                 </NavDropdown.Item>
               </NavDropdown>
 
-              {isAdmin && (
-                <Nav.Link as={NavLink} to="/dashboard">
-                  Dashboard
-                </Nav.Link>
-              )}
-
               <NavDropdown title="Explore" id="explore-dropdown">
                 <NavDropdown.Item href="#faq">FAQ</NavDropdown.Item>
                 <NavDropdown.Item href="#guidelines">
@@ -59,11 +56,42 @@ const NavigationBar = () => {
             </Nav>
 
             {isAuthenticated ? (
-              <Nav className="align-items-lg-center gap-2">
-                <span className="navbar-user">{user?.name || 'User'}</span>
-                <Button type="button" variant="outline-dark" size="sm" className="px-4" onClick={handleLogout}>
-                  Logout
-                </Button>
+              <Nav className="align-items-lg-center">
+                <NavDropdown
+                  align="end"
+                  id="profile-dropdown"
+                  className="profile-dropdown"
+                  title={(
+                    <span className="profile-trigger">
+                      <span className="profile-avatar" aria-hidden="true">{userInitial}</span>
+                      <span className="profile-copy">
+                        <strong>{displayName}</strong>
+                        <small>{isAdmin ? 'Administrator' : 'Anggota'}</small>
+                      </span>
+                    </span>
+                  )}
+                >
+                  <div className="profile-dropdown__header">
+                    <span className="profile-avatar profile-avatar--large" aria-hidden="true">{userInitial}</span>
+                    <div>
+                      <strong>{displayName}</strong>
+                      <small>{user?.email}</small>
+                    </div>
+                  </div>
+                  <NavDropdown.Divider />
+                  {isAdmin && (
+                    <NavDropdown.Item as={Link} to="/dashboard">
+                      <FiGrid aria-hidden="true" /> Dashboard
+                    </NavDropdown.Item>
+                  )}
+                  <NavDropdown.Item as={Link} to="/books">
+                    <FiBookOpen aria-hidden="true" /> Katalog Buku
+                  </NavDropdown.Item>
+                  <NavDropdown.Divider />
+                  <NavDropdown.Item as="button" onClick={handleLogout} className="profile-logout">
+                    <FiLogOut aria-hidden="true" /> Keluar
+                  </NavDropdown.Item>
+                </NavDropdown>
               </Nav>
             ) : (
               <Nav>
@@ -81,36 +109,17 @@ const NavigationBar = () => {
       </Navbar>
 
       {showHero && (
-        <header
-          style={{
-            minHeight: 430,
-            background: 'linear-gradient(90deg, rgba(15, 45, 71, 0.96), rgba(43, 126, 143, 0.88))',
-            color: '#ffffff',
-            display: 'flex',
-            alignItems: 'center',
-          }}
-        >
+        <header className="landing-hero">
           <Container>
-            <div style={{ maxWidth: 650, padding: '72px 0' }}>
-              <span
-                style={{
-                  display: 'inline-block',
-                  marginBottom: 18,
-                  color: '#ffc107',
-                  fontWeight: 700,
-                  letterSpacing: 1,
-                  textTransform: 'uppercase',
-                }}
-              >
-                Digital Library
-              </span>
+            <div className="landing-hero__content">
+              <span className="landing-hero__eyebrow"><FiBookOpen /> Perpustakaan Digital</span>
 
-              <h1 className="fw-bold mb-3" style={{ fontSize: 'clamp(2rem, 5vw, 3.75rem)' }}>
-                Perpustakaan MinjemDong
+              <h1>
+                Buku bagus selalu punya cara untuk <span>menemukanmu.</span>
               </h1>
 
-              <p className="lead mb-4" style={{ color: 'rgba(255, 255, 255, 0.88)' }}>
-                Temukan koleksi buku, panduan peminjaman, dan layanan perpustakaan dalam satu tempat yang mudah diakses.
+              <p className="landing-hero__description">
+                Jelajahi koleksi pilihan, temukan bacaan berikutnya, lalu pinjam dengan proses yang sederhana di MinjemDong.
               </p>
 
               <Form action="/books" method="GET" className="d-flex flex-column flex-md-row gap-2" style={{ maxWidth: 560 }}>
@@ -119,14 +128,17 @@ const NavigationBar = () => {
                   name="keyword"
                   placeholder="Cari judul buku atau penulis..."
                   aria-label="Pencarian buku"
-                  className="py-3 px-4"
-                  style={{ borderRadius: 999, border: 0 }}
+                  className="landing-search__input"
                 />
 
-                <Button type="submit" variant="warning" className="fw-semibold px-4" style={{ borderRadius: 999 }}>
-                  Cari
+                <Button type="submit" variant="warning" className="landing-search__button">
+                  Cari Buku <FiArrowRight />
                 </Button>
               </Form>
+              <div className="landing-hero__trust">
+                <span><strong>500+</strong> koleksi buku</span>
+                <span><strong>Mudah</strong> dicari & dipinjam</span>
+              </div>
             </div>
           </Container>
         </header>
