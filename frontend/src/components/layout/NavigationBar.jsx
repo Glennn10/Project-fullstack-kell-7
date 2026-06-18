@@ -41,21 +41,9 @@ const NavigationBar = () => {
                 Katalog Buku
               </Nav.Link>
 
-              <NavDropdown title="Peminjaman" id="sirkulasi-dropdown">
-                <NavDropdown.Item as={Link} to="/loans">
-                  Catat Peminjaman
-                </NavDropdown.Item>
-                <NavDropdown.Item as={Link} to="/returns">
-                  Pengembalian Buku
-                </NavDropdown.Item>
-              </NavDropdown>
-
-              <NavDropdown title="Info" id="explore-dropdown">
-                <NavDropdown.Item href="#faq">FAQ</NavDropdown.Item>
-                <NavDropdown.Item href="#guidelines">
-                  Panduan Peminjaman
-                </NavDropdown.Item>
-              </NavDropdown>
+              <Nav.Link as={NavLink} to="/my-books" className="my-books-nav-link">
+                <span>Buku Saya <span aria-label="0 buku dipinjam">0</span></span>
+              </Nav.Link>
             </Nav>
 
             {isAuthenticated ? (

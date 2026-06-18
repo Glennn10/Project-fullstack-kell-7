@@ -8,6 +8,7 @@ import Returns from '../pages/Returns';
 import Login from '../pages/Login';
 import Register from '../pages/Register';
 import Dashboard from '../pages/Dashboard';
+import MyBooks from '../pages/MyBooks';
 
 const AppRoutes = () => (
   <Routes>
@@ -18,6 +19,14 @@ const AppRoutes = () => (
       <Route path="returns" element={<Returns />} />
       <Route path="login" element={<Login />} />
       <Route path="register" element={<Register />} />
+      <Route
+        path="my-books"
+        element={(
+          <ProtectedRoute>
+            <MyBooks />
+          </ProtectedRoute>
+        )}
+      />
     </Route>
     <Route
       path="dashboard"
