@@ -2135,6 +2135,13 @@ header form .btn-warning:focus {
   transform: perspective(800px) rotateY(-2deg) rotateZ(0) translateY(-9px);
 }
 
+.weekly-book-volume { margin-bottom: 11px; }
+.weekly-book:nth-child(even) .weekly-book-volume { --physical-book-tilt: 1.2deg; }
+.weekly-book:hover .weekly-book-volume {
+  filter: drop-shadow(14px 17px 7px rgba(16,47,61,.25));
+  transform: perspective(850px) rotateY(-2deg) rotateZ(0) translateY(-9px);
+}
+
 .weekly-book__status {
   align-items: center;
   background: #f6f1e7;
@@ -2207,6 +2214,7 @@ header form .btn-warning:focus {
   .weekly-books__shelf { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .weekly-book__stage { height: 245px; }
   .weekly-book__volume { height: 202px; width: 134px; }
+  .weekly-book-volume { --physical-book-height: 202px; --physical-book-width: 134px; }
   .weekly-book__cover { height: 100%; width: 100%; }
 }
 
@@ -2215,6 +2223,7 @@ header form .btn-warning:focus {
   .weekly-books__shelf { gap: 15px; }
   .weekly-book__stage { height: 220px; }
   .weekly-book__volume { height: 180px; width: 120px; }
+  .weekly-book-volume { --physical-book-height: 180px; --physical-book-width: 120px; }
   .weekly-book__cover { height: 100%; width: 100%; }
   .weekly-book__status { bottom: 8px; right: -2px; }
 }
@@ -2957,6 +2966,16 @@ header form .btn-warning:focus {
   top: 2px;
   width: 13px;
   z-index: 4;
+}
+
+.curator-book-volume {
+  --physical-book-height: 300px;
+  --physical-book-width: 198px;
+}
+
+.curator-book-volume:hover {
+  filter: drop-shadow(14px 17px 7px rgba(16,47,61,.25));
+  transform: perspective(850px) rotateY(-2deg) rotateZ(0) translateY(-7px);
 }
 
 .librarian-note {

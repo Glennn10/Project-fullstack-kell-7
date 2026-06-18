@@ -22,10 +22,10 @@ const borrowerController = {
     },
     createBorrower: async (req, res) => {
         try {
-            const { name, phone, address } = req.body;
+            const { name, phone, address, user_id } = req.body;
             if (!name) return res.status(400).json({ success: false, message: 'Nama peminjam wajib diisi' });
-            
-            const newBorrower = await BorrowerModel.createBorrower({ name, phone, address });
+
+            const newBorrower = await BorrowerModel.createBorrower({ name, phone, address, user_id });
             res.status(201).json({ success: true, message: 'Peminjam berhasil ditambahkan', data: newBorrower });
         } catch (error) {
             console.error(error.message);
@@ -34,10 +34,10 @@ const borrowerController = {
     },
     updateBorrower: async (req, res) => {
         try {
-            const { name, phone, address } = req.body;
+            const { name, phone, address, user_id } = req.body;
             if (!name) return res.status(400).json({ success: false, message: 'Nama peminjam wajib diisi' });
 
-            const updatedBorrower = await BorrowerModel.updateBorrower(req.params.id, { name, phone, address });
+            const updatedBorrower = await BorrowerModel.updateBorrower(req.params.id, { name, phone, address, user_id });
             if (!updatedBorrower) return res.status(404).json({ success: false, message: 'Peminjam tidak ditemukan' });
             res.status(200).json({ success: true, message: 'Peminjam berhasil diupdate', data: updatedBorrower });
         } catch (error) {

@@ -3,6 +3,9 @@ const router = express.Router();
 const loanController = require('../controllers/loanController');
 const { verifyToken, isAdmin } = require('../middleware/authMiddleware');
 
+// Peminjaman milik akun yang sedang login.
+router.get('/my', verifyToken, loanController.getMyLoans);
+
 // Lihat seluruh riwayat pinjaman: khusus Admin
 router.get('/', verifyToken, isAdmin, loanController.getAllLoans);
 router.get('/:id', verifyToken, isAdmin, loanController.getLoanById);

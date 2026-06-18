@@ -22,6 +22,31 @@ const LoanModel = {
         return result.rows;
     },
 
+    getMyLoans: async (userId) => {
+        const query = `
+            SELECT
+                l.id,
+                l.loan_date,
+                l.return_date,
+                l.status,
+                l.created_at,
+                (l.loan_date + INTERVAL '7 days')::date AS due_date,
+                b.id AS book_id,
+                b.title AS book_title,
+                b.author AS book_author,
+                b.cover_image,
+                c.name AS category_name
+            FROM loans l
+            INNER JOIN borrowers br ON l.borrower_id = br.id
+            INNER JOIN books b ON l.book_id = b.id
+            LEFT JOIN categories c ON b.category_id = c.id
+            WHERE br.user_id = $1
+            ORDER BY l.created_at DESC
+        `;
+        const result = await pool.query(query, [userId]);
+        return result.rows;
+    },
+
     getLoanById: async (id) => {
         const query = `
             SELECT 

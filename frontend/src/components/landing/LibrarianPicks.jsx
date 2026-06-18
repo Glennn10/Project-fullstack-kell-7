@@ -1,7 +1,7 @@
 import { Link } from 'react-router-dom';
 import { FiArrowUpRight, FiBookmark } from 'react-icons/fi';
-import fallbackCover from '../../assets/hero.png';
 import { librarianAlternatives, librarianPick } from '../../data/landingData';
+import BookVolume from '../common/BookVolume';
 
 const LibrarianPicks = () => (
   <section className="librarian-picks scroll-reveal scroll-reveal--soft" aria-labelledby="librarian-picks-title">
@@ -13,10 +13,7 @@ const LibrarianPicks = () => (
       <div className="librarian-desk__book-side">
         <span className="librarian-desk__tape" aria-hidden="true" />
         <span className="librarian-desk__pick-label"><FiBookmark /> Pilihan minggu ini</span>
-        <div className="curator-book">
-          <img src={librarianPick.cover} alt={`Sampul ${librarianPick.title}`} draggable="false" onError={(event) => { event.currentTarget.src = fallbackCover; }} />
-          <i className="curator-book__spine" aria-hidden="true" />
-        </div>
+        <BookVolume cover={librarianPick.cover} title={librarianPick.title} className="curator-book-volume" />
       </div>
       <article className="librarian-note">
         <span className="librarian-note__category">{librarianPick.category}</span>

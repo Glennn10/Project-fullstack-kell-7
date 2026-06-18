@@ -1,8 +1,8 @@
 import { Link } from 'react-router-dom';
 import { FiArrowUpRight, FiChevronLeft, FiChevronRight } from 'react-icons/fi';
-import fallbackCover from '../../assets/hero.png';
 import { featuredBooks, weeklyShelfStops } from '../../data/landingData';
 import { useBookCarousel } from '../../hooks/useBookCarousel';
+import BookVolume from '../common/BookVolume';
 
 const WeeklyBooks = () => {
   const {
@@ -43,10 +43,7 @@ const WeeklyBooks = () => {
               <Link to="/books" className="weekly-book" key={book.title}>
                 <div className="weekly-book__stage" style={{ '--book-accent': book.accent }}>
                   <span className="weekly-book__highlight">{book.highlight}</span>
-                  <div className="weekly-book__volume">
-                    <img src={book.cover} alt={`Sampul ${book.title}`} className="weekly-book__cover" draggable="false" onError={(event) => { event.currentTarget.src = fallbackCover; }} />
-                    <i className="weekly-book__spine" aria-hidden="true" />
-                  </div>
+                  <BookVolume cover={book.cover} title={book.title} className="weekly-book-volume" />
                 </div>
                 <div className="weekly-book__details">
                   <span>{book.category}</span><h3>{book.title}</h3><p>{book.author}</p>

@@ -58,6 +58,30 @@ const UserModel = {
         return result.rows[0];
     },
 
+    createUserWithBorrower: async (userData) => {
+        const { name, email, password, role = 'user' } = userData;
+        const client = await pool.connect();
+
+        try {
+            await client.query('BEGIN');
+            const userResult = await client.query(`
+                INSERT INTO users (name, email, password, role)
+                VALUES ($1, $2, $3, $4)
+                RETURNING id, name, email, role, created_at
+            `, [name, email, password, role]);
+            const user = userResult.rows[0];
+
+            await client.query('INSERT INTO borrowers (name, user_id) VALUES ($1, $2)', [name, user.id]);
+            await client.query('COMMIT');
+            return user;
+        } catch (error) {
+            await client.query('ROLLBACK');
+            throw error;
+        } finally {
+            client.release();
+        }
+    },
+
     deleteUser: async (id) => {
         const query = 'DELETE FROM users WHERE id = $1 RETURNING id, name, email, role';
         const result = await pool.query(query, [id]);

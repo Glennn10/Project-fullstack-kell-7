@@ -27,7 +27,7 @@ const authController = {
 
             // Simpan ke database dengan password yang sudah di-hash.
             // Register publik selalu membuat akun user biasa.
-            const newUser = await UserModel.createUser({ 
+            const newUser = await UserModel.createUserWithBorrower({
                 name, 
                 email, 
                 password: hashedPassword,

@@ -1,16 +1,37 @@
+import { useEffect, useState } from 'react';
 import { Navbar, Nav, Container, NavDropdown } from 'react-bootstrap';
 import { Link, NavLink, useLocation, useNavigate } from 'react-router-dom';
 import { FiArrowRight, FiBookOpen, FiGrid, FiLogOut } from 'react-icons/fi';
 import { useAuth } from '../../context/useAuth';
+import { libraryService } from '../../services/libraryService';
 
 const NavigationBar = () => {
-  const { isAuthenticated, logout, user } = useAuth();
+  const { isAuthenticated, logout, token, user } = useAuth();
+  const [myBookCount, setMyBookCount] = useState(0);
   const location = useLocation();
   const navigate = useNavigate();
   const showHero = location.pathname === '/';
   const isAdmin = user?.role === 'admin';
   const displayName = user?.name?.trim() || 'Pengguna';
   const userInitial = displayName.charAt(0).toUpperCase();
+
+  useEffect(() => {
+    let isCurrent = true;
+    if (!token) return undefined;
+
+    libraryService.getMyLoans(token)
+      .then((response) => {
+        const activeCount = (response.data?.data || [])
+          .filter((loan) => loan.status?.toLowerCase() !== 'dikembalikan')
+          .length;
+        if (isCurrent) setMyBookCount(activeCount);
+      })
+      .catch(() => {
+        if (isCurrent) setMyBookCount(0);
+      });
+
+    return () => { isCurrent = false; };
+  }, [token]);
 
   const handleLogout = () => {
     logout();
@@ -42,7 +63,10 @@ const NavigationBar = () => {
               </Nav.Link>
 
               <Nav.Link as={NavLink} to="/my-books" className="my-books-nav-link">
-                <span>Buku Saya <span aria-label="0 buku dipinjam">0</span></span>
+                <span>
+                  Buku Saya
+                  <span aria-label={`${myBookCount} buku dipinjam`}>{myBookCount}</span>
+                </span>
               </Nav.Link>
             </Nav>
 

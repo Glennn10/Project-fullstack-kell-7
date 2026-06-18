@@ -1,6 +1,15 @@
 const LoanModel = require('../models/loanModel');
 
 const loanController = {
+    getMyLoans: async (req, res) => {
+        try {
+            const loans = await LoanModel.getMyLoans(req.user.id);
+            res.status(200).json({ success: true, message: 'Data peminjaman akun berhasil diambil', data: loans });
+        } catch (error) {
+            console.error(error.message);
+            res.status(500).json({ success: false, message: 'Internal Server Error' });
+        }
+    },
     getAllLoans: async (req, res) => {
         try {
             const loans = await LoanModel.getAllLoans();
