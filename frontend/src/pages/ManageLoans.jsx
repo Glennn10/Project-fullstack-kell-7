@@ -1,8 +1,8 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { FiBookOpen, FiCalendar, FiCheck, FiClock, FiPlus, FiSearch, FiSend, FiUser, FiX } from 'react-icons/fi';
 import BookVolume from '../components/common/BookVolume';
+import AutocompleteSelect from '../components/common/AutocompleteSelect';
 import CustomDatePicker from '../components/common/CustomDatePicker';
-import CustomSelect from '../components/common/CustomSelect';
 import DashboardShell from '../components/dashboard/DashboardShell';
 import DeskStationery from '../components/dashboard/DeskStationery';
 import { API_BASE_URL } from '../config/api';
@@ -198,8 +198,8 @@ const ManageLoans = () => {
               {selectedBook ? <BookVolume cover={getCoverUrl(selectedBook.cover_image)} title={selectedBook.title} /> : <FiBookOpen />}
               <div><small>Buku yang dibawa</small><strong>{selectedBook?.title || 'Belum dipilih'}</strong><span>{selectedBook?.author || 'Pilih dari stok yang tersedia'}</span></div>
             </div>
-            <label>Buku<CustomSelect value={bookId} onChange={setBookId} placeholder="Pilih buku yang tersedia" options={availableBooks.map((book) => ({ value: book.id, label: `${book.title} — ${book.author}` }))} /></label>
-            <label>Peminjam<CustomSelect value={borrowerId} onChange={setBorrowerId} placeholder="Pilih anggota perpustakaan" options={borrowers.map((borrower) => ({ value: borrower.id, label: borrower.name }))} /></label>
+            <label>Buku<AutocompleteSelect value={bookId} onChange={setBookId} placeholder="Ketik judul atau penulis..." options={availableBooks.map((book) => ({ value: book.id, label: book.title, meta: book.author, searchText: `${book.title} ${book.author}` }))} /></label>
+            <label>Peminjam<AutocompleteSelect value={borrowerId} onChange={setBorrowerId} placeholder="Ketik nama, email, atau nomor..." options={borrowers.map((borrower) => ({ value: borrower.id, label: borrower.name, meta: borrower.user_email || borrower.phone || 'Anggota perpustakaan', searchText: `${borrower.name} ${borrower.user_email || ''} ${borrower.phone || ''}` }))} /></label>
             <div className="loan-editor__date-grid">
               <label>Tanggal dipinjam<CustomDatePicker value={loanDate} onChange={(value) => { setLoanDate(value); setDueDate(addDays(value, 7)); }} /></label>
               <label>Batas pengembalian<CustomDatePicker value={dueDate} min={loanDate} onChange={setDueDate} /></label>
