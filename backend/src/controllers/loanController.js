@@ -66,7 +66,7 @@ const loanController = {
     },
     updateLoanStatus: async (req, res) => {
         try {
-            const { status, return_date } = req.body;
+            const { status, return_date, return_condition = null, return_notes = null } = req.body;
             
             const validStatus = ['Dipinjam', 'Dikembalikan', 'Terlambat'];
             if (!validStatus.includes(status)) {
@@ -77,8 +77,13 @@ const loanController = {
                 return res.status(400).json({ success: false, message: 'return_date harus berupa tanggal valid' });
             }
 
+            const validConditions = ['Baik', 'Rusak', 'Hilang'];
+            if (status === 'Dikembalikan' && return_condition && !validConditions.includes(return_condition)) {
+                return res.status(400).json({ success: false, message: 'Kondisi buku harus Baik, Rusak, atau Hilang' });
+            }
+
             const normalizedReturnDate = status === 'Dikembalikan' ? (return_date || new Date()) : null;
-            const updatedLoan = await LoanModel.updateLoanStatus(req.params.id, status, normalizedReturnDate);
+            const updatedLoan = await LoanModel.updateLoanStatus(req.params.id, status, normalizedReturnDate, return_condition, return_notes);
             if (!updatedLoan) return res.status(404).json({ success: false, message: 'Data peminjaman tidak ditemukan' });
             
             res.status(200).json({ success: true, message: 'Status peminjaman berhasil diupdate', data: updatedLoan });

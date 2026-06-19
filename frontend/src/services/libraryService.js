@@ -12,6 +12,7 @@ export const libraryService = {
   updateBook: (id, formData, token) => apiClient.put(`/api/books/${id}`, formData, {
     headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'multipart/form-data' },
   }),
+  updateBookStatus: (id, payload, token) => apiClient.patch(`/api/books/${id}/status`, payload, authConfig(token)),
   deleteBook: (id, token) => apiClient.delete(`/api/books/${id}`, authConfig(token)),
   getLoans: (token) => apiClient.get('/api/loans', authConfig(token)),
   getMyLoans: (token) => apiClient.get('/api/loans/my', authConfig(token)),

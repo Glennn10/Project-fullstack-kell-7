@@ -14,6 +14,8 @@ const LoanModel = {
                 l.loan_date, 
                 COALESCE(l.due_date, (l.loan_date + INTERVAL '7 days')::date) AS due_date,
                 l.return_date, 
+                l.return_condition,
+                l.return_notes,
                 l.status, 
                 l.created_at
             FROM loans l
@@ -91,7 +93,7 @@ const LoanModel = {
                 VALUES ($1, $2, $3, $4, $5)
                 RETURNING *
             `, [book_id, borrower_id, loan_date, due_date, user_id]);
-            await client.query('UPDATE books SET is_available = FALSE WHERE id = $1', [book_id]);
+            await client.query("UPDATE books SET is_available = FALSE, inventory_status = 'Dipinjam' WHERE id = $1", [book_id]);
             await client.query('COMMIT');
             return result.rows[0];
         } catch (error) {
@@ -102,19 +104,29 @@ const LoanModel = {
         }
     },
 
-    updateLoanStatus: async (id, status, return_date = null) => {
+    updateLoanStatus: async (id, status, return_date = null, return_condition = null, return_notes = null) => {
         const client = await pool.connect();
         try {
             await client.query('BEGIN');
             const result = await client.query(`
                 UPDATE loans
-                SET status = $1, return_date = $2
-                WHERE id = $3
+                SET status = $1, return_date = $2, return_condition = $3, return_notes = $4
+                WHERE id = $5
                 RETURNING *
-            `, [status, return_date, id]);
+            `, [status, return_date, return_condition, return_notes, id]);
             const loan = result.rows[0];
             if (loan) {
-                await client.query('UPDATE books SET is_available = $1 WHERE id = $2', [status === 'Dikembalikan', loan.book_id]);
+                const nextInventoryStatus = status !== 'Dikembalikan'
+                    ? 'Dipinjam'
+                    : return_condition === 'Rusak'
+                        ? 'Dalam perbaikan'
+                        : return_condition === 'Hilang'
+                            ? 'Hilang'
+                            : 'Tersedia';
+                await client.query(
+                    'UPDATE books SET is_available = $1, inventory_status = $2 WHERE id = $3',
+                    [nextInventoryStatus === 'Tersedia', nextInventoryStatus, loan.book_id]
+                );
             }
             await client.query('COMMIT');
             return loan;

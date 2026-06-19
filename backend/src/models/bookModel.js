@@ -43,6 +43,17 @@ const BookModel = {
         return result.rows[0];
     },
 
+    updateBookStatus: async (id, inventoryStatus) => {
+        const query = `
+            UPDATE books
+            SET inventory_status = $1, is_available = $2
+            WHERE id = $3
+            RETURNING *;
+        `;
+        const result = await pool.query(query, [inventoryStatus, inventoryStatus === 'Tersedia', id]);
+        return result.rows[0];
+    },
+
     deleteBook: async (id) => {
         const query = 'DELETE FROM books WHERE id = $1 RETURNING *';
         const result = await pool.query(query, [id]);

@@ -18,6 +18,7 @@ router.get('/:id', bookController.getBookById);
 // Middleware akan mengeksekusi verifyToken dulu -> kalau lolos cek isAdmin -> kalau lolos baru jalankan Controller
 router.post('/', verifyToken, isAdmin, upload.single('cover_image'), bookController.createBook);
 router.put('/:id', verifyToken, isAdmin, upload.single('cover_image'), bookController.updateBook);
+router.patch('/:id/status', verifyToken, isAdmin, bookController.updateBookStatus);
 router.delete('/:id', verifyToken, isAdmin, bookController.deleteBook);
 
 module.exports = router;

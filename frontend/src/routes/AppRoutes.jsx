@@ -12,6 +12,7 @@ import MyBooks from '../pages/MyBooks';
 import ManageBooks from '../pages/ManageBooks';
 import ManageCategories from '../pages/ManageCategories';
 import ManageLoans from '../pages/ManageLoans';
+import ManageReturns from '../pages/ManageReturns';
 
 const AppRoutes = () => (
   <Routes>
@@ -60,6 +61,14 @@ const AppRoutes = () => (
       element={(
         <ProtectedRoute allowedRoles={['admin']}>
           <ManageLoans />
+        </ProtectedRoute>
+      )}
+    />
+    <Route
+      path="dashboard/returns"
+      element={(
+        <ProtectedRoute allowedRoles={['admin']}>
+          <ManageReturns />
         </ProtectedRoute>
       )}
     />

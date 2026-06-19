@@ -167,6 +167,28 @@ const bookController = {
         }
     },
 
+    updateBookStatus: async (req, res) => {
+        try {
+            const { inventory_status } = req.body;
+            const validStatuses = ['Tersedia', 'Dalam perbaikan', 'Hilang'];
+            if (!validStatuses.includes(inventory_status)) {
+                return res.status(400).json({ success: false, message: 'Status harus Tersedia, Dalam perbaikan, atau Hilang' });
+            }
+
+            const existingBook = await BookModel.getBookById(req.params.id);
+            if (!existingBook) return res.status(404).json({ success: false, message: 'Buku tidak ditemukan' });
+            if (existingBook.inventory_status === 'Dipinjam') {
+                return res.status(409).json({ success: false, message: 'Status buku yang sedang dipinjam hanya bisa berubah melalui Pengembalian' });
+            }
+
+            const updatedBook = await BookModel.updateBookStatus(req.params.id, inventory_status);
+            return res.status(200).json({ success: true, message: 'Status inventaris berhasil diperbarui', data: updatedBook });
+        } catch (error) {
+            console.error('Error updateBookStatus:', error.message);
+            return res.status(500).json({ success: false, message: 'Internal Server Error' });
+        }
+    },
+
     // 5. Hapus buku
     deleteBook: async (req, res) => {
         try {

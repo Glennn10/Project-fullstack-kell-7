@@ -7,6 +7,7 @@ import {
   FiSave,
   FiSearch,
   FiTrash2,
+  FiTool,
   FiUpload,
   FiX,
 } from 'react-icons/fi';
@@ -43,6 +44,8 @@ const ManageBooks = () => {
   const [coverPreview, setCoverPreview] = useState(null);
   const [submitting, setSubmitting] = useState(false);
   const [deleteTarget, setDeleteTarget] = useState(null);
+  const [statusTarget, setStatusTarget] = useState(null);
+  const [statusChoice, setStatusChoice] = useState('Tersedia');
 
   const loadInventory = useCallback(async () => {
     setLoading(true);
@@ -166,6 +169,23 @@ const ManageBooks = () => {
     }
   };
 
+  const openStatus = (book) => {
+    setStatusTarget(book);
+    setStatusChoice(book.inventory_status || (book.is_available === false ? 'Dipinjam' : 'Tersedia'));
+  };
+
+  const handleStatusUpdate = async () => {
+    if (!statusTarget) return;
+    try {
+      await libraryService.updateBookStatus(statusTarget.id, { inventory_status: statusChoice }, token);
+      setFeedback(`Status “${statusTarget.title}” sekarang ${statusChoice.toLowerCase()}.`);
+      setStatusTarget(null);
+      await loadInventory();
+    } catch (requestError) {
+      setError(requestError.response?.data?.message || 'Status buku gagal diperbarui.');
+    }
+  };
+
   return (
     <DashboardShell note="Sampul dan kategori yang rapi bikin katalog lebih gampang dijelajahi.">
       <header className="inventory-masthead">
@@ -185,14 +205,16 @@ const ManageBooks = () => {
 
       {!loading && (
         <section className="inventory-ledger">
-          <header><span>Daftar Buku</span><div><strong>Judul & penulis</strong><strong>Kategori</strong><strong>Terbit</strong><strong>Aksi</strong></div></header>
+          <header><span>Daftar Buku</span><div><strong>Judul & penulis</strong><strong>Kategori</strong><strong>Terbit</strong><strong>Status</strong><strong>Aksi</strong></div></header>
           {filteredBooks.length > 0 ? filteredBooks.map((book) => (
             <article className="inventory-row" key={book.id}>
               <BookVolume cover={getCoverUrl(book.cover_image)} title={book.title} className="inventory-mini-book" />
               <div className="inventory-row__identity"><strong>{book.title}</strong><span>{book.author || 'Penulis belum dicatat'}</span><small>{book.publisher || 'Penerbit belum dicatat'}</small></div>
               <span className="inventory-row__category">{categoryNames.get(String(book.category_id)) || 'Tanpa kategori'}</span>
               <time>{book.year || '—'}</time>
+              <span className={`inventory-row__status is-${(book.inventory_status || (book.is_available === false ? 'Dipinjam' : 'Tersedia')).toLowerCase().replaceAll(' ', '-')}`}><i />{book.inventory_status || (book.is_available === false ? 'Dipinjam' : 'Tersedia')}</span>
               <div className="inventory-row__actions">
+                <button type="button" disabled={(book.inventory_status || '') === 'Dipinjam'} onClick={() => openStatus(book)} aria-label={`Ubah status ${book.title}`} title={(book.inventory_status || '') === 'Dipinjam' ? 'Selesaikan melalui Pengembalian' : 'Ubah status inventaris'}><FiTool /></button>
                 <button type="button" onClick={() => openEdit(book)} aria-label={`Edit ${book.title}`}><FiEdit2 /></button>
                 <button type="button" onClick={() => setDeleteTarget(book)} aria-label={`Hapus ${book.title}`}><FiTrash2 /></button>
               </div>
@@ -235,6 +257,18 @@ const ManageBooks = () => {
               <button className="inventory-save" type="submit" disabled={submitting || !form.category_id}><FiSave /> {submitting ? 'Menyimpan...' : 'Simpan buku'}</button>
             </form>
           </aside>
+        </div>
+      )}
+
+      {statusTarget && (
+        <div className="inventory-confirm-backdrop" onMouseDown={(event) => { if (event.target === event.currentTarget) setStatusTarget(null); }}>
+          <div className="inventory-status-dialog" role="dialog" aria-modal="true">
+            <FiTool /><span>Status inventaris</span><h2>{statusTarget.title}</h2><p>Buku yang sedang diperbaiki atau hilang tidak akan muncul di pilihan Peminjaman.</p>
+            <div className="inventory-status-options">
+              {['Tersedia', 'Dalam perbaikan', 'Hilang'].map((status) => <button type="button" className={statusChoice === status ? 'is-selected' : ''} key={status} onClick={() => setStatusChoice(status)}><i />{status}</button>)}
+            </div>
+            <footer><button type="button" onClick={() => setStatusTarget(null)}>Batal</button><button type="button" onClick={handleStatusUpdate}>Simpan status</button></footer>
+          </div>
         </div>
       )}
 

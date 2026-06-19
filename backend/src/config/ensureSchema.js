@@ -22,6 +22,12 @@ const ensureSchema = async () => {
     `);
 
     await pool.query(`
+        ALTER TABLE loans
+        ADD COLUMN IF NOT EXISTS return_condition VARCHAR(20),
+        ADD COLUMN IF NOT EXISTS return_notes TEXT;
+    `);
+
+    await pool.query(`
         UPDATE loans
         SET due_date = (loan_date + INTERVAL '7 days')::date
         WHERE due_date IS NULL;
@@ -35,6 +41,11 @@ const ensureSchema = async () => {
     await pool.query(`
         ALTER TABLE books
         ADD COLUMN IF NOT EXISTS is_available BOOLEAN NOT NULL DEFAULT TRUE;
+    `);
+
+    await pool.query(`
+        ALTER TABLE books
+        ADD COLUMN IF NOT EXISTS inventory_status VARCHAR(30) NOT NULL DEFAULT 'Tersedia';
     `);
 
     await pool.query(`
@@ -95,12 +106,33 @@ const ensureSchema = async () => {
 
     await pool.query(`
         UPDATE books b
-        SET is_available = NOT EXISTS (
-            SELECT 1
-            FROM loans l
-            WHERE l.book_id = b.id
-              AND l.status IN ('Dipinjam', 'Terlambat')
-        );
+        SET inventory_status = CASE
+            WHEN EXISTS (
+                SELECT 1 FROM loans l
+                WHERE l.book_id = b.id
+                  AND l.status IN ('Dipinjam', 'Terlambat')
+            ) THEN 'Dipinjam'
+            WHEN EXISTS (
+                SELECT 1 FROM loans l
+                WHERE l.book_id = b.id
+                  AND l.status = 'Dikembalikan'
+                  AND l.return_condition = 'Rusak'
+                  AND l.id = (SELECT MAX(latest.id) FROM loans latest WHERE latest.book_id = b.id)
+            ) AND b.is_available = FALSE THEN 'Dalam perbaikan'
+            WHEN EXISTS (
+                SELECT 1 FROM loans l
+                WHERE l.book_id = b.id
+                  AND l.status = 'Dikembalikan'
+                  AND l.return_condition = 'Hilang'
+                  AND l.id = (SELECT MAX(latest.id) FROM loans latest WHERE latest.book_id = b.id)
+            ) AND b.is_available = FALSE THEN 'Hilang'
+            ELSE b.inventory_status
+        END;
+    `);
+
+    await pool.query(`
+        UPDATE books
+        SET is_available = (inventory_status = 'Tersedia');
     `);
 };
 

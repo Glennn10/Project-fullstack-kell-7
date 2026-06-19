@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
-import { FiBookOpen, FiCalendar, FiCheck, FiClock, FiPlus, FiSearch, FiSend, FiUser, FiX } from 'react-icons/fi';
+import { FiBookOpen, FiCalendar, FiClock, FiPlus, FiSearch, FiSend, FiUser, FiX } from 'react-icons/fi';
 import BookVolume from '../components/common/BookVolume';
 import AutocompleteSelect from '../components/common/AutocompleteSelect';
 import CustomDatePicker from '../components/common/CustomDatePicker';
@@ -128,16 +128,14 @@ const ManageLoans = () => {
     }
   };
 
-  const handleStatus = async (loan, status) => {
+  const handleLateStatus = async (loan) => {
     setError('');
     try {
       await libraryService.updateLoanStatus(loan.id, {
-        status,
-        return_date: status === 'Dikembalikan' ? today() : null,
+        status: 'Terlambat',
+        return_date: null,
       }, token);
-      setFeedback(status === 'Dikembalikan'
-        ? `“${loan.book_title}” sudah kembali dan tersedia lagi di katalog.`
-        : `“${loan.book_title}” ditandai terlambat.`);
+      setFeedback(`“${loan.book_title}” ditandai terlambat.`);
       await loadDesk();
     } catch (requestError) {
       setError(requestError.response?.data?.message || 'Status peminjaman gagal diperbarui.');
@@ -170,22 +168,26 @@ const ManageLoans = () => {
       {!loading && (
         <section className="loan-admin-ledger">
           <header><strong>Catatan peminjaman</strong><div><span>Buku</span><span>Peminjam</span><span>Tanggal</span><span>Status</span></div></header>
-          {filteredLoans.map((loan) => (
+          {filteredLoans.map((loan) => {
+            const displayStatus = loan.status === 'Dikembalikan' && ['Rusak', 'Hilang'].includes(loan.return_condition)
+              ? loan.return_condition
+              : loan.status;
+            return (
             <article key={loan.id}>
               <div className="loan-admin-ledger__book"><BookVolume cover={getCoverUrl(loan.cover_image)} title={loan.book_title} className="loan-admin-mini-book" /><div><strong>{loan.book_title || 'Buku dihapus'}</strong><small>{loan.book_author || 'Penulis tidak tercatat'}</small></div></div>
               <div className="loan-admin-ledger__borrower"><FiUser /><div><strong>{loan.borrower_name || 'Peminjam tidak tercatat'}</strong><small>Dicatat oleh {loan.staff_name || 'petugas'}</small></div></div>
               <div className="loan-admin-ledger__dates"><span><FiCalendar /> {formatDate(loan.loan_date)}</span><small>Kembali {formatDate(loan.due_date)}</small></div>
               <div className="loan-admin-ledger__actions">
-                <span className={`loan-admin-ledger__status is-${loan.status?.toLowerCase()}`}><i />{loan.status}</span>
-                {!loan.is_demo && loan.status !== 'Dikembalikan' && (
+                <span className={`loan-admin-ledger__status is-${displayStatus?.toLowerCase()}`}><i />{displayStatus}</span>
+                {!loan.is_demo && loan.status === 'Dipinjam' && (
                   <div>
-                    {loan.status !== 'Terlambat' && <button type="button" onClick={() => handleStatus(loan, 'Terlambat')} title="Tandai terlambat"><FiClock /></button>}
-                    <button type="button" onClick={() => handleStatus(loan, 'Dikembalikan')} title="Tandai sudah kembali"><FiCheck /></button>
+                    <button type="button" onClick={() => handleLateStatus(loan)} title="Tandai terlambat"><FiClock /></button>
                   </div>
                 )}
               </div>
             </article>
-          ))}
+            );
+          })}
           {!filteredLoans.length && <div className="loan-admin-ledger__empty"><FiBookOpen /><strong>Belum ada catatan di halaman ini.</strong><small>Catat peminjaman baru atau ubah kata pencarian.</small></div>}
         </section>
       )}
