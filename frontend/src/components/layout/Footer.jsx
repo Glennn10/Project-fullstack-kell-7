@@ -34,8 +34,6 @@ const Footer = () => {
             <h3>Jelajahi</h3>
             <Link to="/">Beranda</Link>
             <Link to="/buku">Katalog Buku</Link>
-            <Link to="/peminjaman">Peminjaman</Link>
-            <Link to="/pengembalian">Pengembalian</Link>
           </nav>
 
           <div className="site-footer__column">
@@ -57,7 +55,13 @@ const Footer = () => {
         <div className="site-footer__bottom">
           <span>© 2026 MinjemDong</span>
           <span>Dibuat untuk untuk Ujian Akhir Semester.</span>
-          <a href="#top">Kembali ke atas ↑</a>
+          <button
+            onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+            style={{ background: 'none', border: 'none', cursor: 'pointer', padding: 0 }}
+            className="back-to-top"
+          >
+            Kembali ke atas ↑
+          </button>
         </div>
       </Container>
     </footer>

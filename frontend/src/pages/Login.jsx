@@ -32,7 +32,7 @@ const Login = () => {
     try {
       const response = await authService.login(formData);
       const authData = response.data.data;
-      const fallbackPath = authData.user.role === 'admin' ? '/dashboard' : '/books';
+      const fallbackPath = authData.user.role === 'admin' ? '/' : '/books';
       const nextPath = requestedPath === '/dashboard' && authData.user.role !== 'admin'
         ? fallbackPath
         : (requestedPath || fallbackPath);
