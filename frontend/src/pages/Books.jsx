@@ -13,6 +13,17 @@ const getCoverUrl = (coverImage) => {
   return `${API_BASE_URL}/uploads/${coverImage.replace(/^\/?uploads\//, '')}`;
 };
 
+const getAvailability = (book) => {
+  const status = book.inventoryStatus || (book.available ? 'Tersedia' : 'Dipinjam');
+  const labels = {
+    Tersedia: 'bisa dipinjam',
+    Dipinjam: 'sedang dipinjam',
+    'Dalam perbaikan': 'sedang diperbaiki',
+    Hilang: 'buku hilang',
+  };
+  return { label: labels[status] || 'tidak tersedia', className: `is-${status.toLowerCase().replaceAll(' ', '-')}` };
+};
+
 const buildCatalog = (categories, books) => categories.map((category, categoryIndex) => ({
   id: String(category.id),
   name: category.name,
@@ -25,6 +36,7 @@ const buildCatalog = (categories, books) => categories.map((category, categoryIn
       title: book.title,
       author: book.author,
       available: book.is_available ?? book.available ?? book.status !== 'borrowed',
+      inventoryStatus: book.inventory_status,
       accent: categoryPalette[(categoryIndex + bookIndex) % categoryPalette.length],
       cover: getCoverUrl(book.cover_image),
     })),
@@ -33,7 +45,7 @@ const buildCatalog = (categories, books) => categories.map((category, categoryIn
 const Books = () => {
   const [searchParams, setSearchParams] = useSearchParams();
   const [searchQuery, setSearchQuery] = useState(searchParams.get('keyword') || '');
-  const [activeSection, setActiveSection] = useState(null);
+  const [activeSection, setActiveSection] = useState(searchParams.get('kategori'));
   const [categories, setCategories] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [loadError, setLoadError] = useState('');
@@ -103,12 +115,20 @@ const Books = () => {
 
   const openCategory = (sectionId) => {
     setActiveSection(sectionId);
-    updateSearch('');
+    setSearchQuery('');
+    const nextParams = new URLSearchParams(searchParams);
+    nextParams.delete('keyword');
+    nextParams.set('kategori', sectionId);
+    setSearchParams(nextParams, { replace: true });
   };
 
   const closeCategory = () => {
     setActiveSection(null);
-    updateSearch('');
+    setSearchQuery('');
+    const nextParams = new URLSearchParams(searchParams);
+    nextParams.delete('keyword');
+    nextParams.delete('kategori');
+    setSearchParams(nextParams, { replace: true });
   };
 
   return (
@@ -254,7 +274,9 @@ const Books = () => {
               )}
 
               <div className="catalog-book-grid">
-                {section.books.map((book) => (
+                {section.books.map((book) => {
+                  const availability = getAvailability(book);
+                  return (
                   <article className="catalog-book" key={book.id} style={{ '--book-accent': book.accent }}>
                     <div className="catalog-book__stage">
                       <span className="catalog-book__category">{section.name}</span>
@@ -265,13 +287,12 @@ const Books = () => {
                       <h3>{book.title}</h3>
                       <div className="catalog-book__meta">
                         <p>oleh {book.author}</p>
-                        <span className={`catalog-book__availability ${book.available ? '' : 'is-borrowed'}`}>
-                          {book.available ? 'bisa dipinjam' : 'sedang dipinjam'}
-                        </span>
+                        <span className={`catalog-book__availability ${availability.className}`}>{availability.label}</span>
                       </div>
                     </div>
                   </article>
-                ))}
+                  );
+                })}
               </div>
             </section>
           ))}

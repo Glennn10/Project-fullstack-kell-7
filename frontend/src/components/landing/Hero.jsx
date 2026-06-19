@@ -9,9 +9,9 @@ const Hero = () => (
           <span className="landing-hero__eyebrow"><FiBookOpen /> aloww, lagi nyari buku?</span>
           <h1>Mau baca apa <span>today?</span></h1>
           <p className="landing-hero__description">
-            Masih nyari buku keliling rak? yaelah kuno, langsung cari aja disini gausah keliling rak lagi.
+            Cari judul, penulis, atau topik dari sini, lalu temukan rak bukunya tanpa muter terlalu lama.
           </p>
-          <Form action="/books" method="GET" className="landing-search">
+          <Form action="/buku" method="GET" className="landing-search">
             <Form.Control type="search" name="keyword" placeholder="Ketik judul, penulis, atau topik..." aria-label="Pencarian buku" className="landing-search__input" />
             <Button type="submit" className="landing-search__button">Cari <FiArrowRight /></Button>
           </Form>

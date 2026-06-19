@@ -21,11 +21,11 @@ import '../styles/pages/dashboard.css';
 
 const navItems = [
   { label: 'Ringkasan', path: '/dashboard', icon: FiGrid },
-  { label: 'Kelola Buku', path: '/dashboard/books', icon: FiBookOpen },
-  { label: 'Kategori', path: '/dashboard/categories', icon: FiTag },
-  { label: 'Peminjaman', path: '/dashboard/loans', icon: FiRepeat },
-  { label: 'Pengembalian', path: '/dashboard/returns', icon: FiCornerDownLeft },
-  { label: 'Anggota', path: '/dashboard/members', icon: FiUsers },
+  { label: 'Kelola Buku', path: '/dashboard/buku', icon: FiBookOpen },
+  { label: 'Kategori', path: '/dashboard/kategori', icon: FiTag },
+  { label: 'Peminjaman', path: '/dashboard/peminjaman', icon: FiRepeat },
+  { label: 'Pengembalian', path: '/dashboard/pengembalian', icon: FiCornerDownLeft },
+  { label: 'Anggota', path: '/dashboard/anggota', icon: FiUsers },
 ];
 
 const statMeta = [
@@ -129,7 +129,7 @@ const Dashboard = () => {
             <p>{today}</p>
           </div>
           <div className="dashboard-masthead__actions">
-            <Link to="/books">Buka katalog <FiArrowUpRight /></Link>
+            <Link to="/buku">Buka katalog <FiArrowUpRight /></Link>
             <Link to="/">Lihat situs <FiArrowUpRight /></Link>
           </div>
           <span className="dashboard-masthead__mark" aria-hidden="true">catatan hari ini</span>
@@ -159,7 +159,7 @@ const Dashboard = () => {
               <article className="loan-ledger">
                 <header>
                   <div><span>Catatan sirkulasi</span><h2>Peminjaman terbaru</h2></div>
-                  <Link to="/dashboard/loans">Buka pencatatan <FiArrowUpRight /></Link>
+                  <Link to="/dashboard/peminjaman">Buka pencatatan <FiArrowUpRight /></Link>
                 </header>
 
                 {latestLoans.length > 0 ? (

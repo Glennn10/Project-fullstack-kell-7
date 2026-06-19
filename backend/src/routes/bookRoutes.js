@@ -10,6 +10,8 @@ const { verifyToken, isAdmin } = require('../middleware/authMiddleware');
 // ==========================================
 const upload = require('../middleware/uploadMiddleware');
 router.get('/', bookController.getAllBooks);
+router.get('/auth-picks', bookController.getAuthPicks);
+router.get('/landing-picks', bookController.getLandingPicks);
 router.get('/:id', bookController.getBookById);
 
 // ==========================================

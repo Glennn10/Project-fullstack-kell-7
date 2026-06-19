@@ -9,6 +9,11 @@ export const useBookCarousel = (stopsCount) => {
   const moveTo = (nextPosition) => {
     const viewport = viewportRef.current;
     if (!viewport) return;
+    if (stopsCount <= 1) {
+      viewport.scrollTo({ left: 0, behavior: 'smooth' });
+      setPosition(0);
+      return;
+    }
 
     const boundedPosition = Math.min(stopsCount - 1, Math.max(0, nextPosition));
     const maxScroll = viewport.scrollWidth - viewport.clientWidth;
@@ -21,7 +26,7 @@ export const useBookCarousel = (stopsCount) => {
     if (!viewport) return;
 
     const maxScroll = viewport.scrollWidth - viewport.clientWidth;
-    if (maxScroll > 0) setPosition(Math.round((viewport.scrollLeft / maxScroll) * (stopsCount - 1)));
+    if (maxScroll > 0 && stopsCount > 1) setPosition(Math.round((viewport.scrollLeft / maxScroll) * (stopsCount - 1)));
   };
 
   const startDrag = (event) => {

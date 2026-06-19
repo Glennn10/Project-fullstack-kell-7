@@ -8,11 +8,11 @@ const authController = {
     // ==========================================
     register: async (req, res) => {
         try {
-            const { name, email, password } = req.body;
+            const { name, email, phone, address, password } = req.body;
 
             // Validasi input kosong
-            if (!name || !email || !password) {
-                return res.status(400).json({ success: false, message: 'Name, email, dan password wajib diisi!' });
+            if (!name || !email || !phone || !address || !password) {
+                return res.status(400).json({ success: false, message: 'Nama, email, nomor HP, alamat, dan password wajib diisi!' });
             }
 
             // Cek apakah email sudah terdaftar di database
@@ -29,7 +29,9 @@ const authController = {
             // Register publik selalu membuat akun user biasa.
             const newUser = await UserModel.createUserWithBorrower({
                 name, 
-                email, 
+                email,
+                phone,
+                address,
                 password: hashedPassword,
                 role: 'user'
             });

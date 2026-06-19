@@ -197,3 +197,37 @@
   .dashboard-masthead h1 { font-size: 2.65rem; }
   .dashboard-masthead__actions { flex-direction: column; }
 }
+
+/* Dashboard data tables: editorial, but still comfortable to read. */
+.library-admin .loan-ledger__row strong { font-size: .96rem; }
+.library-admin .loan-ledger__row small,
+.library-admin .loan-ledger__row > span,
+.library-admin .loan-ledger__row time { font-size: .72rem; }
+.library-admin .loan-status { font-size: .64rem; }
+.library-admin .inventory-ledger > header > div { font-size: .67rem; }
+.library-admin .inventory-row__identity span { font-size: .75rem; }
+.library-admin .inventory-row__identity small { font-size: .67rem; }
+.library-admin .inventory-row__category,
+.library-admin .inventory-row time { font-size: .74rem; }
+.library-admin .inventory-row__status { font-size: .65rem; }
+.library-admin .loan-admin-ledger > header > div { font-size: .64rem; }
+.library-admin .loan-admin-ledger__book strong { font-size: 1rem; }
+.library-admin .loan-admin-ledger__book small,
+.library-admin .loan-admin-ledger__borrower small { font-size: .68rem; }
+.library-admin .loan-admin-ledger__borrower strong,
+.library-admin .loan-admin-ledger__dates span { font-size: .76rem; }
+.library-admin .loan-admin-ledger__dates small { font-size: .67rem; }
+.library-admin .loan-admin-ledger__status { font-size: .64rem; }
+.library-admin .return-ledger > header > div { font-size: .64rem; }
+.library-admin .return-ledger__identity strong { font-size: 1rem; }
+.library-admin .return-ledger__identity small,
+.library-admin .return-ledger__identity span { font-size: .69rem; }
+.library-admin .return-ledger__dates strong { font-size: .78rem; }
+.library-admin .return-ledger__dates small { font-size: .64rem; }
+.library-admin .return-ledger__timing strong { font-size: .74rem; }
+.library-admin .return-ledger__timing small { font-size: .63rem; }
+.library-admin .return-ledger__receive { font-size: .69rem; }
+.library-admin .member-history > header strong { font-size: .62rem; }
+.library-admin .member-history > article strong { font-size: .78rem; }
+.library-admin .member-history > article small { font-size: .64rem; }
+.library-admin .member-history > article em { font-size: .57rem; }

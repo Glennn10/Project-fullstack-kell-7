@@ -13,7 +13,7 @@ const Footer = () => {
             <span>Masih ada ruang di tasmu?</span>
             <h2>Bawa pulang satu cerita lagi.</h2>
           </div>
-          <Link to="/books">Cari buku <FiArrowUpRight aria-hidden="true" /></Link>
+          <Link to="/buku">Cari buku <FiArrowUpRight aria-hidden="true" /></Link>
         </div>
 
         <div className="site-footer__main">
@@ -33,9 +33,9 @@ const Footer = () => {
           <nav className="site-footer__column" aria-label="Navigasi footer">
             <h3>Jelajahi</h3>
             <Link to="/">Beranda</Link>
-            <Link to="/books">Katalog Buku</Link>
-            <Link to="/loans">Peminjaman</Link>
-            <Link to="/returns">Pengembalian</Link>
+            <Link to="/buku">Katalog Buku</Link>
+            <Link to="/peminjaman">Peminjaman</Link>
+            <Link to="/pengembalian">Pengembalian</Link>
           </nav>
 
           <div className="site-footer__column">

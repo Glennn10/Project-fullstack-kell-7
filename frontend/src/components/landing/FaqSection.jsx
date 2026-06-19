@@ -14,7 +14,7 @@ const FaqSection = () => {
         <div className="faq-section__hint"><span aria-hidden="true">?</span><p>Belum ketemu jawabannya? Petugas perpustakaan siap membantu saat jam operasional.</p></div>
       </div>
       <div className="faq-index">
-        <div className="faq-index__header"><span>Dicatat minggu ini</span><span>4 pertanyaan terakhir</span></div>
+        <div className="faq-index__header"><span>Dicatat minggu ini</span><span>{frequentlyAskedQuestions.length} pertanyaan terakhir</span></div>
         {frequentlyAskedQuestions.map((item, index) => {
           const isOpen = openFaq === index;
           const answerId = `faq-answer-${index}`;

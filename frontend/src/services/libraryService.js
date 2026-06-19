@@ -2,6 +2,8 @@ import { apiClient, authConfig } from './apiClient';
 
 export const libraryService = {
   getBooks: () => apiClient.get('/api/books'),
+  getAuthBookPicks: () => apiClient.get('/api/books/auth-picks'),
+  getLandingPicks: () => apiClient.get('/api/books/landing-picks'),
   getCategories: () => apiClient.get('/api/categories'),
   createCategory: (payload, token) => apiClient.post('/api/categories', payload, authConfig(token)),
   updateCategory: (id, payload, token) => apiClient.put(`/api/categories/${id}`, payload, authConfig(token)),

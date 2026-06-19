@@ -1,10 +1,19 @@
 import { Link } from 'react-router-dom';
 import { FiArrowUpRight, FiChevronLeft, FiChevronRight } from 'react-icons/fi';
-import { featuredBooks, weeklyShelfStops } from '../../data/landingData';
+import { API_BASE_URL } from '../../config/api';
+import { categoryPalette } from '../../data/catalogData';
 import { useBookCarousel } from '../../hooks/useBookCarousel';
 import BookVolume from '../common/BookVolume';
 
-const WeeklyBooks = () => {
+const getCoverUrl = (cover) => {
+  if (!cover) return null;
+  if (/^https?:\/\//i.test(cover)) return cover;
+  return `${API_BASE_URL}/uploads/${cover.replace(/^\/?uploads\//, '')}`;
+};
+
+const WeeklyBooks = ({ books = [] }) => {
+  const stopsCount = Math.max(1, Math.ceil(books.length / 2));
+  const shelfStops = Array.from({ length: stopsCount }, (_, index) => `Bagian rak ${index + 1}`);
   const {
     position,
     viewportRef,
@@ -14,7 +23,7 @@ const WeeklyBooks = () => {
     drag,
     stopDrag,
     blockClickAfterDrag,
-  } = useBookCarousel(weeklyShelfStops.length);
+  } = useBookCarousel(stopsCount);
 
   return (
     <section className="weekly-books scroll-reveal scroll-reveal--side" aria-labelledby="weekly-books-title">
@@ -22,7 +31,7 @@ const WeeklyBooks = () => {
         <div><h2 id="weekly-books-title">Book of the week!</h2></div>
         <div className="weekly-books__intro">
           <p>Beberapa buku yang sering jadi topik hangat, dipinjam, atau diam-diam ilang.</p>
-          <Link to="/books">Lihat semua buku <FiArrowUpRight aria-hidden="true" /></Link>
+          <Link to="/buku">Lihat semua buku <FiArrowUpRight aria-hidden="true" /></Link>
         </div>
       </div>
 
@@ -39,25 +48,26 @@ const WeeklyBooks = () => {
           onClickCapture={blockClickAfterDrag}
         >
           <div className="weekly-books__shelf">
-            {featuredBooks.map((book) => (
-              <Link to="/books" className="weekly-book" key={book.title}>
-                <div className="weekly-book__stage" style={{ '--book-accent': book.accent }}>
-                  <span className="weekly-book__highlight">{book.highlight}</span>
-                  <BookVolume cover={book.cover} title={book.title} className="weekly-book-volume" />
+            {books.map((book, index) => (
+              <Link to={`/buku?keyword=${encodeURIComponent(book.title)}`} className="weekly-book" key={book.id}>
+                <div className="weekly-book__stage" style={{ '--book-accent': categoryPalette[index % categoryPalette.length] }}>
+                  <span className="weekly-book__highlight">{Number(book.weekly_loans) > 0 ? `${book.weekly_loans}x dipinjam minggu ini` : Number(book.total_loans) > 0 ? `${book.total_loans} kali keluar dari rak` : 'Baru di meja katalog'}</span>
+                  <BookVolume cover={getCoverUrl(book.cover_image)} title={book.title} className="weekly-book-volume" />
                 </div>
                 <div className="weekly-book__details">
-                  <span>{book.category}</span><h3>{book.title}</h3><p>{book.author}</p>
-                  <div className={`weekly-book__status${book.available ? '' : ' weekly-book__status--borrowed'}`}><i /> {book.available ? 'Ada di rak' : 'Sedang dipinjam'}</div>
+                  <span>{book.category_name || 'Tanpa kategori'}</span><h3>{book.title}</h3><p>{book.author}</p>
+                  <div className={`weekly-book__status${book.is_available ? '' : ' weekly-book__status--borrowed'}`}><i /> {book.is_available ? 'Ada di rak' : book.inventory_status || 'Sedang dipinjam'}</div>
                 </div>
               </Link>
             ))}
+            {!books.length && <div className="landing-data-empty">Buku pilihan akan muncul setelah koleksi ditambahkan.</div>}
           </div>
         </div>
-        <button type="button" className="weekly-books__arrow weekly-books__arrow--right" onClick={() => moveTo(position + 1)} disabled={position === weeklyShelfStops.length - 1} aria-label="Geser buku ke kanan"><FiChevronRight /></button>
+        <button type="button" className="weekly-books__arrow weekly-books__arrow--right" onClick={() => moveTo(position + 1)} disabled={position === stopsCount - 1} aria-label="Geser buku ke kanan"><FiChevronRight /></button>
       </div>
 
       <div className="weekly-books__controls" aria-label="Navigasi buku pilihan" style={{ '--weekly-position': position }}>
-        {weeklyShelfStops.map((label, index) => (
+        {shelfStops.map((label, index) => (
           <button type="button" className={position === index ? 'active' : ''} onClick={() => moveTo(index)} aria-label={label} aria-pressed={position === index} key={label}><span /></button>
         ))}
       </div>

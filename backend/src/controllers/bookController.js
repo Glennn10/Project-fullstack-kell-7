@@ -1,4 +1,5 @@
 const BookModel = require('../models/bookModel');
+const crypto = require('crypto');
 
 const bookController = {
     getAllBooks: async (req, res) => {
@@ -164,6 +165,51 @@ const bookController = {
                 success: false,
                 message: "Internal Server Error"
             });
+        }
+    },
+    getAuthPicks: async (req, res) => {
+        try {
+            const books = await BookModel.getAllBooks();
+            const candidates = books.filter((book) => book.cover_image);
+            const visitorIp = req.ip || req.socket.remoteAddress || 'local';
+            const picks = candidates
+                .map((book) => ({
+                    book,
+                    rank: crypto.createHash('sha256').update(`${visitorIp}:${book.id}`).digest('hex')
+                }))
+                .sort((left, right) => left.rank.localeCompare(right.rank))
+                .slice(0, 2)
+                .map(({ book }) => ({ id: book.id, title: book.title, cover_image: book.cover_image }));
+            return res.status(200).json({ success: true, data: picks });
+        } catch (error) {
+            console.error('Error getAuthPicks:', error.message);
+            return res.status(500).json({ success: false, message: 'Pilihan buku belum bisa dimuat' });
+        }
+    },
+    getLandingPicks: async (req, res) => {
+        try {
+            const books = await BookModel.getLandingBooks();
+            const weekly = [...books]
+                .sort((left, right) => Number(right.weekly_loans) - Number(left.weekly_loans)
+                    || Number(right.total_loans) - Number(left.total_loans)
+                    || new Date(right.created_at) - new Date(left.created_at))
+                .slice(0, 10);
+
+            const now = new Date();
+            const weekKey = `${now.getUTCFullYear()}-${Math.ceil((((now - new Date(Date.UTC(now.getUTCFullYear(), 0, 1))) / 86400000) + 1) / 7)}`;
+            const curated = books
+                .map((book) => ({
+                    book,
+                    rank: crypto.createHash('sha256').update(`${weekKey}:${book.id}`).digest('hex')
+                }))
+                .sort((left, right) => left.rank.localeCompare(right.rank))
+                .slice(0, 4)
+                .map(({ book }) => book);
+
+            return res.status(200).json({ success: true, data: { weekly, curated } });
+        } catch (error) {
+            console.error('Error getLandingPicks:', error.message);
+            return res.status(500).json({ success: false, message: 'Pilihan landing belum bisa dimuat' });
         }
     },
 

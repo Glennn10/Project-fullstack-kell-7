@@ -1080,6 +1080,20 @@ header form .btn-warning:focus {
   }
 }
 
+.landing-data-empty {
+  align-items: center;
+  border: 1.5px dashed rgba(16, 47, 61, .38);
+  color: #6b7c82;
+  display: flex;
+  font-family: Georgia, serif;
+  grid-column: 1 / -1;
+  justify-content: center;
+  min-height: 180px;
+  padding: 30px;
+  text-align: center;
+  width: 100%;
+}
+
 /* Landing page refresh */
 .navbar-nav > .nav-link.active {
   color: #0f2d47 !important;

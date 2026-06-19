@@ -144,7 +144,7 @@ const MyBooks = () => {
           <span className="my-books-empty__label"><FiClock /> {loadError ? 'Rak belum bisa dibuka' : 'Rak ini masih kosong'}</span>
           <h2>{loadError || (activeTab === 'active' ? 'Belum ada buku di tanganmu.' : 'Belum ada riwayat peminjaman.')}</h2>
           <p>{activeTab === 'active' ? 'Setelah peminjaman akunmu disetujui, buku dan tanggal kembalinya akan muncul di sini.' : 'Buku yang sudah kamu kembalikan nantinya akan tersimpan rapi di sini.'}</p>
-          {activeTab === 'active' && !loadError && <Link to="/books">Jelajahi katalog <FiArrowRight /></Link>}
+          {activeTab === 'active' && !loadError && <Link to="/buku">Jelajahi katalog <FiArrowRight /></Link>}
         </div>
       )}
     </section>

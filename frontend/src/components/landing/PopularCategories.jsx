@@ -1,25 +1,38 @@
 import { Link } from 'react-router-dom';
-import { FiArrowUpRight } from 'react-icons/fi';
-import { popularCategories } from '../../data/landingData';
+import { FiArrowUpRight, FiBookOpen, FiCompass, FiCpu, FiFeather, FiPenTool, FiTrendingUp } from 'react-icons/fi';
+import { categoryPalette } from '../../data/catalogData';
 
-const PopularCategories = () => (
+const categoryIcons = [FiFeather, FiCpu, FiCompass, FiTrendingUp, FiPenTool, FiBookOpen];
+
+const PopularCategories = ({ categories = [] }) => {
+  const visibleCategories = [...categories]
+    .sort((left, right) => Number(right.book_count || 0) - Number(left.book_count || 0))
+    .slice(0, 6);
+
+  return (
   <section className="popular-categories scroll-reveal scroll-reveal--fade" aria-labelledby="popular-categories-title">
     <div className="popular-categories__heading">
-      <div><h2 id="popular-categories-title">Lagi nyari categori <em>yang mana?</em></h2></div>
-      <p>Sesuai in aja ama suasana hati, tinggal pilih categorinya aja.</p>
+      <div><h2 id="popular-categories-title">Lagi nyari kategori <em>yang mana?</em></h2></div>
+      <p>Sesuaikan sama suasana hati, lalu pilih rak yang paling bikin penasaran.</p>
     </div>
     <div className="popular-categories__grid">
-      {popularCategories.map(({ icon: Icon, ...category }) => (
-        <Link to="/books" className="category-tile" key={category.title} style={{ '--category-color': category.color, '--category-ink': category.ink }}>
-          <span className="category-tile__shelf">{category.label}</span>
+      {visibleCategories.map((category, index) => {
+        const Icon = categoryIcons[index % categoryIcons.length];
+        const color = category.color || categoryPalette[index % categoryPalette.length];
+        return (
+        <Link to={`/buku?kategori=${category.id}`} className="category-tile" key={category.id} style={{ '--category-color': color, '--category-ink': ['#377d83', '#e96d4d', '#927db8'].includes(color) ? '#ffffff' : '#102f3d' }}>
+          <span className="category-tile__shelf">{category.book_count || 0} buku di rak</span>
           <span className="category-tile__icon"><Icon aria-hidden="true" /></span>
-          <div><h3>{category.title}</h3><p>{category.description}</p></div>
+          <div><h3>{category.name}</h3><p>{category.description || `Koleksi ${category.name} yang tersimpan di perpustakaan.`}</p></div>
           <FiArrowUpRight className="category-tile__arrow" aria-hidden="true" />
         </Link>
-      ))}
+        );
+      })}
+      {!visibleCategories.length && <div className="landing-data-empty">Kategori akan muncul setelah ditambahkan petugas.</div>}
     </div>
-    <Link to="/books" className="popular-categories__all">Lihat semua koleksi <FiArrowUpRight aria-hidden="true" /></Link>
+    <Link to="/buku" className="popular-categories__all">Lihat semua koleksi <FiArrowUpRight aria-hidden="true" /></Link>
   </section>
-);
+  );
+};
 
 export default PopularCategories;

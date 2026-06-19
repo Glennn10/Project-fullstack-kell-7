@@ -5,7 +5,7 @@ import {
   FiFeather,
   FiPenTool,
   FiSearch,
-  FiSend,
+  FiUserCheck,
   FiSmile,
   FiTrendingUp,
 } from 'react-icons/fi';
@@ -26,9 +26,9 @@ export const featuredBooks = [
 export const weeklyShelfStops = ['Awal rak', 'Bagian kedua', 'Tengah rak', 'Bagian keempat', 'Akhir rak'];
 
 export const borrowingSteps = [
-  { label: 'Langkah satu', title: 'Cari bukunya', description: 'Kalau sudah tahu judulnya, langsung ketik. Kalau belum, masuk saja dari kategori.', note: 'Judul, penulis, atau topik juga bisa', icon: FiSearch, color: '#f5c84b' },
-  { label: 'Langkah dua', title: 'Ajukan pinjam', description: 'Klik pinjam. Petugas akan cek bukunya dulu sebelum kamu datang mengambil.', note: 'Tunggu kabar dari petugas', icon: FiSend, color: '#e96d4d' },
-  { label: 'Langkah tiga', title: 'Ambil & baca', description: 'Setelah disetujui, datang dan tunjukkan akunmu. Selesai—bukunya boleh dibawa.', note: 'Tanggal kembali ada di akunmu', icon: FiBookOpen, color: '#377d83' },
+  { label: 'Langkah satu', title: 'Cari bukunya', description: 'Jelajahi katalog lewat judul, penulis, atau kategori, lalu cek apakah bukunya tersedia di rak.', note: 'Catat judul buku yang kamu pilih', icon: FiSearch, color: '#f5c84b' },
+  { label: 'Langkah dua', title: 'Temui petugas', description: 'Ambil bukunya dari rak dan bawa ke meja petugas. Tunjukkan akunmu supaya peminjaman bisa dicatat.', note: 'Peminjaman dicatat oleh petugas', icon: FiUserCheck, color: '#e96d4d' },
+  { label: 'Langkah tiga', title: 'Bawa & baca', description: 'Setelah selesai dicatat, bukunya boleh dibawa pulang. Jangan lupa kembalikan sesuai tanggalnya.', note: 'Tanggal kembali ada di halaman Buku Saya', icon: FiBookOpen, color: '#377d83' },
 ];
 
 export const librarianPick = {
@@ -46,10 +46,12 @@ export const librarianAlternatives = [
 ];
 
 export const frequentlyAskedQuestions = [
-  { question: 'Bisa booking buku dulu sebelum datang?', answer: 'Bisa. Ajukan lewat katalog dan tunggu konfirmasi petugas. Kalau sudah disetujui, bukunya akan disiapkan untuk kamu ambil.' },
-  { question: 'Bukunya belum selesai, boleh tambah waktu?', answer: 'Kabari petugas sebelum tanggal kembali. Biasanya bisa diperpanjang selama bukunya tidak sedang ditunggu anggota lain.' },
-  { question: 'Di web tertulis tersedia, tapi kok bukunya nggak ada?', answer: 'Mungkin bukunya sedang disiapkan, baru dikembalikan, atau masih ada di meja baca. Tanya petugas supaya bisa langsung dicek.' },
-  { question: 'Buku yang kupinjam kena air. Harus bagaimana?', answer: 'Jangan dilem atau diperbaiki sendiri. Bawa bukunya dan ceritakan kondisinya ke petugas—nanti kita cari jalan keluarnya bersama.' },
+  { question: 'Kalau sudah menemukan buku yang cocok, cara pinjamnya bagaimana?', answer: 'Datang ke meja petugas sambil membawa bukunya. Petugas akan mencatat peminjaman ke akunmu dan memberi tahu batas pengembaliannya.' },
+  { question: 'Di mana aku bisa melihat tanggal pengembalian?', answer: 'Buka halaman Buku Saya setelah masuk akun. Buku yang sedang kamu bawa, tanggal pinjam, dan batas kembalinya tercatat di sana.' },
+  { question: 'Kenapa ada buku yang tidak bisa dipinjam?', answer: 'Buku tersebut mungkin sedang dipinjam, dalam perbaikan, atau tercatat hilang. Status terbarunya bisa dilihat langsung di katalog.' },
+  { question: 'Apa yang harus dilakukan kalau terlambat mengembalikan?', answer: 'Segera bawa bukunya ke meja petugas. Keterlambatan akan tercatat sampai proses pengembalian selesai.' },
+  { question: 'Bagaimana kalau buku rusak saat sedang kupinjam?', answer: 'Jangan diperbaiki sendiri. Bawa bukunya ke petugas dan jelaskan kondisinya supaya kerusakannya bisa dicatat dengan benar.' },
+  { question: 'Boleh menitipkan buku ke teman untuk dikembalikan?', answer: 'Boleh, selama bukunya diserahkan langsung ke meja petugas dan sudah tercatat kembali. Jangan menaruhnya sendiri di rak.' },
 ];
 
 export const popularCategories = [

@@ -1,4 +1,4 @@
-import { Route, Routes } from 'react-router-dom';
+import { Navigate, Route, Routes } from 'react-router-dom';
 import PublicLayout from '../components/layout/PublicLayout';
 import ProtectedRoute from '../components/common/ProtectedRoute';
 import Home from '../pages/Home';
@@ -19,19 +19,23 @@ const AppRoutes = () => (
   <Routes>
     <Route element={<PublicLayout />}>
       <Route index element={<Home />} />
-      <Route path="books" element={<Books />} />
-      <Route path="loans" element={<Loans />} />
-      <Route path="returns" element={<Returns />} />
+      <Route path="buku" element={<Books />} />
+      <Route path="peminjaman" element={<Loans />} />
+      <Route path="pengembalian" element={<Returns />} />
       <Route path="login" element={<Login />} />
       <Route path="register" element={<Register />} />
       <Route
-        path="my-books"
+        path="buku-saya"
         element={(
           <ProtectedRoute>
             <MyBooks />
           </ProtectedRoute>
         )}
       />
+      <Route path="books" element={<Navigate to="/buku" replace />} />
+      <Route path="loans" element={<Navigate to="/peminjaman" replace />} />
+      <Route path="returns" element={<Navigate to="/pengembalian" replace />} />
+      <Route path="my-books" element={<Navigate to="/buku-saya" replace />} />
     </Route>
     <Route
       path="dashboard"
@@ -42,7 +46,7 @@ const AppRoutes = () => (
       )}
     />
     <Route
-      path="dashboard/books"
+      path="dashboard/buku"
       element={(
         <ProtectedRoute allowedRoles={['admin']}>
           <ManageBooks />
@@ -50,7 +54,7 @@ const AppRoutes = () => (
       )}
     />
     <Route
-      path="dashboard/categories"
+      path="dashboard/kategori"
       element={(
         <ProtectedRoute allowedRoles={['admin']}>
           <ManageCategories />
@@ -58,7 +62,7 @@ const AppRoutes = () => (
       )}
     />
     <Route
-      path="dashboard/loans"
+      path="dashboard/peminjaman"
       element={(
         <ProtectedRoute allowedRoles={['admin']}>
           <ManageLoans />
@@ -66,7 +70,7 @@ const AppRoutes = () => (
       )}
     />
     <Route
-      path="dashboard/returns"
+      path="dashboard/pengembalian"
       element={(
         <ProtectedRoute allowedRoles={['admin']}>
           <ManageReturns />
@@ -74,13 +78,18 @@ const AppRoutes = () => (
       )}
     />
     <Route
-      path="dashboard/members"
+      path="dashboard/anggota"
       element={(
         <ProtectedRoute allowedRoles={['admin']}>
           <ManageMembers />
         </ProtectedRoute>
       )}
     />
+    <Route path="dashboard/books" element={<Navigate to="/dashboard/buku" replace />} />
+    <Route path="dashboard/categories" element={<Navigate to="/dashboard/kategori" replace />} />
+    <Route path="dashboard/loans" element={<Navigate to="/dashboard/peminjaman" replace />} />
+    <Route path="dashboard/returns" element={<Navigate to="/dashboard/pengembalian" replace />} />
+    <Route path="dashboard/members" element={<Navigate to="/dashboard/anggota" replace />} />
   </Routes>
 );
 

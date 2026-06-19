@@ -59,7 +59,7 @@ const UserModel = {
     },
 
     createUserWithBorrower: async (userData) => {
-        const { name, email, password, role = 'user' } = userData;
+        const { name, email, phone, address, password, role = 'user' } = userData;
         const client = await pool.connect();
 
         try {
@@ -71,7 +71,7 @@ const UserModel = {
             `, [name, email, password, role]);
             const user = userResult.rows[0];
 
-            await client.query('INSERT INTO borrowers (name, user_id) VALUES ($1, $2)', [name, user.id]);
+            await client.query('INSERT INTO borrowers (name, phone, address, user_id) VALUES ($1, $2, $3, $4)', [name, phone, address, user.id]);
             await client.query('COMMIT');
             return user;
         } catch (error) {

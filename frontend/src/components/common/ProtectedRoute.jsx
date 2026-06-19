@@ -10,7 +10,7 @@ const ProtectedRoute = ({ allowedRoles, children }) => {
   }
 
   if (allowedRoles && !allowedRoles.includes(user?.role)) {
-    return <Navigate to="/books" replace />;
+    return <Navigate to="/buku" replace />;
   }
 
   return children;

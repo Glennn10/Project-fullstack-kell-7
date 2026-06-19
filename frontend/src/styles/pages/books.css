@@ -1007,6 +1007,9 @@
 }
 
 .catalog-book__availability.is-borrowed { color: #b2543f; }
+.catalog-book__availability.is-dipinjam { color: #b2543f; }
+.catalog-book__availability.is-dalam-perbaikan { color: #b87924; }
+.catalog-book__availability.is-hilang { color: #9f3328; text-decoration: line-through; }
 
 .catalog-book__info h3 {
   font-family: Georgia, serif;

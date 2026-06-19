@@ -62,6 +62,10 @@
   z-index: 3;
 }
 
+.physical-book__cover--custom {
+  overflow: hidden;
+}
+
 .physical-book__spine {
   background: linear-gradient(90deg, rgba(7,27,35,.32), rgba(255,255,255,.18), transparent);
   border-right: 1px solid rgba(7,27,35,.35);

@@ -43,6 +43,21 @@ const BookModel = {
         return result.rows[0];
     },
 
+    getLandingBooks: async () => {
+        const query = `
+            SELECT b.*, c.name AS category_name,
+                COUNT(l.id)::int AS total_loans,
+                COUNT(l.id) FILTER (WHERE l.loan_date >= CURRENT_DATE - INTERVAL '7 days')::int AS weekly_loans
+            FROM books b
+            LEFT JOIN categories c ON c.id = b.category_id
+            LEFT JOIN loans l ON l.book_id = b.id
+            GROUP BY b.id, c.name
+            ORDER BY b.created_at DESC;
+        `;
+        const result = await pool.query(query);
+        return result.rows;
+    },
+
     updateBookStatus: async (id, inventoryStatus) => {
         const query = `
             UPDATE books

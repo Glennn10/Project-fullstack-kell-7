@@ -4,11 +4,11 @@ import { useAuth } from '../../context/useAuth';
 
 const navItems = [
   { label: 'Ringkasan', path: '/dashboard', icon: FiGrid },
-  { label: 'Kelola Buku', path: '/dashboard/books', icon: FiBookOpen },
-  { label: 'Kategori', path: '/dashboard/categories', icon: FiTag },
-  { label: 'Peminjaman', path: '/dashboard/loans', icon: FiRepeat },
-  { label: 'Pengembalian', path: '/dashboard/returns', icon: FiCornerDownLeft },
-  { label: 'Anggota', path: '/dashboard/members', icon: FiUsers },
+  { label: 'Kelola Buku', path: '/dashboard/buku', icon: FiBookOpen },
+  { label: 'Kategori', path: '/dashboard/kategori', icon: FiTag },
+  { label: 'Peminjaman', path: '/dashboard/peminjaman', icon: FiRepeat },
+  { label: 'Pengembalian', path: '/dashboard/pengembalian', icon: FiCornerDownLeft },
+  { label: 'Anggota', path: '/dashboard/anggota', icon: FiUsers },
 ];
 
 const DashboardShell = ({ children, note = 'Cek data sebelum menutup perpustakaan.' }) => {

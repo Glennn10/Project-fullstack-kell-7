@@ -58,11 +58,11 @@ const NavigationBar = () => {
                 Beranda
               </Nav.Link>
 
-              <Nav.Link as={NavLink} to="/books">
+              <Nav.Link as={NavLink} to="/buku">
                 Katalog Buku
               </Nav.Link>
 
-              <Nav.Link as={NavLink} to="/my-books" className="my-books-nav-link">
+              <Nav.Link as={NavLink} to="/buku-saya" className="my-books-nav-link">
                 <span>
                   Buku Saya
                   <span aria-label={`${myBookCount} buku dipinjam`}>{myBookCount}</span>
@@ -99,7 +99,7 @@ const NavigationBar = () => {
                       <FiGrid aria-hidden="true" /> Dashboard
                     </NavDropdown.Item>
                   )}
-                  <NavDropdown.Item as={Link} to="/books">
+                  <NavDropdown.Item as={Link} to="/buku">
                     <FiBookOpen aria-hidden="true" /> Katalog Buku
                   </NavDropdown.Item>
                   <NavDropdown.Divider />
