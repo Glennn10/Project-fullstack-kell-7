@@ -61,6 +61,12 @@ const loanController = {
             if (error.code === 'BOOK_UNAVAILABLE') {
                 return res.status(409).json({ success: false, message: 'Buku sedang dipinjam dan belum kembali' });
             }
+            if (error.code === 'BORROWER_NOT_FOUND') {
+                return res.status(404).json({ success: false, message: 'Anggota tidak ditemukan' });
+            }
+            if (error.code === 'BORROWER_INACTIVE') {
+                return res.status(409).json({ success: false, message: 'Keanggotaan sedang nonaktif dan tidak bisa meminjam buku' });
+            }
             res.status(500).json({ success: false, message: 'Internal Server Error (Pastikan ID yang dimasukkan valid)' });
         }
     },

@@ -9,6 +9,7 @@ router.get('/', borrowerController.getAllBorrowers);
 router.get('/:id', borrowerController.getBorrowerById);
 router.post('/', borrowerController.createBorrower);
 router.put('/:id', borrowerController.updateBorrower);
+router.patch('/:id/status', borrowerController.updateBorrowerStatus);
 router.delete('/:id', borrowerController.deleteBorrower);
 
 module.exports = router;

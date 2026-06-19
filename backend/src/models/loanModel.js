@@ -6,6 +6,7 @@ const LoanModel = {
             SELECT 
                 l.id, 
                 l.book_id,
+                l.borrower_id,
                 b.title AS book_title, 
                 b.author AS book_author,
                 b.cover_image,
@@ -85,6 +86,19 @@ const LoanModel = {
             if (!book.is_available) {
                 const error = new Error('Buku sedang dipinjam');
                 error.code = 'BOOK_UNAVAILABLE';
+                throw error;
+            }
+
+            const borrowerResult = await client.query('SELECT id, membership_status FROM borrowers WHERE id = $1', [borrower_id]);
+            const borrower = borrowerResult.rows[0];
+            if (!borrower) {
+                const error = new Error('Anggota tidak ditemukan');
+                error.code = 'BORROWER_NOT_FOUND';
+                throw error;
+            }
+            if (borrower.membership_status !== 'Aktif') {
+                const error = new Error('Keanggotaan sedang nonaktif');
+                error.code = 'BORROWER_INACTIVE';
                 throw error;
             }
 

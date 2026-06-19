@@ -70,6 +70,7 @@ const ManageLoans = () => {
   }, [token]);
 
   const availableBooks = useMemo(() => books.filter((book) => book.is_available !== false), [books]);
+  const activeBorrowers = useMemo(() => borrowers.filter((borrower) => borrower.membership_status !== 'Nonaktif'), [borrowers]);
   const activeLoans = useMemo(() => loans.filter((loan) => loan.status !== 'Dikembalikan'), [loans]);
   const lateLoans = useMemo(() => loans.filter((loan) => loan.status === 'Terlambat'), [loans]);
   const tableLoans = useMemo(() => {
@@ -146,7 +147,7 @@ const ManageLoans = () => {
     <DashboardShell note="Cocokkan buku dan nama peminjam sebelum catatan disimpan.">
       <header className="loan-admin-masthead">
         <div><span>Meja sirkulasi</span><h1>Buku keluar,<br />catat jejaknya.</h1><p>Pilih buku yang tersedia dan siapa yang membawanya pulang.</p></div>
-        <button type="button" onClick={() => setEditorOpen(true)} disabled={!availableBooks.length || !borrowers.length}><FiPlus /> Catat peminjaman</button>
+        <button type="button" onClick={() => setEditorOpen(true)} disabled={!availableBooks.length || !activeBorrowers.length}><FiPlus /> Catat peminjaman</button>
         <DeskStationery items={['ruler', 'clips', 'stapler']} className="loan-admin-stationery" />
       </header>
 
@@ -201,7 +202,7 @@ const ManageLoans = () => {
               <div><small>Buku yang dibawa</small><strong>{selectedBook?.title || 'Belum dipilih'}</strong><span>{selectedBook?.author || 'Pilih dari stok yang tersedia'}</span></div>
             </div>
             <label>Buku<AutocompleteSelect value={bookId} onChange={setBookId} placeholder="Ketik judul atau penulis..." options={availableBooks.map((book) => ({ value: book.id, label: book.title, meta: book.author, searchText: `${book.title} ${book.author}` }))} /></label>
-            <label>Peminjam<AutocompleteSelect value={borrowerId} onChange={setBorrowerId} placeholder="Ketik nama, email, atau nomor..." options={borrowers.map((borrower) => ({ value: borrower.id, label: borrower.name, meta: borrower.user_email || borrower.phone || 'Anggota perpustakaan', searchText: `${borrower.name} ${borrower.user_email || ''} ${borrower.phone || ''}` }))} /></label>
+            <label>Peminjam<AutocompleteSelect value={borrowerId} onChange={setBorrowerId} placeholder="Ketik nama, email, atau nomor..." options={activeBorrowers.map((borrower) => ({ value: borrower.id, label: borrower.name, meta: borrower.user_email || borrower.phone || 'Anggota perpustakaan', searchText: `${borrower.name} ${borrower.user_email || ''} ${borrower.phone || ''}` }))} /></label>
             <div className="loan-editor__date-grid">
               <label>Tanggal dipinjam<CustomDatePicker value={loanDate} onChange={(value) => { setLoanDate(value); setDueDate(addDays(value, 7)); }} /></label>
               <label>Batas pengembalian<CustomDatePicker value={dueDate} min={loanDate} onChange={setDueDate} /></label>

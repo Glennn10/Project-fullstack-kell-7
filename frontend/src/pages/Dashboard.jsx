@@ -9,6 +9,7 @@ import {
   FiLogOut,
   FiRepeat,
   FiTag,
+  FiUsers,
 } from 'react-icons/fi';
 import { Link, NavLink, useNavigate } from 'react-router-dom';
 import BookVolume from '../components/common/BookVolume';
@@ -24,6 +25,7 @@ const navItems = [
   { label: 'Kategori', path: '/dashboard/categories', icon: FiTag },
   { label: 'Peminjaman', path: '/dashboard/loans', icon: FiRepeat },
   { label: 'Pengembalian', path: '/dashboard/returns', icon: FiCornerDownLeft },
+  { label: 'Anggota', path: '/dashboard/members', icon: FiUsers },
 ];
 
 const statMeta = [

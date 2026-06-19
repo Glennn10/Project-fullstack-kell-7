@@ -169,7 +169,7 @@
   .library-admin__sidebar { height: auto; overflow: visible; }
   .library-admin__brand { margin-bottom: 18px; }
   .library-admin__nav-label, .library-admin__sidebar-note { display: none; }
-  .library-admin__nav { grid-template-columns: repeat(5, minmax(0, 1fr)); }
+  .library-admin__nav { grid-template-columns: repeat(3, minmax(0, 1fr)); }
   .library-admin__nav a { gap: 6px; grid-template-columns: 16px 1fr; padding: 9px 8px; }
   .library-admin__nav a > i { display: none; }
   .library-admin__profile { margin-top: 18px; }

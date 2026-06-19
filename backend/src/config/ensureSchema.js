@@ -39,6 +39,11 @@ const ensureSchema = async () => {
     `);
 
     await pool.query(`
+        ALTER TABLE borrowers
+        ADD COLUMN IF NOT EXISTS membership_status VARCHAR(20) NOT NULL DEFAULT 'Aktif';
+    `);
+
+    await pool.query(`
         ALTER TABLE books
         ADD COLUMN IF NOT EXISTS is_available BOOLEAN NOT NULL DEFAULT TRUE;
     `);

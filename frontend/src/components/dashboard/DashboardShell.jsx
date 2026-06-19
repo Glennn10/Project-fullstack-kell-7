@@ -1,4 +1,4 @@
-import { FiBookOpen, FiCornerDownLeft, FiGrid, FiLogOut, FiRepeat, FiTag } from 'react-icons/fi';
+import { FiBookOpen, FiCornerDownLeft, FiGrid, FiLogOut, FiRepeat, FiTag, FiUsers } from 'react-icons/fi';
 import { Link, NavLink, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/useAuth';
 
@@ -8,6 +8,7 @@ const navItems = [
   { label: 'Kategori', path: '/dashboard/categories', icon: FiTag },
   { label: 'Peminjaman', path: '/dashboard/loans', icon: FiRepeat },
   { label: 'Pengembalian', path: '/dashboard/returns', icon: FiCornerDownLeft },
+  { label: 'Anggota', path: '/dashboard/members', icon: FiUsers },
 ];
 
 const DashboardShell = ({ children, note = 'Cek data sebelum menutup perpustakaan.' }) => {
