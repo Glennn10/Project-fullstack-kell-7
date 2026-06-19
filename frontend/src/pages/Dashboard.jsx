@@ -29,10 +29,10 @@ const navItems = [
 ];
 
 const statMeta = [
-  { key: 'books', label: 'Buku tercatat', detail: 'Koleksi di katalog', color: '#f5c84b', icon: FiBookOpen },
-  { key: 'loans', label: 'Semua transaksi', detail: 'Sejak pencatatan dimulai', color: '#377d83', icon: FiRepeat },
-  { key: 'active', label: 'Masih dibawa', detail: 'Belum kembali ke rak', color: '#e96d4d', icon: FiClock },
-  { key: 'overdue', label: 'Perlu diingatkan', detail: 'Melewati batas kembali', color: '#927db8', icon: FiAlertTriangle },
+  { key: 'books', label: 'Total Koleksi', detail: 'Buku yang siap dibaca', color: '#f5c84b', icon: FiBookOpen },
+  { key: 'loans', label: 'Riwayat Transaksi', detail: 'Seluruh aktivitas sirkulasi', color: '#377d83', icon: FiRepeat },
+  { key: 'active', label: 'Sedang Dipinjam', detail: 'Buku di tangan anggota', color: '#e96d4d', icon: FiClock },
+  { key: 'overdue', label: 'Jatuh Tempo', detail: 'Perlu segera dikembalikan', color: '#927db8', icon: FiAlertTriangle },
 ];
 
 const formatDate = (value) => value
@@ -96,10 +96,10 @@ const Dashboard = () => {
       <aside className="library-admin__sidebar">
         <Link to="/dashboard" className="library-admin__brand">
           <span><img src="/Logo.png" alt="" aria-hidden="true" /></span>
-          <div><strong>MinjemDong!</strong><small>Meja petugas</small></div>
+          <div><strong>MinjemDong!</strong><small>Area Petugas</small></div>
         </Link>
 
-        <span className="library-admin__nav-label">Jelajahi meja</span>
+        <span className="library-admin__nav-label">Menu Navigasi</span>
         <nav className="library-admin__nav" aria-label="Navigasi admin">
           {navItems.map(({ label, path, icon: Icon }) => (
             <NavLink key={label} to={path} end={path === '/dashboard'}>
@@ -109,8 +109,8 @@ const Dashboard = () => {
         </nav>
 
         <div className="library-admin__sidebar-note">
-          <span>Catatan meja</span>
-          <p>Cek buku terlambat sebelum menutup perpustakaan.</p>
+          <span>Pengingat Harian</span>
+          <p>Jangan lupa periksa daftar buku yang jatuh tempo hari ini.</p>
           <i aria-hidden="true" />
         </div>
 
@@ -124,18 +124,18 @@ const Dashboard = () => {
       <main className="library-admin__main">
         <header className="dashboard-masthead">
           <div>
-            <span>Halo, {displayName}</span>
-            <h1>Apa yang terjadi<br />di perpustakaan?</h1>
+            <span>Selamat datang kembali, {displayName}</span>
+            <h1>Ringkasan aktivitas<br />perpustakaan hari ini</h1>
             <p>{today}</p>
           </div>
           <div className="dashboard-masthead__actions">
-            <Link to="/buku">Buka katalog <FiArrowUpRight /></Link>
-            <Link to="/">Lihat situs <FiArrowUpRight /></Link>
+            <Link to="/buku">Lihat Katalog <FiArrowUpRight /></Link>
+            <Link to="/">Beranda Web <FiArrowUpRight /></Link>
           </div>
-          <span className="dashboard-masthead__mark" aria-hidden="true">catatan hari ini</span>
+          <span className="dashboard-masthead__mark" aria-hidden="true">laporan hari ini</span>
         </header>
 
-        {loading && <div className="dashboard-state"><i /> Membuka catatan perpustakaan...</div>}
+        {loading && <div className="dashboard-state"><i /> Memuat data perpustakaan...</div>}
         {error && <div className="dashboard-state dashboard-state--error"><FiAlertTriangle /><span>{error}</span></div>}
 
         {!loading && !error && (
@@ -158,8 +158,8 @@ const Dashboard = () => {
             <section className="dashboard-workspace">
               <article className="loan-ledger">
                 <header>
-                  <div><span>Catatan sirkulasi</span><h2>Peminjaman terbaru</h2></div>
-                  <Link to="/dashboard/peminjaman">Buka pencatatan <FiArrowUpRight /></Link>
+                  <div><span>Sirkulasi Aktif</span><h2>Peminjaman Terbaru</h2></div>
+                  <Link to="/dashboard/peminjaman">Lihat Semua <FiArrowUpRight /></Link>
                 </header>
 
                 {latestLoans.length > 0 ? (
@@ -176,14 +176,14 @@ const Dashboard = () => {
                 ) : (
                   <div className="dashboard-blank dashboard-blank--ledger">
                     <FiBookOpen aria-hidden="true" />
-                    <span>Halaman ini masih bersih.</span>
-                    <small>Peminjaman & Pengembalian akan tercatat di sini.</small>
+                    <span>Belum ada aktivitas.</span>
+                    <small>Transaksi peminjaman dan pengembalian akan muncul di sini.</small>
                   </div>
                 )}
               </article>
 
               <aside className="new-books-panel">
-                <header><div><span>Baru tiba</span><h2>Di meja katalog</h2></div><i aria-hidden="true" /></header>
+                <header><div><span>Koleksi Baru</span><h2>Baru Saja Ditambahkan</h2></div><i aria-hidden="true" /></header>
                 {latestBooks.length > 0 ? (
                   <div className="new-books-panel__list">
                     {latestBooks.map((book, index) => (
@@ -196,7 +196,7 @@ const Dashboard = () => {
                   </div>
                 ) : (
                   <div className="dashboard-blank">
-                    <FiBookOpen aria-hidden="true" /><span>Mejanya masih kosong.</span><small>Buku baru akan muncul di sini.</small>
+                    <FiBookOpen aria-hidden="true" /><span>Belum ada koleksi baru.</span><small>Buku yang baru ditambahkan akan tampil di sini.</small>
                   </div>
                 )}
               </aside>

@@ -9,12 +9,12 @@ const FaqSection = () => {
     <section className="faq-section" id="faq" aria-labelledby="faq-title">
       <div className="faq-section__intro">
         <span className="faq-section__eyebrow">Catatan dari meja petugas</span>
-        <h2 id="faq-title">Tadi ada yang <em>nanya ini.</em></h2>
-        <p>Bukan semua aturan perpustakaan—cuma beberapa pertanyaan yang memang sering muncul.</p>
+        <h2 id="faq-title">Pertanyaan yang <em>sering muncul.</em></h2>
+        <p>Beberapa hal yang biasanya ditanyakan sebelum meminjam, mengembalikan, atau mengecek status buku.</p>
         <div className="faq-section__hint"><span aria-hidden="true">?</span><p>Belum ketemu jawabannya? Petugas perpustakaan siap membantu saat jam operasional.</p></div>
       </div>
       <div className="faq-index">
-        <div className="faq-index__header"><span>Dicatat minggu ini</span><span>{frequentlyAskedQuestions.length} pertanyaan terakhir</span></div>
+        <div className="faq-index__header"><span>Ringkasan bantuan</span><span>{frequentlyAskedQuestions.length} pertanyaan tersedia</span></div>
         {frequentlyAskedQuestions.map((item, index) => {
           const isOpen = openFaq === index;
           const answerId = `faq-answer-${index}`;

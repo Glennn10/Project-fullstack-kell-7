@@ -12,8 +12,8 @@ const PopularCategories = ({ categories = [] }) => {
   return (
   <section className="popular-categories scroll-reveal scroll-reveal--fade" aria-labelledby="popular-categories-title">
     <div className="popular-categories__heading">
-      <div><h2 id="popular-categories-title">Lagi nyari kategori <em>yang mana?</em></h2></div>
-      <p>Sesuaikan sama suasana hati, lalu pilih rak yang paling bikin penasaran.</p>
+      <div><h2 id="popular-categories-title">Mulai dari rak <em>yang paling cocok.</em></h2></div>
+      <p>Pilih kategori sesuai kebutuhanmu, dari bacaan ringan sampai referensi buat tugas.</p>
     </div>
     <div className="popular-categories__grid">
       {visibleCategories.map((category, index) => {
@@ -21,16 +21,16 @@ const PopularCategories = ({ categories = [] }) => {
         const color = category.color || categoryPalette[index % categoryPalette.length];
         return (
         <Link to={`/buku?kategori=${category.id}`} className="category-tile" key={category.id} style={{ '--category-color': color, '--category-ink': ['#377d83', '#e96d4d', '#927db8'].includes(color) ? '#ffffff' : '#102f3d' }}>
-          <span className="category-tile__shelf">{category.book_count || 0} buku di rak</span>
+          <span className="category-tile__shelf">{category.book_count || 0} buku tersedia</span>
           <span className="category-tile__icon"><Icon aria-hidden="true" /></span>
           <div><h3>{category.name}</h3><p>{category.description || `Koleksi ${category.name} yang tersimpan di perpustakaan.`}</p></div>
           <FiArrowUpRight className="category-tile__arrow" aria-hidden="true" />
         </Link>
         );
       })}
-      {!visibleCategories.length && <div className="landing-data-empty">Kategori akan muncul setelah ditambahkan petugas.</div>}
+      {!visibleCategories.length && <div className="landing-data-empty">Kategori akan muncul setelah petugas menambahkan data koleksi.</div>}
     </div>
-    <Link to="/buku" className="popular-categories__all">Lihat semua koleksi <FiArrowUpRight aria-hidden="true" /></Link>
+    <Link to="/buku" className="popular-categories__all">Lihat semua kategori <FiArrowUpRight aria-hidden="true" /></Link>
   </section>
   );
 };

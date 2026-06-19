@@ -26,9 +26,9 @@ export const featuredBooks = [
 export const weeklyShelfStops = ['Awal rak', 'Bagian kedua', 'Tengah rak', 'Bagian keempat', 'Akhir rak'];
 
 export const borrowingSteps = [
-  { label: 'Langkah satu', title: 'Cari bukunya', description: 'Jelajahi katalog lewat judul, penulis, atau kategori, lalu cek apakah bukunya tersedia di rak.', note: 'Catat judul buku yang kamu pilih', icon: FiSearch, color: '#f5c84b' },
-  { label: 'Langkah dua', title: 'Temui petugas', description: 'Ambil bukunya dari rak dan bawa ke meja petugas. Tunjukkan akunmu supaya peminjaman bisa dicatat.', note: 'Peminjaman dicatat oleh petugas', icon: FiUserCheck, color: '#e96d4d' },
-  { label: 'Langkah tiga', title: 'Bawa & baca', description: 'Setelah selesai dicatat, bukunya boleh dibawa pulang. Jangan lupa kembalikan sesuai tanggalnya.', note: 'Tanggal kembali ada di halaman Buku Saya', icon: FiBookOpen, color: '#377d83' },
+  { label: 'Langkah satu', title: 'Cari bukunya', description: 'Gunakan katalog untuk mencari judul, penulis, atau kategori. Cek juga apakah bukunya masih tersedia.', note: 'Simpan judul yang ingin kamu pinjam', icon: FiSearch, color: '#f5c84b' },
+  { label: 'Langkah dua', title: 'Konfirmasi ke petugas', description: 'Bawa buku ke meja petugas dan tunjukkan akunmu supaya peminjaman bisa dicatat dengan benar.', note: 'Petugas akan mencatat transaksi', icon: FiUserCheck, color: '#e96d4d' },
+  { label: 'Langkah tiga', title: 'Baca dan kembalikan', description: 'Setelah tercatat, buku bisa kamu bawa pulang. Tanggal kembali bisa dicek lagi dari akunmu.', note: 'Pantau batas kembali di Buku Saya', icon: FiBookOpen, color: '#377d83' },
 ];
 
 export const librarianPick = {
@@ -46,12 +46,12 @@ export const librarianAlternatives = [
 ];
 
 export const frequentlyAskedQuestions = [
-  { question: 'Kalau sudah menemukan buku yang cocok, cara pinjamnya bagaimana?', answer: 'Datang ke meja petugas sambil membawa bukunya. Petugas akan mencatat peminjaman ke akunmu dan memberi tahu batas pengembaliannya.' },
-  { question: 'Di mana aku bisa melihat tanggal pengembalian?', answer: 'Buka halaman Buku Saya setelah masuk akun. Buku yang sedang kamu bawa, tanggal pinjam, dan batas kembalinya tercatat di sana.' },
-  { question: 'Kenapa ada buku yang tidak bisa dipinjam?', answer: 'Buku tersebut mungkin sedang dipinjam, dalam perbaikan, atau tercatat hilang. Status terbarunya bisa dilihat langsung di katalog.' },
-  { question: 'Apa yang harus dilakukan kalau terlambat mengembalikan?', answer: 'Segera bawa bukunya ke meja petugas. Keterlambatan akan tercatat sampai proses pengembalian selesai.' },
-  { question: 'Bagaimana kalau buku rusak saat sedang kupinjam?', answer: 'Jangan diperbaiki sendiri. Bawa bukunya ke petugas dan jelaskan kondisinya supaya kerusakannya bisa dicatat dengan benar.' },
-  { question: 'Boleh menitipkan buku ke teman untuk dikembalikan?', answer: 'Boleh, selama bukunya diserahkan langsung ke meja petugas dan sudah tercatat kembali. Jangan menaruhnya sendiri di rak.' },
+  { question: 'Kalau sudah menemukan buku yang cocok, cara pinjamnya bagaimana?', answer: 'Bawa bukunya ke meja petugas. Petugas akan mencatat peminjaman ke akunmu dan memberi tahu batas pengembaliannya.' },
+  { question: 'Di mana aku bisa melihat tanggal pengembalian?', answer: 'Masuk ke akun, lalu buka halaman Buku Saya. Buku yang sedang kamu pinjam, tanggal pinjam, dan batas kembali akan tampil di sana.' },
+  { question: 'Kenapa ada buku yang tidak bisa dipinjam?', answer: 'Biasanya karena buku sedang dipinjam, dalam perbaikan, atau tercatat hilang. Status terbarunya bisa kamu cek di katalog.' },
+  { question: 'Apa yang harus dilakukan kalau terlambat mengembalikan?', answer: 'Segera bawa bukunya ke meja petugas. Status terlambat akan diperbarui setelah proses pengembalian selesai.' },
+  { question: 'Bagaimana kalau buku rusak saat sedang kupinjam?', answer: 'Jangan diperbaiki sendiri dulu. Bawa bukunya ke petugas dan jelaskan kondisinya supaya bisa dicatat dengan benar.' },
+  { question: 'Boleh menitipkan buku ke teman untuk dikembalikan?', answer: 'Boleh, selama bukunya diserahkan ke meja petugas dan sudah tercatat kembali. Hindari menaruh buku langsung ke rak.' },
 ];
 
 export const popularCategories = [

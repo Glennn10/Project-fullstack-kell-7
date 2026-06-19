@@ -28,9 +28,9 @@ const WeeklyBooks = ({ books = [] }) => {
   return (
     <section className="weekly-books scroll-reveal scroll-reveal--side" aria-labelledby="weekly-books-title">
       <div className="weekly-books__heading">
-        <div><h2 id="weekly-books-title">Book of the week!</h2></div>
+        <div><h2 id="weekly-books-title">Buku yang lagi sering dilirik.</h2></div>
         <div className="weekly-books__intro">
-          <p>Beberapa buku yang sering jadi topik hangat, dipinjam, atau diam-diam ilang.</p>
+          <p>Koleksi yang belakangan ramai dipinjam, baru balik ke rak, atau sering dicari anggota.</p>
           <Link to="/buku">Lihat semua buku <FiArrowUpRight aria-hidden="true" /></Link>
         </div>
       </div>
@@ -51,7 +51,7 @@ const WeeklyBooks = ({ books = [] }) => {
             {books.map((book, index) => (
               <Link to={`/buku?keyword=${encodeURIComponent(book.title)}`} className="weekly-book" key={book.id}>
                 <div className="weekly-book__stage" style={{ '--book-accent': categoryPalette[index % categoryPalette.length] }}>
-                  <span className="weekly-book__highlight">{Number(book.weekly_loans) > 0 ? `${book.weekly_loans}x dipinjam minggu ini` : Number(book.total_loans) > 0 ? `${book.total_loans} kali keluar dari rak` : 'Baru di meja katalog'}</span>
+                  <span className="weekly-book__highlight">{Number(book.weekly_loans) > 0 ? `${book.weekly_loans}x dipinjam minggu ini` : Number(book.total_loans) > 0 ? `${book.total_loans} kali dipinjam` : 'Baru masuk katalog'}</span>
                   <BookVolume cover={getCoverUrl(book.cover_image)} title={book.title} className="weekly-book-volume" />
                 </div>
                 <div className="weekly-book__details">
@@ -60,7 +60,7 @@ const WeeklyBooks = ({ books = [] }) => {
                 </div>
               </Link>
             ))}
-            {!books.length && <div className="landing-data-empty">Buku pilihan akan muncul setelah koleksi ditambahkan.</div>}
+            {!books.length && <div className="landing-data-empty">Buku pilihan akan muncul setelah koleksi tersedia di katalog.</div>}
           </div>
         </div>
         <button type="button" className="weekly-books__arrow weekly-books__arrow--right" onClick={() => moveTo(position + 1)} disabled={position === stopsCount - 1} aria-label="Geser buku ke kanan"><FiChevronRight /></button>

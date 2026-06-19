@@ -6,20 +6,20 @@ const Hero = () => (
     <Container>
       <div className="landing-hero__layout">
         <div className="landing-hero__content">
-          <span className="landing-hero__eyebrow"><FiBookOpen /> aloww, lagi nyari buku?</span>
-          <h1>Mau baca apa <span>today?</span></h1>
+          <span className="landing-hero__eyebrow"><FiBookOpen /> lagi cari bacaan?</span>
+          <h1>Mau baca apa <span>hari ini?</span></h1>
           <p className="landing-hero__description">
-            Cari judul, penulis, atau topik dari sini, lalu temukan rak bukunya tanpa muter terlalu lama.
+            Cari judul, penulis, atau topik yang kamu butuhin. Nanti kami bantu arahkan ke buku yang paling pas.
           </p>
           <Form action="/buku" method="GET" className="landing-search">
             <Form.Control type="search" name="keyword" placeholder="Ketik judul, penulis, atau topik..." aria-label="Pencarian buku" className="landing-search__input" />
             <Button type="submit" className="landing-search__button">Cari <FiArrowRight /></Button>
           </Form>
-          <p className="landing-hero__hint">Coba cari: novel, desain, sejarah, atau teknologi</p>
+          <p className="landing-hero__hint">Coba cari: novel, desain, sejarah, teknologi, atau buku kuliah</p>
         </div>
 
         <div className="hero-books" aria-hidden="true">
-          <span className="hero-books__scribble">book of the week!</span>
+          <span className="hero-books__scribble">pilihan minggu ini</span>
           <div className="hero-book hero-book--one">
             <small>Bacaan santai</small><strong>Laut<br />Bercerita</strong><span>Leila S. Chudori</span>
           </div>
