@@ -28,10 +28,9 @@ const WeeklyBooks = ({ books = [] }) => {
   return (
     <section className="weekly-books scroll-reveal scroll-reveal--side" aria-labelledby="weekly-books-title">
       <div className="weekly-books__heading">
-        <div><h2 id="weekly-books-title">Buku yang lagi sering dilirik.</h2></div>
+        <div><h2 id="weekly-books-title">Book of the Week!</h2></div>
         <div className="weekly-books__intro">
-          <p>Koleksi yang belakangan ramai dipinjam, baru balik ke rak, atau sering dicari anggota.</p>
-          <Link to="/buku">Lihat semua buku <FiArrowUpRight aria-hidden="true" /></Link>
+          <p>Koleksi yang belakangan ramai dipinjam, baru balik, atau sering dicari pembaca.</p>
         </div>
       </div>
 

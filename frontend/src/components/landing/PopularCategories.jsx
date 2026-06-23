@@ -12,8 +12,8 @@ const PopularCategories = ({ categories = [] }) => {
   return (
   <section className="popular-categories scroll-reveal scroll-reveal--fade" aria-labelledby="popular-categories-title">
     <div className="popular-categories__heading">
-      <div><h2 id="popular-categories-title">Mulai dari rak <em>yang paling cocok.</em></h2></div>
-      <p>Pilih kategori sesuai kebutuhanmu, dari bacaan ringan sampai referensi buat tugas.</p>
+      <div><h2 id="popular-categories-title">Mulai dari categori <em>yang paling kamu suka.</em></h2></div>
+      <p>Sesuaikan pencarianmu dengan kategori yang paling kamu minati.</p>
     </div>
     <div className="popular-categories__grid">
       {visibleCategories.map((category, index) => {
